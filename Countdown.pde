@@ -8,9 +8,9 @@ class Countdown {
   int secStart, secBeep;
   int leaderCounter = 0;
   int leaderCounterMax, leaderCounterBeep;
-  int leaderCircleSize = int(stageWidth/2.2);
-  float leaderX = stageWidth/2;
-  float leaderY = stageHeight/2;
+  int leaderCircleSize = int(sW/2.2);
+  float leaderX = sW/2;
+  float leaderY = sH/2;
   boolean beep = false;
   boolean go = false;
 
@@ -30,7 +30,7 @@ class Countdown {
     if(!go) {
       rectMode(CORNER);
       fill(200,alphaNum);
-      rect(0,0,stageWidth,stageHeight);
+      rect(0,0,sW,sH);
     }
     if(!beep) {
       noStroke();

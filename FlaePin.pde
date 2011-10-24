@@ -1,35 +1,12 @@
-import proxml.*;
 
-Data data;
-
-int sW = 640;
-int sH = 480;
-int fps = 24;
-
-proxml.XMLElement MotionCapture;
-XMLInOut xmlIO;
-boolean loaded = false;
-
-String[] oscNames = {
-  //~~~   complete list of working joints, check updates at https://github.com/Sensebloom/OSCeleton  ~~~
-"head","neck","torso","r_shoulder","r_elbow","r_hand","l_shoulder","l_elbow","l_hand","r_hip","r_knee","r_foot","l_hip","l_knee","l_foot"
-  //~~~
-  //"head","r_shoulder","r_elbow","r_hand","l_shoulder","l_elbow","l_hand"
-};
-
-int[] pinNums = new int[oscNames.length];
-
-float posX, posY, posZ;
-
-
-void setup() {
+void flaePinInit() {
   for(int i=0;i<pinNums.length;i++){
   pinNums[i] = i+1;
 }
   //size(sW,sH);
   //frameRate(fps);
 
-  xmlInit();
+  //xmlPlayerInit();
 
   data = new Data();
   data.beginSave();
@@ -42,30 +19,7 @@ void setup() {
   data.add("\t"+"Comp Pixel Aspect Ratio"+"\t"+"1");
 }
 
-void xmlInit() {
-  xmlIO = new XMLInOut(this);
-  try {
-    xmlIO.loadElement("mocapData.xml"); //loads the XML
-  }
-  catch(Exception e) {
-    //if loading failed 
-    println("Loading Failed");
-  }
-}
-
-void xmlEvent(proxml.XMLElement element) {
-  //this function is ccalled by default when an XML object is loaded
-  MotionCapture = element;
-  //parseXML(); //appelle la fonction qui analyse le fichier XML
-  loaded = true;
-  xmlFirstRun();
-}
-
-void xmlFirstRun() {
-//
-}
-
-void draw() {
+void flaePinUpdate() {
   if(loaded) {
     
     for(int j=0;j<oscNames.length;j++){
@@ -84,10 +38,9 @@ void draw() {
     data.add("\r");
     data.add("End of Keyframe Data");
     data.endSave(
-    data.getIncrementalFilename(
-    sketchPath("save"+
-      java.io.File.separator+
-      "data ####.txt")));
-    exit();
+    data.getIncrementalFilename(sketchPath("save"+java.io.File.separator+"data####.txt")));
+    modePlay = true;
+    modeRecord = false;
+    modeExport = false;
   }
 }

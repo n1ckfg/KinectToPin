@@ -1,39 +1,4 @@
-import proxml.*;
-import processing.opengl.*;
-
-int stageWidth = 640;
-int stageHeight = 480;
-int fps = 24;
-
-int counter = 0;
-int counterMax; //set by xml file
-
-proxml.XMLElement MotionCapture;
-XMLInOut xmlIO;
-boolean loaded = false;
-
-String[] oscNames = {
-//~~~   complete list of working joints, check updates at https://github.com/Sensebloom/OSCeleton  ~~~
-"head","neck","torso","r_shoulder","r_elbow","r_hand","l_shoulder","l_elbow","l_hand","r_hip","r_knee","r_foot","l_hip","l_knee","l_foot"
-//~~~
-//"r_hand","r_wrist","r_elbow","r_shoulder", "l_hand","l_wrist","l_elbow","l_shoulder","head","torso"
-};
-proxml.XMLElement[] oscXmlTags = new proxml.XMLElement [oscNames.length];
-
-float[] x = new float[oscNames.length];
-float[] y = new float[oscNames.length];
-float[] z = new float[oscNames.length];
-float depth = 200;
-int circleSize = 50;
-
-void setup() {
-  size(stageWidth,stageHeight,OPENGL);
-  frameRate(fps);
-  xmlInit();
-  ellipseMode(CENTER);
-}
-
-void xmlInit(){
+void xmlPlayerInit(){
   xmlIO = new XMLInOut(this);
   try {
     xmlIO.loadElement("mocapData.xml"); //loads the XML
@@ -44,19 +9,9 @@ void xmlInit(){
   }
 }
 
-void xmlEvent(proxml.XMLElement element) {
-  //this function is ccalled by default when an XML object is loaded
-  MotionCapture = element;
-  //parseXML(); //appelle la fonction qui analyse le fichier XML
-  loaded = true;
-  xmlFirstRun();
-}
+//~~~
 
-void xmlFirstRun(){
-  counterMax = int(MotionCapture.getAttribute("numFrames"));
-}
-
-void draw() {
+void xmlPlayerUpdate() {
   background(0);
   if(loaded){
   parseXML();
@@ -76,6 +31,20 @@ void draw() {
     counter=0;
   }
 }
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void xmlEvent(proxml.XMLElement element) {
+  //this function is ccalled by default when an XML object is loaded
+  MotionCapture = element;
+  //parseXML(); //appelle la fonction qui analyse le fichier XML
+  loaded = true;
+  xmlFirstRun();
+}
+
+void xmlFirstRun(){
+  counterMax = int(MotionCapture.getAttribute("numFrames"));
 }
 
 void parseXML(){
