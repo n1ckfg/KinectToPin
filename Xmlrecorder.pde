@@ -11,6 +11,10 @@ void xmlRecorderInit() {
 //~~~
 
 void xmlRecorderUpdate() {
+//
+}
+
+void xmlOscUpdate() {
   background(0);
   if(found) {
     fill(255,200);

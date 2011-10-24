@@ -42,10 +42,11 @@ float[] z = new float[oscNames.length];
 float depth = 200;
 int circleSize = 50;
 
-Button[] buttons = new Button[3];
+Button[] buttons = new Button[4];
 
-boolean modePlay = true;
 boolean modeRecord = false;
+boolean modeOsc = false;
+boolean modePlay = true;
 boolean modeExport = false;
 
 //~~~
@@ -58,8 +59,9 @@ void setup() {
   countdown = new Countdown(8, 2);
   oscP5 = new OscP5(this, "127.0.0.1", 7110);
   buttons[0] = new Button(25, 20, 30, color(240, 10, 10), 12, "rec");
-  buttons[1] = new Button(60, 20, 30, color(20, 200, 20), 12, "play");
-  buttons[2] = new Button(95, 20, 30, color(50, 50, 200), 12, "save");
+  buttons[1] = new Button(60, 20, 30, color(200, 20, 200), 12, "osc");
+  buttons[2] = new Button(95, 20, 30, color(20, 200, 20), 12, "play");
+  buttons[3] = new Button(130, 20, 30, color(50, 50, 200), 12, "save");
   xmlPlayerInit();
   xmlRecorderInit();
   flaePinInit();
@@ -69,14 +71,17 @@ void setup() {
 
 
 void draw() {
-  if(modePlay){
-  xmlPlayerUpdate(); 
-  }
   if(modeRecord){
-  xmlRecorderUpdate();
+    xmlRecorderUpdate();
   }
+  if(modeOsc){
+    xmlOscUpdate(); 
+  }
+  if(modePlay){
+    xmlPlayerUpdate();
+}
   if(modeExport){
-  flaePinUpdate();
+    flaePinUpdate();
   }
   buttonHandler();
 }
@@ -89,20 +94,36 @@ void buttonHandler() {
     buttons[i].drawButton();
   }
   if(buttons[0].clicked){
-    buttons[0].clicked=false;
-    modePlay = false;
-    modeRecord = true;
-    modeExport = false;    
+    if(modeRecord){
+      buttonsRefresh();
+    }else{
+      buttonsRefresh();
+      modeRecord = true;
+    }
   }else if(buttons[1].clicked){
-    buttons[1].clicked=false;
-    modePlay = true;
-    modeRecord = false;
-    modeExport = false;    
+    if(modeOsc){
+      buttonsRefresh();
+    }else{
+      buttonsRefresh();
+      modeOsc = true;
+    }
   }else if(buttons[2].clicked){
-    buttons[2].clicked=false;
-    modePlay = false;
-    modeRecord = false;
+    buttonsRefresh();
+    modePlay = true;    
+  }else if(buttons[3].clicked){
+    buttonsRefresh();
     modeExport = true;    
+  }
+}
+
+void buttonsRefresh(){
+  counter=0;
+  for(int i=0;i<buttons.length;i++){
+    buttons[i].clicked = false;
+    modeRecord = false;
+    modeOsc = false;
+    modePlay = false;
+    modeExport = false;    
   }
 }
 
