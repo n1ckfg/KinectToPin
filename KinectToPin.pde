@@ -8,9 +8,10 @@ int sW = 640;
 int sH = 480;
 int fps = 24;
 int counter = 0;
-int counterMax = 400; //number of MocapFrames to record
-
+int counterMax; //number of MocapFrames to record
 Countdown countdown;
+
+String sayText = ".";
 
 Minim minim;
 OscP5 oscP5;
@@ -20,6 +21,9 @@ XMLInOut xmlIO;
 proxml.XMLElement xmlFile;
 proxml.XMLElement MotionCapture;
 String xmlFileName = "mocapData.xml";
+String xmlFilePath = "data";
+String aeFileName = "aeMocapData.txt";
+String aeFilePath = "save";
 
 boolean limitReached = false;
 boolean loaded = false;
@@ -42,12 +46,13 @@ float[] z = new float[oscNames.length];
 float depth = 200;
 int circleSize = 50;
 
-Button[] buttons = new Button[4];
+Button[] buttons = new Button[5];
 
-boolean modeRecord = false;
+boolean modeRec = false;
 boolean modeOsc = false;
-boolean modePlay = true;
+boolean modePlay = false;
 boolean modeExport = false;
+boolean modeStop = true;
 
 //~~~
 
@@ -56,34 +61,32 @@ void setup() {
   frameRate(fps);
   ellipseMode(CENTER);
   minim = new Minim(this);
-  countdown = new Countdown(8, 2);
   oscP5 = new OscP5(this, "127.0.0.1", 7110);
-  buttons[0] = new Button(25, 20, 30, color(240, 10, 10), 12, "rec");
-  buttons[1] = new Button(60, 20, 30, color(200, 20, 200), 12, "osc");
-  buttons[2] = new Button(95, 20, 30, color(20, 200, 20), 12, "play");
-  buttons[3] = new Button(130, 20, 30, color(50, 50, 200), 12, "save");
+  buttons[0] = new Button(25, height-20, 30, color(240, 10, 10), 12, "rec");
+  buttons[1] = new Button(60, height-20, 30, color(200, 20, 200), 12, "osc");
+  buttons[2] = new Button(width-25, height-20, 30, color(50, 50, 220), 12, "save");
+  buttons[3] = new Button(width-60, height-20, 30, color(20, 200, 20), 12, "play");
+  buttons[4] = new Button(95, height-20, 30, color(100, 100, 100), 12, "stop");
   xmlPlayerInit();
   xmlRecorderInit();
-  flaePinInit();
+  countdown = new Countdown(8,2);
+  background(0);
 }
 
 //~~~
 
 
 void draw() {
-  if(modeRecord){
+  background(0);
+  if(modeRec||modeOsc){
     xmlRecorderUpdate();
-  }
-  if(modeOsc){
-    xmlOscUpdate(); 
   }
   if(modePlay){
     xmlPlayerUpdate();
-}
-  if(modeExport){
-    flaePinUpdate();
   }
   buttonHandler();
+  recDot();
+  println(counter);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -94,37 +97,63 @@ void buttonHandler() {
     buttons[i].drawButton();
   }
   if(buttons[0].clicked){
-    if(modeRecord){
-      buttonsRefresh();
-    }else{
-      buttonsRefresh();
-      modeRecord = true;
-    }
+    modesRefresh();
+    modeRec = true;
   }else if(buttons[1].clicked){
-    if(modeOsc){
-      buttonsRefresh();
-    }else{
-      buttonsRefresh();
-      modeOsc = true;
-    }
+    modesRefresh();
+    modeOsc = true;
   }else if(buttons[2].clicked){
-    buttonsRefresh();
-    modePlay = true;    
+    modesRefresh();
+    modeExport = true;
+    allSaveToDisk();    
   }else if(buttons[3].clicked){
-    buttonsRefresh();
-    modeExport = true;    
-  }
+    modesRefresh();
+    modePlay = true;
+  }else if(buttons[4].clicked){
+    modesRefresh();
+ }
 }
 
 void buttonsRefresh(){
-  counter=0;
   for(int i=0;i<buttons.length;i++){
     buttons[i].clicked = false;
-    modeRecord = false;
+  }
+}
+
+void modesRefresh(){
+    buttonsRefresh();
+    counter=0;
+    countdown.leaderCounter = 0;
+    modeRec = false;
     modeOsc = false;
     modePlay = false;
-    modeExport = false;    
+    modeExport = false; 
+    modeStop=false;
   }
+
+void recDot() {
+  fill(200);
+  text(sayText,40,35);
+  text(int(frameRate) + " fps", sW-60,35);
+  noFill();
+  if(counter%2!=0) {
+    if(modeRec){
+    stroke(255,20,0);
+    }else if(modeOsc){
+    stroke(225,0,205);
+    }
+  } 
+  else {
+    stroke(35,25,35);
+  }
+  strokeWeight(20);
+  point(20,30);
+  stroke(200);
+  strokeWeight(1);
+  rectMode(CORNER);
+  rect(3,59,633,360);
+  line((sW/2)-10,(sH/2),(sW/2)+10,(sH/2));
+  line((sW/2),(sH/2)-10,(sW/2),(sH/2)+10);
 }
 
 void stop() {

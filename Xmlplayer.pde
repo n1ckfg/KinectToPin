@@ -24,7 +24,7 @@ void xmlPlayerUpdate() {
     ellipse(0,0,circleSize,circleSize);
     popMatrix();
   }
-  if(counter<counterMax) {
+  if(counter<counterMax&&!modeStop) {
     counter++;
   } 
   else {

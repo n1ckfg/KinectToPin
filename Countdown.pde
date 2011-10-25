@@ -38,8 +38,9 @@ class Countdown {
       ellipseMode(CENTER);
       ellipse(leaderX,leaderY,leaderCircleSize,leaderCircleSize);
       fill(0,alphaNum);
+      textAlign(CENTER);
       textFont(font,fontSize);
-      text(secStart-int(leaderCounter/fps),leaderX-(fontSize/3.8),leaderY+(fontSize/2.7));
+      text(secStart-int(leaderCounter/fps),leaderX,leaderY+(fontSize/2.7));
       if(leaderCounter==leaderCounterBeep) { 
         foo.play();
         beep=true;
