@@ -1,7 +1,7 @@
-void xmlPlayerInit(){
+void xmlPlayerInit(int mfc){
   xmlIO = new XMLInOut(this);
   try {
-    xmlIO.loadElement("mocapData.xml"); //loads the XML
+    xmlIO.loadElement(xmlFilePath + "/" + xmlFileName + (mfc) + "." + xmlFileType); //loads the XML
   }
   catch(Exception e) {
     //if loading failed 
