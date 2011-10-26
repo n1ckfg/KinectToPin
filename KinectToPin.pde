@@ -8,6 +8,7 @@ import SimpleOpenNI.*;
 //~~~~~~~~~~~~~~~~~~
 
 boolean firstRun=true;
+boolean modePreview = false;
 
 SimpleOpenNI  context;
 
@@ -118,9 +119,10 @@ void setup() {
 
 void draw() {
   background(0);
-  if(modeRec){
+  if(modeRec||modePreview){
   drawUser(); //looking for one user; may upgrade later
   }
+  if(!modePreview){
   if (modeRec||modeOsc) {
     xmlRecorderUpdate();
   }
@@ -128,12 +130,27 @@ void draw() {
     xmlPlayerUpdate();
   }
   buttonHandler();
+  }
   recDot();
   sayText = xmlFileName + (masterFileCounter);
   //println(counter);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void keyPressed(){
+if(key==' '){
+if(modePreview){
+  modePreview=false;
+}else if(!modePreview){
+modePreview=true;
+    if(firstRun){
+      firstRun=false;
+      setupUser(); //this sets up SimpleOpenNi
+    }
+}
+}
+}
 
 void buttonHandler() {
   for (int i=0;i<buttons.length;i++) {
