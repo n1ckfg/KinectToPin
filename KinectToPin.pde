@@ -129,7 +129,7 @@ void buttonHandler() {
       needsSaving = true;
       masterFileCounter++;
     }
-    sayTextPrefix = "Recording skeleton data";
+    sayTextPrefix = "** CURRENTLY BROKEN!** Recording skeleton data";
   }
   else if (buttons[1].clicked) {
     modesRefresh();
