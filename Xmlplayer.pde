@@ -18,7 +18,7 @@ void xmlPlayerUpdate() {
   fill(255,200);
   stroke(0);
   strokeWeight(5);
-  for(int i=0;i<oscNames.length;i++) {
+  for(int i=0;i<osceletonNames.length;i++) {
     pushMatrix();
     translate(width*x[i],height*y[i],(-depth*z[i])+abs(depth/2));
     ellipse(0,0,circleSize,circleSize);
@@ -67,7 +67,7 @@ void parseXML(){
     if(i==0){
       println("~~~~~~~~~~~~~~~~");
     }
-    println(oscNames[i] + "  x: " + posX + "  y: " + posY + "  z: " + posZ);
+    println(osceletonNames[i] + "  x: " + posX + "  y: " + posY + "  z: " + posZ);
   }
   }
 }

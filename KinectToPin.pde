@@ -3,8 +3,13 @@ import oscP5.*;
 import netP5.*;
 import proxml.*;
 import ddf.minim.*;
+import SimpleOpenNI.*;
 
 //~~~~~~~~~~~~~~~~~~
+
+boolean firstRun=true;
+
+SimpleOpenNI  context;
 
 int masterFileCounter=0;
 String[] allFiles;
@@ -37,23 +42,28 @@ String aeFileType = "txt";
 boolean limitReached = false;
 boolean loaded = false;
 
-String[] oscNames = {
-  //~~~   complete list of working Joints, check updates at https://github.com/Sensebloom/OSCeleton  ~~~
+String[] osceletonNames = {
+  //~~~   complete list of working joints, check updates at https://github.com/Sensebloom/OSCeleton  ~~~
   "head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"
-    //~~~
   //"r_hand","r_wrist","r_elbow","r_shoulder", "l_hand","l_wrist","l_elbow","l_shoulder","head","torso"
 };
 
+//SKEL_HEAD, SKEL_NECK, SKEL_TORSO, SKEL_RIGHT_SHOULDER, SKEL_RIGHT_ELBOW, SKEL_RIGHT_HAND, SKEL_LEFT_SHOULDER, SKEL_LEFT_ELBOW, SKEL_LEFT_HAND, SKEL_RIGHT_HIP, SKEL_RIGHT_KNEE, SKEL_RIGHT_FOOT, SKEL_LEFT_HIP, SKEL_LEFT_KNEE, SKEL_LEFT_FOOT
+PVector[] simpleOpenNiPos = new PVector[osceletonNames.length];
+PVector[] simpleOpenNiPos_proj = new PVector[osceletonNames.length];
+
+
+
 File dataFolder;
 Data data;
-int[] pinNums = new int[oscNames.length];
-proxml.XMLElement[] oscXmlTags = new proxml.XMLElement[oscNames.length];
+int[] pinNums = new int[osceletonNames.length];
+proxml.XMLElement[] oscXmlTags = new proxml.XMLElement[osceletonNames.length];
 float posX, posY, posZ;
 
-float[] x = new float[oscNames.length];
-float[] y = new float[oscNames.length];
-float[] z = new float[oscNames.length];
-float depth = 200;
+float[] x = new float[osceletonNames.length];
+float[] y = new float[osceletonNames.length];
+float[] z = new float[osceletonNames.length];
+float depth = 200; //range of depth...FYI After Effects puppet tool doesn't use Z position
 int circleSize = 50;
 
 Button[] buttons = new Button[5];
@@ -70,6 +80,12 @@ boolean needsSaving = false;
 void setup() {
   size(sW, sH, OPENGL);
   frameRate(fps);
+
+  for(int i=0;i<osceletonNames.length;i++){
+    simpleOpenNiPos[i] = new PVector(0,0,0);
+    simpleOpenNiPos_proj[i] = new PVector(0,0,0);
+  }
+
   dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
   allFiles = dataFolder.list();
   for(int i=0;i<allFiles.length;i++){
@@ -102,6 +118,9 @@ void setup() {
 
 void draw() {
   background(0);
+  if(modeRec){
+  drawUser(); //looking for one user; may upgrade later
+  }
   if (modeRec||modeOsc) {
     xmlRecorderUpdate();
   }
@@ -121,7 +140,11 @@ void buttonHandler() {
     buttons[i].checkButton();
     buttons[i].drawButton();
   }
-  if (buttons[0].clicked) {
+  if (buttons[0].clicked) { //REC
+    if(firstRun){
+      firstRun=false;
+      setupUser(); //this sets up SimpleOpenNi
+    }
     modesRefresh();
     xmlRecorderInit();
     modeRec = true;
@@ -129,9 +152,9 @@ void buttonHandler() {
       needsSaving = true;
       masterFileCounter++;
     }
-    sayTextPrefix = "** CURRENTLY BROKEN!** Recording skeleton data";
+    sayTextPrefix = "Recording skeleton data";
   }
-  else if (buttons[1].clicked) {
+  else if (buttons[1].clicked) {  //OSC from OSCeleton
     modesRefresh();
     xmlRecorderInit();
     modeOsc = true;
@@ -141,13 +164,13 @@ void buttonHandler() {
     }
     sayTextPrefix = "Recording OSC data";
   }
-  else if (buttons[2].clicked) {
+  else if (buttons[2].clicked) { //SAVE
     modesRefresh();
     modeExport = true;
     aePinSaveToDisk(masterFileCounter);    
-    sayTextPrefix = "Exporting all XML files for After Effects";
+    sayTextPrefix = "Exported all XML files for After Effects";
   }
-  else if (buttons[3].clicked) {
+  else if (buttons[3].clicked) { //PLAY
     modesRefresh();
     if (needsSaving) {
       xmlSaveToDisk();
@@ -155,10 +178,10 @@ void buttonHandler() {
     modePlay = true;
     sayTextPrefix = "Playing back last saved XML file";
   }
-  else if (buttons[4].clicked) {
-    countdown.foo.play();
+  else if (buttons[4].clicked) {  //STOP
     modesRefresh();
     if (needsSaving) {
+      countdown.foo.play();
       xmlSaveToDisk();
     }
     needsSaving=false;

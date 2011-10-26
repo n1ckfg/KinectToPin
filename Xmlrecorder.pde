@@ -1,7 +1,6 @@
 void xmlRecorderInit() {
   xmlIO = new XMLInOut(this);
   MotionCapture = new proxml.XMLElement("MotionCapture");
-  MotionCapture.addAttribute("numFrames", counterMax);
   MotionCapture.addAttribute("fps", fps);
   MotionCapture.addAttribute("width", width);
   MotionCapture.addAttribute("height", height);
@@ -12,11 +11,11 @@ void xmlRecorderInit() {
 
 void xmlRecorderUpdate() {
   background(0);
-  if (found) {
+  if (modeRec||(modeOsc&&found)) {
     fill(255, 200);
     stroke(0);
     strokeWeight(5);
-    for (int i=0;i<oscNames.length;i++) {
+    for (int i=0;i<osceletonNames.length;i++) {
       pushMatrix();
       translate(width*x[i], height*y[i], (-depth*z[i])+abs(depth/2));
       ellipse(0, 0, circleSize, circleSize);
@@ -35,8 +34,8 @@ void xmlRecorderUpdate() {
 void oscEvent(OscMessage msg) {
   if (msg.checkAddrPattern("/joint") && msg.checkTypetag("sifff")) {
     found = true;
-    for (int i=0;i<oscNames.length;i++) {
-      if (modeOsc&&msg.get(0).stringValue().equals(oscNames[i])) {
+    for (int i=0;i<osceletonNames.length;i++) {
+      if (modeOsc&&msg.get(0).stringValue().equals(osceletonNames[i])) {
         x[i] = msg.get(2).floatValue();
         y[i] = msg.get(3).floatValue();
         z[i] = msg.get(4).floatValue();
@@ -45,11 +44,33 @@ void oscEvent(OscMessage msg) {
   }
 }
 
-void skeletonEvent() {
-  //
+void simpleOpenNiEvent(int userId) {
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_HEAD,simpleOpenNiPos[0]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_NECK,simpleOpenNiPos[1]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_TORSO,simpleOpenNiPos[2]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_RIGHT_SHOULDER,simpleOpenNiPos[3]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_RIGHT_ELBOW,simpleOpenNiPos[4]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_RIGHT_HAND,simpleOpenNiPos[5]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_LEFT_SHOULDER,simpleOpenNiPos[6]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_LEFT_ELBOW,simpleOpenNiPos[7]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_LEFT_HAND,simpleOpenNiPos[8]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_RIGHT_HIP,simpleOpenNiPos[9]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_RIGHT_KNEE,simpleOpenNiPos[10]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_RIGHT_FOOT,simpleOpenNiPos[11]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_LEFT_HIP,simpleOpenNiPos[12]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_LEFT_KNEE,simpleOpenNiPos[13]);
+      context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_LEFT_FOOT,simpleOpenNiPos[14]);
+      
+    for (int i=0;i<osceletonNames.length;i++) {
+        context.convertRealWorldToProjective(simpleOpenNiPos[i],simpleOpenNiPos_proj[i]);
+        x[i] = simpleOpenNiPos_proj[i].x/sW;
+        y[i] = simpleOpenNiPos_proj[i].y/sH;
+        z[i] = simpleOpenNiPos_proj[i].z/2000; //approximate 'cause don't know real SimpleOpenNI depth max/min in pixels; will fix
+    }
 }
 
 void xmlAdd() {
+  MotionCapture.addAttribute("numFrames", counter);
   proxml.XMLElement MocapFrame = new proxml.XMLElement("MocapFrame");
   MotionCapture.addChild(MocapFrame);
   MocapFrame.addAttribute("index", counter);
@@ -58,8 +79,8 @@ void xmlAdd() {
   Skeleton.addAttribute("id", 0);
   proxml.XMLElement Joints = new proxml.XMLElement("Joints");
   Skeleton.addChild(Joints);
-  for (int i=0;i<oscNames.length;i++) {
-    oscXmlTags[i] = new proxml.XMLElement(oscNames[i]);
+  for (int i=0;i<osceletonNames.length;i++) {
+    oscXmlTags[i] = new proxml.XMLElement(osceletonNames[i]);
     Joints.addChild(oscXmlTags[i]);
     oscXmlTags[i].addAttribute("x", x[i]);
     oscXmlTags[i].addAttribute("y", y[i]);
@@ -89,7 +110,7 @@ void aePinSaveToDisk(int mfc) {
       data.add("\t"+"Source Height"+"\t"+sH);
       data.add("\t"+"Source Pixel Aspect Ratio"+"\t"+"1");
       data.add("\t"+"Comp Pixel Aspect Ratio"+"\t"+"1");
-      for (int j=0;j<oscNames.length;j++) {
+      for (int j=0;j<osceletonNames.length;j++) {
         modesRefresh();
         data.add("\r");
         data.add("Effects" + "\t" + "Puppet #2" + "\t" + "arap #3" + "\t" + "Mesh" + "\t" + "Mesh #1" + "\t" + "Deform" + "\t" + "Pin #" + pinNums[j] + "\t" + "Position");
