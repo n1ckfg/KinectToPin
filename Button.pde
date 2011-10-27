@@ -37,6 +37,7 @@ class Button {
         hovered=true;
         clicked=true;
       }
+    /*
     } 
     else if (hitDetect(x[1], y[1], kSize, kSize, posX, posY, sizeXY, sizeXY)||hitDetect(x[4], y[4], kSize, kSize, posX, posY, sizeXY, sizeXY)) {
       hovered=true;
@@ -45,6 +46,7 @@ class Button {
     else if (hitDetect(x[0], y[0], kSize, kSize, posX, posY, sizeXY, sizeXY)&&hitDetect(x[4], y[4], kSize, kSize, posX, posY, sizeXY, sizeXY)) {
       hovered=true;
       clicked=true;
+    */
     } 
     else {
       hovered=false;

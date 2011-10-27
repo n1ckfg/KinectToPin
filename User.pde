@@ -11,6 +11,7 @@
 
 void setupUser(){
   context = new SimpleOpenNI(this);
+  context.setMirror(true);
    
   // enable depthMap generation 
   context.enableDepth();
@@ -32,12 +33,17 @@ void drawUser(){
   context.update();
   
   // draw depthImageMap
-  //image(context.depthImage(),0,0);
+  if(modePreview){
+    image(context.depthImage(),0,0);
+  }
   
   // draw the skeleton if it's available
   if(context.isTrackingSkeleton(1)){
-    //drawSkeleton(1);
+    if(modePreview){
+    drawSkeleton(1);
+    }else if(modeRec){
     simpleOpenNiEvent(1);
+    }
   }
 }
 
@@ -50,6 +56,8 @@ void drawSkeleton(int userId){
   println(jointPos);
   */
   
+  stroke(0,0,255);
+  strokeWeight(3);
   context.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
 
   context.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
