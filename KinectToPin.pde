@@ -46,7 +46,7 @@ boolean loaded = false;
 String[] osceletonNames = {
   //~~~   complete list of working joints, check updates at https://github.com/Sensebloom/OSCeleton  ~~~
   "head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"
-  //"r_hand","r_wrist","r_elbow","r_shoulder", "l_hand","l_wrist","l_elbow","l_shoulder","head","torso"
+    //"r_hand","r_wrist","r_elbow","r_shoulder", "l_hand","l_wrist","l_elbow","l_shoulder","head","torso"
 };
 
 //SKEL_HEAD, SKEL_NECK, SKEL_TORSO, SKEL_RIGHT_SHOULDER, SKEL_RIGHT_ELBOW, SKEL_RIGHT_HAND, SKEL_LEFT_SHOULDER, SKEL_LEFT_ELBOW, SKEL_LEFT_HAND, SKEL_RIGHT_HIP, SKEL_RIGHT_KNEE, SKEL_RIGHT_FOOT, SKEL_LEFT_HIP, SKEL_LEFT_KNEE, SKEL_LEFT_FOOT
@@ -67,7 +67,7 @@ float[] z = new float[osceletonNames.length];
 float depth = 200; //range of depth...FYI After Effects puppet tool doesn't use Z position
 int circleSize = 50;
 
-Button[] buttons = new Button[5];
+Button[] buttons = new Button[6];
 
 boolean modeRec = false;
 boolean modeOsc = false;
@@ -76,28 +76,34 @@ boolean modeExport = false;
 boolean modeStop = true;
 boolean needsSaving = false;
 
+int buttonTimeoutCounter=0;
+int buttonTimeoutMax = 4;
+int introWarningCounter = 0;
+int introWarningCounterMax = 5*fps;
+
 //~~~~~~~~~~~~~~~~~~
 
 void setup() {
   size(sW, sH, OPENGL);
   frameRate(fps);
 
-  for(int i=0;i<osceletonNames.length;i++){
-    simpleOpenNiPos[i] = new PVector(0,0,0);
-    simpleOpenNiPos_proj[i] = new PVector(0,0,0);
+  for (int i=0;i<osceletonNames.length;i++) {
+    simpleOpenNiPos[i] = new PVector(0, 0, 0);
+    simpleOpenNiPos_proj[i] = new PVector(0, 0, 0);
   }
 
   dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
   allFiles = dataFolder.list();
-  for(int i=0;i<allFiles.length;i++){
-  if (allFiles[i].toLowerCase().endsWith(xmlFileType)) {
-  masterFileCounter++;
-  }
+  for (int i=0;i<allFiles.length;i++) {
+    if (allFiles[i].toLowerCase().endsWith(xmlFileType)) {
+      masterFileCounter++;
+    }
   }
   //masterFileCounter = allFiles.length;
-  if(masterFileCounter==1){
+  if (masterFileCounter==1) {
     sayTextPrefix = masterFileCounter + " existing saved XML file";
-  }else{
+  }
+  else {
     sayTextPrefix = masterFileCounter + " existing saved XML files";
   }
   ellipseMode(CENTER);
@@ -108,6 +114,7 @@ void setup() {
   buttons[2] = new Button(width-25, height-20, 30, color(50, 50, 220), 12, "save");
   buttons[3] = new Button(width-60, height-20, 30, color(20, 200, 20), 12, "play");
   buttons[4] = new Button(95, height-20, 30, color(100, 100, 100), 12, "stop");
+  buttons[5] = new Button(width/2, height-20, 30, color(200, 200, 50), 12, "cam");
   xmlPlayerInit(masterFileCounter);
   xmlRecorderInit();
   countdown = new Countdown(8, 2);
@@ -119,46 +126,35 @@ void setup() {
 
 void draw() {
   background(0);
-  if(modeRec||modePreview){
-  drawUser(); //looking for one user; may upgrade later
+  if (modeRec||modePreview) {
+    drawUser(); //looking for one user; may upgrade later
   }
-  if(!modePreview){
-  if (modeRec||modeOsc) {
-    xmlRecorderUpdate();
-  }
-  if (modePlay) {
-    xmlPlayerUpdate();
+  if (!modePreview) {
+    if (modeRec||modeOsc) {
+      xmlRecorderUpdate();
+    }
+    if (modePlay) {
+      xmlPlayerUpdate();
+    }
   }
   buttonHandler();
-  }
   recDot();
   sayText = xmlFileName + (masterFileCounter);
   //println(counter);
+  if(introWarningCounter<introWarningCounterMax){
+    textAlign(CENTER);
+  text("PLEASE NOTE:",width/2,(height/2)-70);
+  text("The app will freeze for 20 sec. the first time you press REC or CAM.",width/2,(height/2)-50);
+  introWarningCounter++;
+  }
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void keyPressed(){
-if(key==' '){
-if(modePreview){
-  modePreview=false;
-}else if(!modePreview){
-modePreview=true;
-    if(firstRun){
-      firstRun=false;
-      setupUser(); //this sets up SimpleOpenNi
-    }
-}
-}
-}
-
-void buttonHandler() {
-  for (int i=0;i<buttons.length;i++) {
-    buttons[i].checkButton();
-    buttons[i].drawButton();
-  }
-  if (buttons[0].clicked) { //REC
-    if(firstRun){
+void keyPressed() {
+  if (key==' ') {
+    if(!modeRec){
+    if (firstRun) {
       firstRun=false;
       setupUser(); //this sets up SimpleOpenNi
     }
@@ -169,7 +165,53 @@ void buttonHandler() {
       needsSaving = true;
       masterFileCounter++;
     }
-    sayTextPrefix = "Recording skeleton data";
+    sayTextPrefix = "Record skeleton data";
+  }else{
+    modesRefresh();
+    if (needsSaving) {
+      countdown.foo.play();
+      xmlSaveToDisk();
+    }
+    needsSaving=false;
+   sayTextPrefix = "Stop recording";
+  }
+}
+}
+
+void buttonHandler() {
+  for (int i=0;i<buttons.length;i++) {
+  if(modePreview){
+    if(buttonTimeoutCounter==0){
+    buttons[5].checkButton();
+    }
+    buttons[5].drawButton();
+  }else{
+        if(buttonTimeoutCounter==0){
+    buttons[i].checkButton();
+        }
+    buttons[i].drawButton();
+  }
+  if(buttons[i].clicked){
+  buttonTimeoutCounter=buttonTimeoutMax;
+  }else{
+  buttonTimeoutCounter--;
+  if(buttonTimeoutCounter<0){
+  buttonTimeoutCounter=0;
+  }
+  }
+  }
+  if (buttons[0].clicked) { //REC
+    if (firstRun) {
+      firstRun=false;
+      setupUser(); //this sets up SimpleOpenNi
+    }
+    modesRefresh();
+    xmlRecorderInit();
+    modeRec = true;
+    if (!needsSaving) {
+      needsSaving = true;
+      masterFileCounter++;
+    }
   }
   else if (buttons[1].clicked) {  //OSC from OSCeleton
     modesRefresh();
@@ -179,13 +221,11 @@ void buttonHandler() {
       needsSaving = true;
       masterFileCounter++;
     }
-    sayTextPrefix = "Recording OSC data";
   }
   else if (buttons[2].clicked) { //SAVE
     modesRefresh();
     modeExport = true;
     aePinSaveToDisk(masterFileCounter);    
-    sayTextPrefix = "Exported all XML files for After Effects";
   }
   else if (buttons[3].clicked) { //PLAY
     modesRefresh();
@@ -193,7 +233,6 @@ void buttonHandler() {
       xmlSaveToDisk();
     }
     modePlay = true;
-    sayTextPrefix = "Playing back last saved XML file";
   }
   else if (buttons[4].clicked) {  //STOP
     modesRefresh();
@@ -202,8 +241,35 @@ void buttonHandler() {
       xmlSaveToDisk();
     }
     needsSaving=false;
-    sayTextPrefix = "Click PLAY to review, SAVE to export for After Effects";
   }
+  else if (buttons[5].clicked) {  //CAM
+    modesRefresh();
+    if (modePreview) {
+      modePreview=false;
+    }
+    else if (!modePreview) {
+      modePreview=true;
+      if (firstRun) {
+        firstRun=false;
+        setupUser(); //this sets up SimpleOpenNi
+      }
+    }
+    //needsSaving=false;
+  }
+
+if (buttons[0].hovered) {
+    sayTextPrefix = "Record skeleton data";
+}else if (buttons[1].hovered) {
+    sayTextPrefix = "Record OSC data";
+}else if (buttons[2].hovered) {
+    sayTextPrefix = "Save all XML files for After Effects";
+}else if (buttons[3].hovered) {
+    sayTextPrefix = "Play back last saved XML file";
+}else if (buttons[4].hovered) {
+    sayTextPrefix = "Stop recording";
+}else if (buttons[5].hovered) {
+    sayTextPrefix = "Toggle camera view";
+}
 }
 
 void buttonsRefresh() {
