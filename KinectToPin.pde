@@ -77,9 +77,9 @@ boolean modeStop = true;
 boolean needsSaving = false;
 
 int buttonTimeoutCounter=0;
-int buttonTimeoutMax = 4;
+int buttonTimeoutMax = 6;
 int introWarningCounter = 0;
-int introWarningCounterMax = 5*fps;
+int introWarningCounterMax = 6*fps;
 
 //~~~~~~~~~~~~~~~~~~
 
@@ -243,11 +243,12 @@ void buttonHandler() {
     needsSaving=false;
   }
   else if (buttons[5].clicked) {  //CAM
-    modesRefresh();
     if (modePreview) {
-      modePreview=false;
+    modesRefresh();
+      //modePreview=false;
     }
     else if (!modePreview) {
+    modesRefresh();
       modePreview=true;
       if (firstRun) {
         firstRun=false;
@@ -287,6 +288,7 @@ void modesRefresh() {
   modePlay = false;
   modeExport = false; 
   modeStop=false;
+  modePreview=false;
 }
 
 void recDot() {
