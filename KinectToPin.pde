@@ -76,8 +76,6 @@ boolean modeExport = false;
 boolean modeStop = true;
 boolean needsSaving = false;
 
-int buttonTimeoutCounter=0;
-int buttonTimeoutMax = 6;
 int introWarningCounter = 0;
 int introWarningCounterMax = 6*fps;
 
@@ -181,25 +179,16 @@ void keyPressed() {
 void buttonHandler() {
   for (int i=0;i<buttons.length;i++) {
   if(modePreview){
-    if(buttonTimeoutCounter==0){
     buttons[5].checkButton();
-    }
     buttons[5].drawButton();
   }else{
-        if(buttonTimeoutCounter==0){
     buttons[i].checkButton();
-        }
     buttons[i].drawButton();
   }
-  if(buttons[i].clicked){
-  buttonTimeoutCounter=buttonTimeoutMax;
-  }else{
-  buttonTimeoutCounter--;
-  if(buttonTimeoutCounter<0){
-  buttonTimeoutCounter=0;
   }
-  }
-  }
+}
+
+void mouseReleased(){
   if (buttons[0].clicked) { //REC
     if (firstRun) {
       firstRun=false;
