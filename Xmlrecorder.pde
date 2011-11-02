@@ -83,9 +83,21 @@ void xmlAdd() {
   for (int i=0;i<osceletonNames.length;i++) {
     oscXmlTags[i] = new proxml.XMLElement(osceletonNames[i]);
     Joints.addChild(oscXmlTags[i]);
-    oscXmlTags[i].addAttribute("x", x[i]);
-    oscXmlTags[i].addAttribute("y", y[i]);
-    oscXmlTags[i].addAttribute("z", z[i]);
+    if(""+x[i]=="NaN"){
+      oscXmlTags[i].addAttribute("x", 0.0);
+    }else{
+      oscXmlTags[i].addAttribute("x", x[i]);
+    }    
+    if(""+y[i]=="NaN"){
+      oscXmlTags[i].addAttribute("y", 0.0);
+    }else{
+      oscXmlTags[i].addAttribute("y", y[i]);
+    }    
+    if(""+z[i]=="NaN"){
+      oscXmlTags[i].addAttribute("z", 0.0);
+    }else{
+      oscXmlTags[i].addAttribute("z", z[i]);
+    }
   }
 }
 

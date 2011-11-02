@@ -3,7 +3,7 @@
 <plist version="0.9">
   <dict>
     <key>CFBundleName</key>
-    <string>kinect_to_pin07</string>
+    <string>KinectToPin</string>
     <key>CFBundleVersion</key>
     <string>1.0</string>
     <key>CFBundleAllowMixedLocalizations</key>
@@ -21,7 +21,7 @@
     <key>CFBundleIconFile</key>
     <string>sketch.icns</string>
     <key>CFBundleIdentifier</key> 
-    <string>kinect_to_pin07</string>
+    <string>KinectToPin</string>
 
     <!-- http://developer.apple.com/documentation/MacOSX/Conceptual/BPRuntimeConfig/Articles/PListKeys.html#//apple_ref/doc/uid/20001431-113616 -->
     <key>LSUIPresentationMode</key>
@@ -41,7 +41,7 @@
       <key>VMOptions</key>
       <string> -Xms64m -Xmx1024m</string>
       <key>MainClass</key>
-      <string>kinect_to_pin07</string>
+      <string>KinectToPin</string>
       <key>JVMVersion</key>
       <string>1.5*</string>
       <key>JVMArchs</key>
@@ -50,7 +50,7 @@
 	<string>ppc</string>
       </array>
       <key>ClassPath</key>
-      <string>$JAVAROOT/oscP5.jar:$JAVAROOT/proxml.jar:$JAVAROOT/SimpleOpenNI.jar:$JAVAROOT/kinect_to_pin07.jar:$JAVAROOT/core.jar:$JAVAROOT/gluegen-rt.jar:$JAVAROOT/jogl.jar:$JAVAROOT/opengl.jar:$JAVAROOT/oscP5.jar:$JAVAROOT/proxml.jar:$JAVAROOT/jl1.0.jar:$JAVAROOT/jsminim.jar:$JAVAROOT/minim-spi.jar:$JAVAROOT/minim.jar:$JAVAROOT/mp3spi1.9.4.jar:$JAVAROOT/tritonus_aos.jar:$JAVAROOT/tritonus_share.jar:$JAVAROOT/SimpleOpenNI.jar</string>
+      <string>$JAVAROOT/oscP5.jar:$JAVAROOT/proxml.jar:$JAVAROOT/SimpleOpenNI.jar:$JAVAROOT/KinectToPin.jar:$JAVAROOT/core.jar:$JAVAROOT/gluegen-rt.jar:$JAVAROOT/jogl.jar:$JAVAROOT/opengl.jar:$JAVAROOT/oscP5.jar:$JAVAROOT/proxml.jar:$JAVAROOT/jl1.0.jar:$JAVAROOT/jsminim.jar:$JAVAROOT/minim-spi.jar:$JAVAROOT/minim.jar:$JAVAROOT/mp3spi1.9.4.jar:$JAVAROOT/tritonus_aos.jar:$JAVAROOT/tritonus_share.jar:$JAVAROOT/SimpleOpenNI.jar</string>
 
       <!-- http://developer.apple.com/releasenotes/Java/java141/system_properties/chapter_4_section_1.html#//apple_ref/doc/uid/TP30000285 -->
       <key>Properties</key>
