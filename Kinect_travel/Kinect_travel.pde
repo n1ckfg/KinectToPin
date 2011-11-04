@@ -1,44 +1,74 @@
 import org.openkinect.*;
 import org.openkinect.processing.*;
 
+int sW = 640;
+int sH = 480;
+int fps = 30;
+int sWbutton = 240;
+int sHbutton = 180;
+int translateX = 200;
+int translateY = 300;
+
 Button bob, mary,louise;
 PFont degFont;
 int degFontSize = 50;
 float deg = 0;  // orig 15, goes -30 to 30
-Kinect kinect;
 boolean firstRun = true;
 
+//--Kinect sectup
+Kinect kinect;
+boolean depth = true;
+boolean rgbSwitch = false;
+boolean ir = false;
+boolean process = false;
+int[] depthArray;
+int pixelCounter = 1;
+PImage displayImg;
+int maxDepthValue = 1040;  // full range 0-2047, rec'd 530-1040
+int minDepthValue = 530; 
+//--
+
 void setup() {
-  size(240,180);
+  size(sW,sH);
+  frameRate(fps);
   smooth();
-  bob = new Button((width/2)-75,height/1.5,50,color(200,50,0),18,-30);
-  mary = new Button(width/2,height/1.5,50,color(0,50,200),18,0);
-  louise = new Button((width/2)+75,height/1.5,50,color(50,200,0),18,15);
-  kinect = new Kinect(this);
-  kinect.start();
+  displayImg = createImage(sW,sH,RGB);
+  bob = new Button((sWbutton/2)-75,sHbutton/1.5,50,color(200,50,0),18,-30);
+  mary = new Button(sWbutton/2,sHbutton/1.5,50,color(0,50,200),18,0);
+  louise = new Button((sWbutton/2)+75,sHbutton/1.5,50,color(50,200,0),18,15);
+  initKinect();
   degFont = createFont("Arial",degFontSize);
 }
 
 void draw() {
-  background(135,135,155);
-    bob.update();
+  background(0);
+  depthArray = kinect.getRawDepth();
+  imageProcess();
+  image(displayImg,-4,0);
+  fill(255);
+  textFont(degFont,int(degFontSize/4));
+  text(int(frameRate)+" fps",width-30,20);
+  translate(translateX,translateY);
+  fill(135,135,155,200);
+  rect(0,0,sWbutton,sHbutton);
+  bob.update();
   mary.update();
   louise.update();
   if(!firstRun){
   fill(0);
   textFont(degFont,degFontSize);
-  text(int(deg),width/2,(height/2)-degFontSize);
+  text(int(deg),sWbutton/2,(sHbutton/2)-degFontSize);
   kinect.tilt(deg);
   //exit();
   }else{
   fill(0);
   textFont(degFont,degFontSize);
-  text("?",width/2,(height/2)-degFontSize);
+  text("?",sWbutton/2,(sHbutton/2)-degFontSize);
   }
 }
 
 void mouseReleased(){
-    bob.degKinect();
+  bob.degKinect();
   mary.degKinect();
   louise.degKinect();
 }
@@ -81,7 +111,7 @@ class Button {
   }
 
   void checkButton() {
-    if(hitDetect(mouseX,mouseY,0,0,posX,posY,sizeXY,sizeXY)) {
+    if(hitDetect(mouseX,mouseY,0,0,posX+translateX,posY+translateY,sizeXY,sizeXY)) {
       if(!mousePressed) {
         hovered=true;
         clicked=false;
@@ -147,8 +177,30 @@ if (keyCode==DOWN){
 }
 }
 
+void imageProcess() {
+  for(int i=0;i<depthArray.length;i++) {
+    float q = map(depthArray[i],minDepthValue,maxDepthValue,255,0);
+    depthArray[i] = color(q);
+  }
+  displayImg.pixels = depthArray;
+  displayImg.updatePixels();
+  //displayImg.filter(GRAY);
+  //displayImg.filter(INVERT);
+}
+
+void initKinect() {
+  kinect = new Kinect(this);
+  kinect.start();
+  kinect.enableDepth(depth);
+  kinect.enableRGB(rgbSwitch);
+  kinect.enableIR(ir);
+  kinect.processDepthImage(process);
+  //kinect.tilt(deg);
+}
+
 void stop() {
   kinect.quit();
   super.stop();
+  exit();
 }
 
