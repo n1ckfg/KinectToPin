@@ -39,6 +39,9 @@ String xmlFilePath = "savexml";
 String aeFileName = "aeMocapData";
 String aeFilePath = "saveae";
 String aeFileType = "txt";
+String jsonFileName = "jsonMocapData";
+String jsonFilePath = "savejson";
+String jsonFileType = "txt";
 
 boolean limitReached = false;
 boolean loaded = false;
