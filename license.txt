@@ -1,4 +1,7 @@
-KinectToPin was developed with support from the Toronto Arts Council, the Ontario Arts Council, and Bravo!FACT.
+KinectToPin was developed with support from:
+   Bravo!FACT
+   Ontario Arts Council
+   Toronto Arts Council
 Copyright (c) 2011 Nick Fox-Gieg Animation
 
 The MIT License <http://www.opensource.org/licenses/mit-license.php>
