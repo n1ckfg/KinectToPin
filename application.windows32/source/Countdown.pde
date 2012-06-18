@@ -22,7 +22,7 @@ class Countdown {
     secBeep = sb;
     leaderCounterMax = secStart * fps;
     leaderCounterBeep = (secStart-secBeep) * fps;
-    foo = minim.loadSnippet("24th blip sync pop.wav");
+    foo = minim.loadSnippet("sounds/24th blip sync pop.wav");
     font = createFont("Arial",fontSize);
   }
 
