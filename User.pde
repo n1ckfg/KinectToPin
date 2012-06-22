@@ -10,7 +10,7 @@
  */
 
 void setupUser(){
-  context = new SimpleOpenNI(this);
+  context = new SimpleOpenNI(this,SimpleOpenNI.RUN_MODE_MULTI_THREADED);
   context.setMirror(true);
    
   // enable depthMap generation 
