@@ -4,7 +4,8 @@ String aeJsxFileType = "jsx";
 
 //provided for example only; replaced here by aeJsxSaveToDisk function
 void AEkeysMain() {
-  AEkeysBegin();
+/*
+AEkeysBegin();
   for (int i=0;i<numParticles;i++) {
     data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 1.0, 0], \"my square\", 50, 50, 1);" + "\r");
     if(motionBlur){
@@ -24,6 +25,7 @@ void AEkeysMain() {
     }
 }
     AEkeysEnd();   
+    */
 }
 
 float AEkeyTime(int currentFrame, int totalFrames){
@@ -98,11 +100,11 @@ void AEkeysBegin() {
   data.add("\r");  
 }
 
-void AEkeysEnd() {
+void AEkeysEnd(int qq) {
   data.add("\r");
   data.add("\t" + "app.endUndoGroup();" + "\r");
   data.add("}  //end script" + "\r");
-  data.endSave("data/" + aeJsxFilePath + "/" + aeJsxFileName + "." + aeJsxFileType);
+  data.endSave("data/" + aeJsxFilePath + "/" + aeJsxFileName + qq + "." + aeJsxFileType);
 }
 
 

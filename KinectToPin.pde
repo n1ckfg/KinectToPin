@@ -19,7 +19,7 @@ float weight = 18;
 float scaleNum  = 1.0 / (weight + 2);
 //---
 boolean tracePath = true;
-String scriptsFilePath = "saveJsx";
+String scriptsFilePath = "savejsx";
 //**************************
 
 boolean firstRun=true;

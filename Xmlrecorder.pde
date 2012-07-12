@@ -215,7 +215,7 @@ void aeJsxSaveToDisk(int mfc) {
         data.add("\t" + "p.expression = expression;");
         */
       }
-      AEkeysEnd();
+      AEkeysEnd(zz);
     }
   }
 }
