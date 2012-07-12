@@ -7,6 +7,21 @@ import SimpleOpenNI.*;
 
 //~~~~~~~~~~~~~~~~~~
 
+//**************************
+//float durationFrames = 10 * fps;
+int numParticles = 100;
+boolean motionBlur = true;
+boolean applyEffects = false;
+boolean applySmoothing = true;
+//smoothing
+int smoothNum = 6;
+float weight = 18;
+float scaleNum  = 1.0 / (weight + 2);
+//---
+boolean tracePath = true;
+String scriptsFilePath = "saveJsx";
+//**************************
+
 boolean firstRun=true;
 boolean modePreview = false;
 
@@ -15,8 +30,14 @@ SimpleOpenNI  context;
 int masterFileCounter=0;
 String[] allFiles;
 
+//this sketch
 int sW = 640;
 int sH = 480;
+
+//destination After Effects comp
+int dW = 1920;
+int dH = 1080;
+
 int fps = 24;
 int counter = 0;
 int counterMax = 0; //number of MocapFrames to record
@@ -48,8 +69,10 @@ boolean loaded = false;
 
 String[] osceletonNames = {
   //~~~   complete list of working joints, check updates at https://github.com/Sensebloom/OSCeleton  ~~~
-  "head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"
-    //"r_hand","r_wrist","r_elbow","r_shoulder", "l_hand","l_wrist","l_elbow","l_shoulder","head","torso"
+  //follows screen left vs. right
+  //"head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"
+  //follows character left vs. right
+  "head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot"
 };
 
 //SKEL_HEAD, SKEL_NECK, SKEL_TORSO, SKEL_RIGHT_SHOULDER, SKEL_RIGHT_ELBOW, SKEL_RIGHT_HAND, SKEL_LEFT_SHOULDER, SKEL_LEFT_ELBOW, SKEL_LEFT_HAND, SKEL_RIGHT_HIP, SKEL_RIGHT_KNEE, SKEL_RIGHT_FOOT, SKEL_LEFT_HIP, SKEL_LEFT_KNEE, SKEL_LEFT_FOOT
@@ -218,6 +241,7 @@ void mouseReleased(){
     modesRefresh();
     modeExport = true;
     aePinSaveToDisk(masterFileCounter);    
+    aeJsxSaveToDisk(masterFileCounter);    
   }
   else if (buttons[3].clicked) { //PLAY
     modesRefresh();
