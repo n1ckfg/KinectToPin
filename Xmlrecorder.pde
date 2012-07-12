@@ -146,40 +146,74 @@ void aeJsxSaveToDisk(int mfc) {
         pinNums[i] = i+1;
       }
       AEkeysBegin();
+      data.add("\t" + "var mocap = myComp.layers.addSolid([0, 0, 0], \"mocap\", 640, 480, 1);" + "\r");
+      data.add("\t" + "mocap.guideLayer = true;" + "\r");
+      data.add("\t" + "mocap.locked = true;" + "\r");
+      data.add("\t" + "mocap.property(\"position\").setValue([320,240]);" + "\r");
+      data.add("\t" + "mocap.property(\"opacity\").setValue(0);" + "\r");
       for (int j=0;j<osceletonNames.length;j++) {
         modesRefresh();
-        data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 1.0, 0], \"" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
+        data.add("\r");
+        data.add("\t" + "var myEffect = mocap.property(\"Effects\").addProperty(\"Point Control\");" + "\r");
+        data.add("\t" + "myEffect.name = \"" + osceletonNames[j] + "\";" + "\r");
+        //(\"Blurriness\").setValue(61);");
+        //data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 1.0, 0], \"" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
+        /*
         if (motionBlur) {
-          data.add("\t" + "solid.motionBlur = true;" + "\r");
-        }
-        if (applyEffects) {
-          AEeffects();
-        }
-        data.add("\r");
-        data.add("\t" + "var p = solid.property(\"position\");" + "\r");
+         data.add("\t" + "solid.motionBlur = true;" + "\r");
+         }
+         if (applyEffects) {
+         AEeffects();
+         }
+         */
+        //data.add("\r");
+        data.add("\t" + "var p = mocap.property(\"Effects\")(\"" + osceletonNames[j] + "\")(\"Point\");" + "\r");
         //data.add("\t" + "var r = solid.property(\"rotation\");" + "\r");
-        data.add("\r");
+        //data.add("\r");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
-          PVector temp = new PVector(0,0);
+          PVector temp = new PVector(0, 0);
           //this awkward check is needed to stop "NaN" errors creeping into the JavaScript file.
           //for some reason they don't break the copy-paste pin methods, but they do break JavaScript.
-          if(
+          if (
           float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")) >= 0 &&
-          float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")) <= 1 &&
-          float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")) >= 0 &&
-          float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")) <= 1
-          ){
-          temp.x = (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")));
-          temp.y = (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")));
+            float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")) <= 1 &&
+            float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")) >= 0 &&
+            float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")) <= 1
+            ) {
+            temp.x = (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")));
+            temp.y = (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")));
           }
-          data.add("\t\t" + "p.setValueAtTime(" + AEkeyTime(i,MotionCapture.countChildren()) + ", [ " + temp.x + ", " + temp.y + "]);" + "\r");
-
-        /*
-        data.add("\t" + i  
-            + "\t" + (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))
-            + "\t" + (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))); //gets to the child we need //gets to the child we need
-           */
+          data.add("\t\t" + "p.setValueAtTime(" + AEkeyTime(i, MotionCapture.countChildren()) + ", [" + temp.x + ", " + temp.y + "]);" + "\r");
         }
+
+        data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 0, 0], \"" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
+        data.add("\t" + "solid.guideLayer = true;" + "\r");
+        data.add("\t" + "solid.property(\"opacity\").setValue(33);" + "\r");
+        data.add("\t" + "var p = solid.property(\"position\");" + "\r");
+        data.add("\t" + "var expression = " + "\r");
+        data.add("\t" + "//~~~~~~~~~~~~~expression here~~~~~~~~~~~~~~~" + "\r");
+        data.add("\t\t" + "\"" + "var sW = 640;" + "\"" + " +" + "\r");
+        data.add("\t\t" + "\"" + "var sH = 480;" + "\"" + " +" + "\r");
+        data.add("\t\t" + "\"" + "var dW = thisComp.width;" + "\"" + " +" + "\r");
+        data.add("\t\t" + "\"" + "var dH = thisComp.height;" + "\"" + " +" + "\r");
+        data.add("\t\t" + "\"" + "var x = fromComp(thisComp.layer(" + "\\" + "\"mocap" + "\\" + "\").effect(" + "\\" + "\"" + osceletonNames[j] + "\\" + "\")(" + "\\" + "\"Point" + "\\" + "\"))[0];" + "\"" + " +" + "\r");
+        data.add("\t\t" + "\"" + "var y = fromComp(thisComp.layer(" + "\\" + "\"mocap" + "\\" + "\").effect(" + "\\" + "\"" + osceletonNames[j] + "\\" + "\")(" + "\\" + "\"Point" + "\\" + "\"))[1];" + "\"" + " +" + "\r");
+        data.add("\t\t" + "\"" + "[x*(dW/sW),y*(dH/sH)];" + "\"" + ";" + "\r");
+        data.add("\t" + "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + "\r");
+        data.add("\t" + "p.expression = expression;");
+        
+        /*
+        data.add("\r");
+         
+        data.add("\t" + "var solid = myComp.layers.addSolid([0, 1.0, 0], \"dest_" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
+        data.add("\t" + "var p = solid.property(\"position\");" + "\r");
+        data.add("\t" + "var expression = " + "\r");
+        data.add("\t" + "//~~~~~~~~~~~~~expression here~~~~~~~~~~~~~~~" + "\r");
+        data.add("\t\t" + "\"" + "var nullTarget = " + "\\" + "\"source_" + osceletonNames[j] + "\\" + "\";" + "\"" + " +" + "\r");
+        data.add("\t\t" + "\"" + "fromComp(thisComp.layer(nullTarget).transform.position);" + "\";" + "\r");
+        data.add("\t" + "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + "\r");
+        data.add("\t" + "p.expression = expression;");
+        */
       }
       AEkeysEnd();
     }
