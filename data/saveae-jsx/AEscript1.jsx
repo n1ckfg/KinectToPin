@@ -24,6 +24,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "head";
 	var p = mocap.property("Effects")("head")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -376,6 +377,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "neck";
 	var p = mocap.property("Effects")("neck")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -763,6 +765,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "torso";
 	var p = mocap.property("Effects")("torso")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -1150,6 +1153,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "l_shoulder";
 	var p = mocap.property("Effects")("l_shoulder")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -1534,6 +1538,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "l_elbow";
 	var p = mocap.property("Effects")("l_elbow")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -1921,6 +1926,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "l_hand";
 	var p = mocap.property("Effects")("l_hand")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -2299,6 +2305,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "r_shoulder";
 	var p = mocap.property("Effects")("r_shoulder")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -2685,6 +2692,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "r_elbow";
 	var p = mocap.property("Effects")("r_elbow")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -3071,6 +3079,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "r_hand";
 	var p = mocap.property("Effects")("r_hand")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -3457,6 +3466,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "l_hip";
 	var p = mocap.property("Effects")("l_hip")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -3844,6 +3854,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "l_knee";
 	var p = mocap.property("Effects")("l_knee")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -4231,6 +4242,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "l_foot";
 	var p = mocap.property("Effects")("l_foot")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -4549,6 +4561,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "r_hip";
 	var p = mocap.property("Effects")("r_hip")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -4936,6 +4949,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "r_knee";
 	var p = mocap.property("Effects")("r_knee")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);
@@ -5323,6 +5337,7 @@
 	var myEffect = mocap.property("Effects").addProperty("3D Point Control");
 	myEffect.name = "r_foot";
 	var p = mocap.property("Effects")("r_foot")("3D Point");
+p.expression = """smooth(.2,5)""";
 		p.setValueAtTime(0.0, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.041666668, [0.0, 0.0, 0.0]);
 		p.setValueAtTime(0.083333336, [0.0, 0.0, 0.0]);

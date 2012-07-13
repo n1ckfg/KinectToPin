@@ -213,6 +213,7 @@ void aeJsxSaveToDisk(int mfc) {
          */
         //data.add("\r");
         data.add("\t" + "var p = mocap.property(\"Effects\")(\"" + osceletonNames[j] + "\")(\"3D Point\");" + "\r");
+        data.add("p.expression = \"\"\"smooth(.2,5)\"\"\";");
         //data.add("\t" + "var r = solid.property(\"rotation\");" + "\r");
         //data.add("\r");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
