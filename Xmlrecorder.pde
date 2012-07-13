@@ -97,10 +97,12 @@ void xmlAdd() {
 }
 
 
+//exports xml file with all original data
 void xmlSaveToDisk() {
   xmlIO.saveElement(MotionCapture, xmlFilePath + "/" + xmlFileName + (masterFileCounter) + "." + xmlFileType);
 }
 
+//exports puppet pins as text with only x and y
 void aePinSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -124,9 +126,11 @@ void aePinSaveToDisk(int mfc) {
         data.add("Effects" + "\t" + "Puppet #2" + "\t" + "arap #3" + "\t" + "Mesh" + "\t" + "Mesh #1" + "\t" + "Deform" + "\t" + "Pin #" + pinNums[j] + "\t" + "Position");
         data.add("\t" + "Frame" + "\t" + "X pixels" + "\t" + "Y pixels");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
-          data.add("\t" + i  
-            + "\t" + (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))
-            + "\t" + (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))); //gets to the child we need //gets to the child we need
+          if (errorCheck(i, j)) {
+            data.add("\t" + i  
+              + "\t" + (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))
+              + "\t" + (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))); //gets to the child we need //gets to the child we need
+          }
         }
       }
       data.add("\r");
@@ -137,6 +141,47 @@ void aePinSaveToDisk(int mfc) {
   }
 }
 
+//export 3D points as text with xyz
+void aePointSaveToDisk(int mfc) {
+  for (int z=0;z<mfc;z++) {
+    int zz=z+1;
+    xmlPlayerInit(zz);
+    if (loaded) {
+      for (int i=0;i<pinNums.length;i++) {
+        pinNums[i] = i+1;
+      }
+      data = new Data();
+      data.beginSave();
+      data.add("Adobe After Effects 8.0 Keyframe Data");
+      data.add("\r");
+      data.add("\t"+"Units Per Second"+"\t"+fps);
+      data.add("\t"+"Source Width"+"\t"+sW);
+      data.add("\t"+"Source Height"+"\t"+sH);
+      data.add("\t"+"Source Pixel Aspect Ratio"+"\t"+"1");
+      data.add("\t"+"Comp Pixel Aspect Ratio"+"\t"+"1");
+      for (int j=0;j<osceletonNames.length;j++) {
+        modesRefresh();
+        data.add("\r");
+        data.add("Effects" + "\t" + "3D Point Control #" + pinNums[j] + "\t" + "3D Point #2");
+        data.add("\t" + "Frame" + "\t" + "X pixels" + "\t" + "Y pixels" + "\t" + "Z pixels");
+        for (int i=0;i<MotionCapture.countChildren();i++) { 
+          if (errorCheck(i, j)) {
+            data.add("\t" + i  
+              + "\t" + (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))
+              + "\t" + (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y"))) //gets to the child we need //gets to the child we need
+            + "\t" + (100 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))); //gets to the child we need //gets to the child we need
+          }
+        }
+      }
+      data.add("\r");
+      data.add("\r");
+      data.add("End of Keyframe Data");
+      data.endSave("data/"+ aePointFilePath + "/" + aePointFileName + zz +"."+aePointFileType);
+    }
+  }
+}
+
+//export JavaScript script to automate rigging tasks
 void aeJsxSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -171,22 +216,13 @@ void aeJsxSaveToDisk(int mfc) {
         //data.add("\t" + "var r = solid.property(\"rotation\");" + "\r");
         //data.add("\r");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
-          PVector temp = new PVector(0, 0, 0);
-          //this awkward check is needed to stop "NaN" errors creeping into the JavaScript file.
-          //for some reason they don't break the copy-paste pin methods, but they do break JavaScript.
-          if (
-          float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")) >= 0 &&
-            float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")) <= 1 &&
-            float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")) >= 0 &&
-            float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")) <= 1 &&
-            float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")) >= 0 &&
-            float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")) <= 100
-            ) {
+          if (errorCheck(i, j)) {
+            PVector temp = new PVector(0, 0, 0);
             temp.x = (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")));
             temp.y = (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")));
             temp.z = (100* float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")));
+            data.add("\t\t" + "p.setValueAtTime(" + AEkeyTime(i, MotionCapture.countChildren()) + ", [" + temp.x + ", " + temp.y + ", " + temp.z + "]);" + "\r");
           }
-          data.add("\t\t" + "p.setValueAtTime(" + AEkeyTime(i, MotionCapture.countChildren()) + ", [" + temp.x + ", " + temp.y + ", " + temp.z + "]);" + "\r");
         }
 
         data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 0, 0], \"" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
@@ -204,19 +240,19 @@ void aeJsxSaveToDisk(int mfc) {
         data.add("\t\t" + "\"" + "[(1.5 * dW) + (x*(dW/sW)),dH + (y*(dH/sH))];" + "\"" + ";" + "\r");
         data.add("\t" + "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + "\r");
         data.add("\t" + "p.expression = expression;");
-        
+
         /*
         data.add("\r");
          
-        data.add("\t" + "var solid = myComp.layers.addSolid([0, 1.0, 0], \"dest_" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
-        data.add("\t" + "var p = solid.property(\"position\");" + "\r");
-        data.add("\t" + "var expression = " + "\r");
-        data.add("\t" + "//~~~~~~~~~~~~~expression here~~~~~~~~~~~~~~~" + "\r");
-        data.add("\t\t" + "\"" + "var nullTarget = " + "\\" + "\"source_" + osceletonNames[j] + "\\" + "\";" + "\"" + " +" + "\r");
-        data.add("\t\t" + "\"" + "fromComp(thisComp.layer(nullTarget).transform.position);" + "\";" + "\r");
-        data.add("\t" + "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + "\r");
-        data.add("\t" + "p.expression = expression;");
-        */
+         data.add("\t" + "var solid = myComp.layers.addSolid([0, 1.0, 0], \"dest_" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
+         data.add("\t" + "var p = solid.property(\"position\");" + "\r");
+         data.add("\t" + "var expression = " + "\r");
+         data.add("\t" + "//~~~~~~~~~~~~~expression here~~~~~~~~~~~~~~~" + "\r");
+         data.add("\t\t" + "\"" + "var nullTarget = " + "\\" + "\"source_" + osceletonNames[j] + "\\" + "\";" + "\"" + " +" + "\r");
+         data.add("\t\t" + "\"" + "fromComp(thisComp.layer(nullTarget).transform.position);" + "\";" + "\r");
+         data.add("\t" + "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + "\r");
+         data.add("\t" + "p.expression = expression;");
+         */
       }
       AEkeysEnd(zz);
     }
@@ -292,6 +328,21 @@ void jsonSaveToDisk(int mfc) {
       data.add("End of Keyframe Data");
       data.endSave("data/"+ jsonFilePath + "/" + jsonFileName + zz +"."+jsonFileType);
     }
+  }
+}
+
+boolean errorCheck(int i, int j) {
+  if (
+    float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")) >= 0 &&
+    float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")) <= 1 &&
+    float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")) >= 0 &&
+    float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")) <= 1 &&
+    float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")) >= 0 &&
+    float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")) <= 100
+    ) {
+    return true;
+  } else {
+    return false;
   }
 }
 

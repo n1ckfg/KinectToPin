@@ -19,7 +19,6 @@ float weight = 18;
 float scaleNum  = 1.0 / (weight + 2);
 //---
 boolean tracePath = true;
-String scriptsFilePath = "savejsx";
 //**************************
 
 boolean firstRun=true;
@@ -57,12 +56,22 @@ proxml.XMLElement MotionCapture;
 String xmlFileName = "mocapData";
 String xmlFileType = "xml";
 String xmlFilePath = "savexml";
-String aeFileName = "aeMocapData";
-String aeFilePath = "saveae";
+//~
+String aeFileName = "AEpinData";
+String aeFilePath = "saveae-pins";
 String aeFileType = "txt";
-String jsonFileName = "jsonMocapData";
+//~
+String aePointFileName = "AEpointData";
+String aePointFilePath = "saveae-points";
+String aePointFileType = "txt";
+//~
+String jsonFileName = "jsonData";
 String jsonFilePath = "savejson";
 String jsonFileType = "txt";
+//~
+String aeJsxFileName = "AEscript";
+String aeJsxFilePath = "saveae-jsx";
+String aeJsxFileType = "jsx";
 
 boolean limitReached = false;
 boolean loaded = false;
@@ -241,6 +250,7 @@ void mouseReleased(){
     modesRefresh();
     modeExport = true;
     aePinSaveToDisk(masterFileCounter);    
+    aePointSaveToDisk(masterFileCounter);    
     aeJsxSaveToDisk(masterFileCounter);    
   }
   else if (buttons[3].clicked) { //PLAY

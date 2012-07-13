@@ -1,7 +1,3 @@
-String aeJsxFileName = "AEscript";
-String aeJsxFilePath = scriptsFilePath;
-String aeJsxFileType = "jsx";
-
 //provided for example only; replaced here by aeJsxSaveToDisk function
 void AEkeysMain() {
 /*
