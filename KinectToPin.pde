@@ -23,6 +23,9 @@ boolean tracePath = true;
 
 boolean firstRun=true;
 boolean modePreview = false;
+int previewLevel = 5;
+PImage previewImg;
+int[] previewInt;
 
 SimpleOpenNI  context;
 
@@ -72,6 +75,10 @@ String jsonFileType = "txt";
 String aeJsxFileName = "AEscript";
 String aeJsxFilePath = "saveae-jsx";
 String aeJsxFileType = "jsx";
+
+String mayaFileName = "mayaScript";
+String mayaFilePath = "saveMaya";
+String mayaFileType = "py";
 
 boolean limitReached = false;
 boolean loaded = false;
@@ -151,6 +158,9 @@ void setup() {
   xmlPlayerInit(masterFileCounter);
   xmlRecorderInit();
   countdown = new Countdown(8, 2);
+  
+  previewImg = createImage(sW,sH,RGB);
+  previewInt = new int[sW*sH];
   background(0);
 }
 
@@ -177,7 +187,7 @@ void draw() {
   if(introWarningCounter<introWarningCounterMax){
     textAlign(CENTER);
   text("PLEASE NOTE:",width/2,(height/2)-70);
-  text("The app will freeze for 20 sec. the first time you press REC or CAM.",width/2,(height/2)-50);
+  text("The app will freeze for ~20 sec. the first time you press REC or CAM.",width/2,(height/2)-50);
   introWarningCounter++;
   }
 }
@@ -252,6 +262,7 @@ void mouseReleased(){
     aePinSaveToDisk(masterFileCounter);    
     aePointSaveToDisk(masterFileCounter);    
     aeJsxSaveToDisk(masterFileCounter);    
+    mayaSaveToDisk(masterFileCounter);
   }
   else if (buttons[3].clicked) { //PLAY
     modesRefresh();

@@ -19,6 +19,16 @@ void xmlRecorderUpdate() {
     for (int i=0;i<osceletonNames.length;i++) {
       pushMatrix();
       translate(width*x[i], height*y[i], (-depth*z[i])+abs(depth/2));
+      //~~~~~~~~~~
+      //custom joint colors if you need them
+      /*
+      if(osceletonNames[i]=="r_hand"){
+         fill(255,0,0);
+      }else{
+        fill(235);
+      }
+      */
+      //~~~~~~~~~~
       ellipse(0, 0, circleSize, circleSize);
       popMatrix();
     }
@@ -260,6 +270,34 @@ void aeJsxSaveToDisk(int mfc) {
   }
 }
 
+void mayaSaveToDisk(int mfc) {
+  for (int z=0;z<mfc;z++) {
+    int zz=z+1;
+    xmlPlayerInit(zz);
+    if (loaded) {
+      for (int i=0;i<pinNums.length;i++) {
+        pinNums[i] = i+1;
+      }
+      mayaKeysBegin();
+       for (int j=0;j<osceletonNames.length;j++) {
+        modesRefresh();
+       for (int i=0;i<MotionCapture.countChildren();i++) { 
+          if (errorCheck(i, j)) {
+            PVector temp = new PVector(0, 0, 0);
+            temp.x = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")));
+            temp.y = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")));
+            temp.z = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")));
+            data.add("polyCube()" + "\r");
+       data.add("currentTime("+i+")"+"\r");
+       data.add("move(" + (temp.x) + ", " + (temp.y) + "," + (temp.z) + ")" + "\r");
+       data.add("setKeyframe()" + "\r");          
+        }
+        }
+      }
+      mayaKeysEnd(zz);
+    }
+  }
+}
 
 /*
 //json parser by Greg Borenstein, gregborenstein.com 

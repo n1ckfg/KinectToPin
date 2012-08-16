@@ -11,6 +11,7 @@
 
 void setupUser(){
   context = new SimpleOpenNI(this,SimpleOpenNI.RUN_MODE_MULTI_THREADED);
+  //context = new SimpleOpenNI(this);
   context.setMirror(true);
    
   // enable depthMap generation 
@@ -34,7 +35,14 @@ void drawUser(){
   
   // draw depthImageMap
   if(modePreview){
-    image(context.depthImage(),0,0);
+  previewInt = context.depthImage().pixels;
+  for(int i=0;i<sW*sH;i+=previewLevel){
+  previewImg.pixels[i] = previewInt[i];
+  previewImg.updatePixels();
+  }
+  image(previewImg, 0,0);
+
+  //image(context.depthImage(),0,0);
   }
   
   // draw the skeleton if it's available
