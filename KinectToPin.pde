@@ -28,6 +28,7 @@ PImage previewImg;
 int[] previewInt;
 
 SimpleOpenNI  context;
+boolean mirror = false;
 
 int masterFileCounter=0;
 String[] allFiles;

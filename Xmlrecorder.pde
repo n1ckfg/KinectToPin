@@ -21,13 +21,13 @@ void xmlRecorderUpdate() {
       translate(width*x[i], height*y[i], (-depth*z[i])+abs(depth/2));
       //~~~~~~~~~~
       //custom joint colors if you need them
-      /*
+      
       if(osceletonNames[i]=="r_hand"){
-         fill(255,0,0);
+         fill(255,155,155,200);
       }else{
-        fill(235);
+        fill(255,200);
       }
-      */
+      
       //~~~~~~~~~~
       ellipse(0, 0, circleSize, circleSize);
       popMatrix();
