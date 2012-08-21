@@ -20,7 +20,7 @@ void xmlPlayerUpdate() {
   strokeWeight(5);
   for(int i=0;i<osceletonNames.length;i++) {
     pushMatrix();
-    translate(width*x[i],height*y[i],(-depth*z[i])+abs(depth/2));
+    translate(width*x[i],height*y[i],(-sD*z[i])+abs(sD/2));
     ellipse(0,0,circleSize,circleSize);
     popMatrix();
   }

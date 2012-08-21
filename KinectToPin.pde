@@ -36,6 +36,7 @@ String[] allFiles;
 //this sketch
 int sW = 640;
 int sH = 480;
+float sD = 200; //range of depth...FYI After Effects puppet tool doesn't use Z position
 
 //destination After Effects comp
 int dW = 1920;
@@ -53,6 +54,8 @@ String sayTextSeparator = "  ...  ";
 Minim minim;
 OscP5 oscP5;
 boolean found=false;
+String ipNumber = "127.0.0.1";
+int receivePort = 7110;
 
 XMLInOut xmlIO;
 //proxml.XMLElement xmlFile;
@@ -60,43 +63,42 @@ proxml.XMLElement MotionCapture;
 String xmlFileName = "mocapData";
 String xmlFileType = "xml";
 String xmlFilePath = "savexml";
+boolean saveXml = true;
 //~
 String aeFileName = "AEpinData";
 String aeFilePath = "saveae-pins";
 String aeFileType = "txt";
+boolean savePins = true;
 //~
 String aePointFileName = "AEpointData";
 String aePointFilePath = "saveae-points";
 String aePointFileType = "txt";
+boolean savePoints = false;
 //~
 String jsonFileName = "jsonData";
 String jsonFilePath = "savejson";
 String jsonFileType = "txt";
+boolean saveJson = false;
 //~
 String aeJsxFileName = "AEscript";
 String aeJsxFilePath = "saveae-jsx";
 String aeJsxFileType = "jsx";
+boolean saveJsx = false;
 
 String mayaFileName = "mayaScript";
 String mayaFilePath = "saveMaya";
 String mayaFileType = "py";
+boolean saveMaya = false;
 
 boolean limitReached = false;
 boolean loaded = false;
 
-String[] osceletonNames = {
-  //~~~   complete list of working joints, check updates at https://github.com/Sensebloom/OSCeleton  ~~~
-  //follows screen left vs. right
-  //"head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"
-  //follows character left vs. right
-  "head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot"
-};
+String[] osceletonNamesNormal = {"head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"};
+String[] osceletonNamesReversed = {"head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot"};
+String[] osceletonNames = new String[15];
 
-//SKEL_HEAD, SKEL_NECK, SKEL_TORSO, SKEL_RIGHT_SHOULDER, SKEL_RIGHT_ELBOW, SKEL_RIGHT_HAND, SKEL_LEFT_SHOULDER, SKEL_LEFT_ELBOW, SKEL_LEFT_HAND, SKEL_RIGHT_HIP, SKEL_RIGHT_KNEE, SKEL_RIGHT_FOOT, SKEL_LEFT_HIP, SKEL_LEFT_KNEE, SKEL_LEFT_FOOT
 PVector[] simpleOpenNiPos = new PVector[osceletonNames.length];
 PVector[] simpleOpenNiPos_proj = new PVector[osceletonNames.length];
-
-
 
 File dataFolder;
 Data data;
@@ -107,7 +109,6 @@ float posX, posY, posZ;
 float[] x = new float[osceletonNames.length];
 float[] y = new float[osceletonNames.length];
 float[] z = new float[osceletonNames.length];
-float depth = 200; //range of depth...FYI After Effects puppet tool doesn't use Z position
 int circleSize = 50;
 
 Button[] buttons = new Button[6];
@@ -124,7 +125,24 @@ int introWarningCounterMax = 6*fps;
 
 //~~~~~~~~~~~~~~~~~~
 
+void initSettings(){
+  Settings settings = new Settings("settings.txt");
+  if(mirror){
+    osceletonNames = osceletonNamesNormal;
+  }else{
+    osceletonNames = osceletonNamesReversed;
+  }
+  simpleOpenNiPos = new PVector[osceletonNames.length];
+  simpleOpenNiPos_proj = new PVector[osceletonNames.length];
+  pinNums = new int[osceletonNames.length];
+  oscXmlTags = new proxml.XMLElement[osceletonNames.length];
+  x = new float[osceletonNames.length];
+  y = new float[osceletonNames.length];
+  z = new float[osceletonNames.length];
+}
+
 void setup() {
+  initSettings();
   size(sW, sH, OPENGL);
   frameRate(fps);
 
@@ -135,10 +153,14 @@ void setup() {
 
   dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
   allFiles = dataFolder.list();
+  try{
   for (int i=0;i<allFiles.length;i++) {
     if (allFiles[i].toLowerCase().endsWith(xmlFileType)) {
       masterFileCounter++;
     }
+  }
+  }catch (Exception e){
+  //
   }
   //masterFileCounter = allFiles.length;
   if (masterFileCounter==1) {
@@ -149,7 +171,7 @@ void setup() {
   }
   ellipseMode(CENTER);
   minim = new Minim(this);
-  oscP5 = new OscP5(this, "127.0.0.1", 7110);
+  oscP5 = new OscP5(this, ipNumber, receivePort);
   buttons[0] = new Button(25, height-20, 30, color(240, 10, 10), 12, "rec");
   buttons[1] = new Button(60, height-20, 30, color(200, 20, 200), 12, "osc");
   buttons[2] = new Button(width-25, height-20, 30, color(50, 50, 220), 12, "save");
@@ -196,7 +218,7 @@ void draw() {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void keyPressed() {
-  if (key==' '||keyCode==33||keyCode==34) { //works with pgup or pgdn used by remote clicker
+  if (key==' '||keyCode==33) { //REC works with space or pgdn from clicker
     if(!modeRec){
     if (firstRun) {
       firstRun=false;
@@ -219,6 +241,22 @@ void keyPressed() {
     needsSaving=false;
    sayTextPrefix = "Stop recording";
   }
+}
+
+if(key=='c'||key=='C'||keyCode==34){  //CAM works with C key or pgup from clicker
+    if (modePreview) {
+    modesRefresh();
+      //modePreview=false;
+    }
+    else if (!modePreview) {
+    modesRefresh();
+      modePreview=true;
+      if (firstRun) {
+        firstRun=false;
+        setupUser(); //this sets up SimpleOpenNi
+      }
+    }
+    //needsSaving=false;
 }
 }
 

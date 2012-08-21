@@ -2,9 +2,9 @@ void xmlRecorderInit() {
   xmlIO = new XMLInOut(this);
   MotionCapture = new proxml.XMLElement("MotionCapture");
   MotionCapture.addAttribute("fps", fps);
-  MotionCapture.addAttribute("width", width);
-  MotionCapture.addAttribute("height", height);
-  MotionCapture.addAttribute("depth", depth);
+  MotionCapture.addAttribute("width", sW);
+  MotionCapture.addAttribute("height", sH);
+  MotionCapture.addAttribute("depth", sD);
   MotionCapture.addAttribute("numFrames", counter);
 }
 
@@ -18,12 +18,12 @@ void xmlRecorderUpdate() {
     strokeWeight(5);
     for (int i=0;i<osceletonNames.length;i++) {
       pushMatrix();
-      translate(width*x[i], height*y[i], (-depth*z[i])+abs(depth/2));
+      translate(sW*x[i], sH*y[i], (-sD*z[i])+abs(sD/2));
       //~~~~~~~~~~
       //custom joint colors if you need them
       
       if(osceletonNames[i]=="r_hand"){
-         fill(255,155,155,200);
+         fill(255,200,200,200);
       }else{
         fill(255,200);
       }
@@ -76,7 +76,7 @@ void simpleOpenNiEvent(int userId) {
     context.convertRealWorldToProjective(simpleOpenNiPos[i], simpleOpenNiPos_proj[i]);
     x[i] = simpleOpenNiPos_proj[i].x/sW;
     y[i] = simpleOpenNiPos_proj[i].y/sH;
-    z[i] = simpleOpenNiPos_proj[i].z/2000; //approximate 'cause don't know real SimpleOpenNI depth max/min in pixels; will fix
+    z[i] = simpleOpenNiPos_proj[i].z/(sD*10); //approximate 'cause don't know real SimpleOpenNI depth max/min in pixels; will fix
   }
 }
 
