@@ -214,8 +214,7 @@ void draw() {
     if (modeRec||modeOsc) {
     //if(modeRec){
       xmlRecorderUpdate();
-    }
-    if (modePlay) {
+    }else if (modePlay) {
       xmlPlayerUpdate();
     }
   }

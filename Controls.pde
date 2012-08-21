@@ -77,13 +77,13 @@ void modesRefresh() {
   modePreview=false;
 }
 
-void doButtonRec(){
+void doButtonRec(){ //toggle
     if(!modeRec){
     if (firstRun) {
       firstRun=false;
       setupUser(); //this sets up SimpleOpenNi
     }
-    modesRefresh();
+    doButtonStop();
     xmlRecorderInit();
     modeRec = true;
     if (!needsSaving) {
@@ -91,27 +91,26 @@ void doButtonRec(){
       masterFileCounter++;
     }
   }else{
-    modesRefresh();
-    if (needsSaving) {
-      countdown.foo.play();
-      xmlSaveToDisk();
-    }
-    needsSaving=false;
+    doButtonStop();
   }
 }
 
 
-void doButtonOsc(){
-    modesRefresh();
+void doButtonOsc(){ //toggle
+  if(!modeOsc){
+    doButtonStop();
     xmlRecorderInit();
     modeOsc = true;
     if (!needsSaving) {
       needsSaving = true;
       masterFileCounter++;
     }
+  }else{
+    doButtonStop();
   }
+}
 
-void doButtonStop(){
+void doButtonStop(){ //one-off
     modesRefresh();
     if (needsSaving) {
       countdown.foo.play();
@@ -120,16 +119,14 @@ void doButtonStop(){
     needsSaving=false;
 }
 
-void doButtonPlay(){
-    modesRefresh();
-    if (needsSaving) {
-      xmlSaveToDisk();
-    }
+void doButtonPlay(){ //one-off
+    doButtonStop();
     modePlay = true;
+    xmlPlayerInit(masterFileCounter);
 }
 
-void doButtonSave(){
-    modesRefresh();
+void doButtonSave(){ //one-off
+    doButtonStop();
     modeExport = true;
     if(savePins) aePinSaveToDisk(masterFileCounter);    
     if(savePoints) aePointSaveToDisk(masterFileCounter);    
@@ -138,18 +135,16 @@ void doButtonSave(){
     if(saveMaya) mayaSaveToDisk(masterFileCounter);
 }
 
-void doButtonCam(){
+void doButtonCam(){ //toggle
     if (modePreview) {
-    modesRefresh();
-      //modePreview=false;
+      doButtonStop();
     }
     else if (!modePreview) {
       if (firstRun) {
         firstRun=false;
         setupUser(); //this sets up SimpleOpenNi
       }
-      modesRefresh();
+      doButtonStop();
       modePreview=true;
     }
-    //needsSaving=false;
 }

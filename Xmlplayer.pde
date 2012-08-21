@@ -5,7 +5,7 @@ void xmlPlayerInit(int mfc){
   }
   catch(Exception e) {
     //if loading failed 
-    println("Loading Failed");
+    println("XML file loading failed");
   }
 }
 
