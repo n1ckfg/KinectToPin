@@ -13,7 +13,7 @@ class Settings {
         if (settings.data[i].equals("saveXml")) saveXml = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("savePins")) savePins = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("savePoints")) savePoints = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("saveJson")) saveJson = setBoolean(settings.data[i+1]);
+        //if (settings.data[i].equals("saveJson")) saveJson = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("saveJsx")) saveJsx = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("saveMaya")) saveMaya = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("sW")) sW = setInt(settings.data[i+1]);

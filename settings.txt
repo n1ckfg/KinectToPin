@@ -16,9 +16,6 @@ true
 savePoints
 false
 
-saveJson
-false
-
 saveJsx
 false
 

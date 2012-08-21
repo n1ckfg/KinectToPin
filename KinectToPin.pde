@@ -298,10 +298,11 @@ void mouseReleased(){
   else if (buttons[2].clicked) { //SAVE
     modesRefresh();
     modeExport = true;
-    aePinSaveToDisk(masterFileCounter);    
-    aePointSaveToDisk(masterFileCounter);    
-    aeJsxSaveToDisk(masterFileCounter);    
-    mayaSaveToDisk(masterFileCounter);
+    if(savePins) aePinSaveToDisk(masterFileCounter);    
+    if(savePoints) aePointSaveToDisk(masterFileCounter);    
+    //if(saveJson) aeJsxSaveToDisk(masterFileCounter);    
+    if(saveJsx) aeJsxSaveToDisk(masterFileCounter);    
+    if(saveMaya) mayaSaveToDisk(masterFileCounter);
   }
   else if (buttons[3].clicked) { //PLAY
     modesRefresh();
