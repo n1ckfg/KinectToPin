@@ -12,7 +12,8 @@ void xmlRecorderInit() {
 
 void xmlRecorderUpdate() {
   background(0);
-  if (modeRec||(modeOsc&&found)) {
+  //if (modeRec||(modeOsc&&found)) {
+  if (modeRec) {
     fill(255, 200);
     stroke(0);
     strokeWeight(5);
@@ -42,6 +43,7 @@ void xmlRecorderUpdate() {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
 void oscEvent(OscMessage msg) {
   if (msg.checkAddrPattern("/joint") && msg.checkTypetag("sifff")) {
     found = true;
@@ -54,6 +56,7 @@ void oscEvent(OscMessage msg) {
     }
   }
 }
+
 
 void simpleOpenNiEvent(int userId) {
   context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_HEAD, simpleOpenNiPos[0]);

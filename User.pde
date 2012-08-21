@@ -34,15 +34,23 @@ void drawUser(){
   context.update();
   
   // draw depthImageMap
+  
   if(modePreview){
+    if(camDelayCounter<camDelayCounterMax){
+      camDelayCounter++;
+    }else{
+  
+  
   previewInt = context.depthImage().pixels;
   for(int i=0;i<sW*sH;i+=previewLevel){
   previewImg.pixels[i] = previewInt[i];
   previewImg.updatePixels();
   }
   image(previewImg, 0,0);
+  
 
   //image(context.depthImage(),0,0);
+    }
   }
   
   // draw the skeleton if it's available

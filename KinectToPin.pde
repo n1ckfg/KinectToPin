@@ -52,6 +52,7 @@ String sayTextPrefix = "";
 String sayTextSeparator = "  ...  ";
 
 Minim minim;
+
 OscP5 oscP5;
 boolean found=false;
 String ipNumber = "127.0.0.1";
@@ -111,8 +112,6 @@ float[] y = new float[osceletonNames.length];
 float[] z = new float[osceletonNames.length];
 int circleSize = 50;
 
-Button[] buttons = new Button[6];
-
 boolean modeRec = false;
 boolean modeOsc = false;
 boolean modePlay = false;
@@ -120,8 +119,20 @@ boolean modeExport = false;
 boolean modeStop = true;
 boolean needsSaving = false;
 
+int buttonRecNum = 0;
+int buttonOscNum = 1;
+int buttonStopNum = 2;
+int buttonPlayNum = 3;
+int buttonSaveNum = 4;
+int buttonCamNum = 5;
+int totalButtons = 6;
+Button[] buttons = new Button[totalButtons];
+
 int introWarningCounter = 0;
 int introWarningCounterMax = 6*fps;
+
+int camDelayCounter=0;
+int camDelayCounterMax = 10;
 
 //~~~~~~~~~~~~~~~~~~
 
@@ -172,18 +183,22 @@ void setup() {
   ellipseMode(CENTER);
   minim = new Minim(this);
   oscP5 = new OscP5(this, ipNumber, receivePort);
-  buttons[0] = new Button(25, height-20, 30, color(240, 10, 10), 12, "rec");
-  buttons[1] = new Button(60, height-20, 30, color(200, 20, 200), 12, "osc");
-  buttons[2] = new Button(width-25, height-20, 30, color(50, 50, 220), 12, "save");
-  buttons[3] = new Button(width-60, height-20, 30, color(20, 200, 20), 12, "play");
-  buttons[4] = new Button(95, height-20, 30, color(100, 100, 100), 12, "stop");
-  buttons[5] = new Button(width/2, height-20, 30, color(200, 200, 50), 12, "cam");
+  buttons[buttonRecNum] = new Button(25, sH-20, 30, color(240, 10, 10), 12, "rec");
+  buttons[buttonOscNum] = new Button(60, sH-20, 30, color(200, 20, 200), 12, "osc");
+  buttons[buttonSaveNum] = new Button(sW-25, sH-20, 30,  color(50, 50, 220), 12, "save");
+  buttons[buttonPlayNum] = new Button(sW-60, sH-20, 30, color(20, 200, 20), 12, "play");
+  buttons[buttonStopNum] = new Button(95, sH-20, 30, color(100, 100, 100), 12, "stop");
+  buttons[buttonCamNum] = new Button(sW/2, sH-20, 30, color(200, 200, 50), 12, "cam");
   xmlPlayerInit(masterFileCounter);
   xmlRecorderInit();
   countdown = new Countdown(8, 2);
   
   previewImg = createImage(sW,sH,RGB);
   previewInt = new int[sW*sH];
+  
+  //~~~~~~~ get rid of this to use with OSC device that grabs camera
+  //setupUser(); //this sets up SimpleOpenNi
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   background(0);
 }
 
@@ -197,6 +212,7 @@ void draw() {
   }
   if (!modePreview) {
     if (modeRec||modeOsc) {
+    //if(modeRec){
       xmlRecorderUpdate();
     }
     if (modePlay) {
@@ -217,156 +233,7 @@ void draw() {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void keyPressed() {
-  if (key==' '||keyCode==33) { //REC works with space or pgdn from clicker
-    if(!modeRec){
-    if (firstRun) {
-      firstRun=false;
-      setupUser(); //this sets up SimpleOpenNi
-    }
-    modesRefresh();
-    xmlRecorderInit();
-    modeRec = true;
-    if (!needsSaving) {
-      needsSaving = true;
-      masterFileCounter++;
-    }
-    sayTextPrefix = "Record skeleton data";
-  }else{
-    modesRefresh();
-    if (needsSaving) {
-      countdown.foo.play();
-      xmlSaveToDisk();
-    }
-    needsSaving=false;
-   sayTextPrefix = "Stop recording";
-  }
-}
 
-if(key=='c'||key=='C'||keyCode==34){  //CAM works with C key or pgup from clicker
-    if (modePreview) {
-    modesRefresh();
-      //modePreview=false;
-    }
-    else if (!modePreview) {
-    modesRefresh();
-      modePreview=true;
-      if (firstRun) {
-        firstRun=false;
-        setupUser(); //this sets up SimpleOpenNi
-      }
-    }
-    //needsSaving=false;
-}
-}
-
-void buttonHandler() {
-  for (int i=0;i<buttons.length;i++) {
-  if(modePreview){
-    buttons[5].checkButton();
-    buttons[5].drawButton();
-  }else{
-    buttons[i].checkButton();
-    buttons[i].drawButton();
-  }
-  }
-}
-
-void mouseReleased(){
-  if (buttons[0].clicked) { //REC
-    if (firstRun) {
-      firstRun=false;
-      setupUser(); //this sets up SimpleOpenNi
-    }
-    modesRefresh();
-    xmlRecorderInit();
-    modeRec = true;
-    if (!needsSaving) {
-      needsSaving = true;
-      masterFileCounter++;
-    }
-  }
-  else if (buttons[1].clicked) {  //OSC from OSCeleton
-    modesRefresh();
-    xmlRecorderInit();
-    modeOsc = true;
-    if (!needsSaving) {
-      needsSaving = true;
-      masterFileCounter++;
-    }
-  }
-  else if (buttons[2].clicked) { //SAVE
-    modesRefresh();
-    modeExport = true;
-    if(savePins) aePinSaveToDisk(masterFileCounter);    
-    if(savePoints) aePointSaveToDisk(masterFileCounter);    
-    //if(saveJson) aeJsxSaveToDisk(masterFileCounter);    
-    if(saveJsx) aeJsxSaveToDisk(masterFileCounter);    
-    if(saveMaya) mayaSaveToDisk(masterFileCounter);
-  }
-  else if (buttons[3].clicked) { //PLAY
-    modesRefresh();
-    if (needsSaving) {
-      xmlSaveToDisk();
-    }
-    modePlay = true;
-  }
-  else if (buttons[4].clicked) {  //STOP
-    modesRefresh();
-    if (needsSaving) {
-      countdown.foo.play();
-      xmlSaveToDisk();
-    }
-    needsSaving=false;
-  }
-  else if (buttons[5].clicked) {  //CAM
-    if (modePreview) {
-    modesRefresh();
-      //modePreview=false;
-    }
-    else if (!modePreview) {
-    modesRefresh();
-      modePreview=true;
-      if (firstRun) {
-        firstRun=false;
-        setupUser(); //this sets up SimpleOpenNi
-      }
-    }
-    //needsSaving=false;
-  }
-
-if (buttons[0].hovered) {
-    sayTextPrefix = "Record skeleton data";
-}else if (buttons[1].hovered) {
-    sayTextPrefix = "Record OSC data";
-}else if (buttons[2].hovered) {
-    sayTextPrefix = "Save all XML files for After Effects";
-}else if (buttons[3].hovered) {
-    sayTextPrefix = "Play back last saved XML file";
-}else if (buttons[4].hovered) {
-    sayTextPrefix = "Stop recording";
-}else if (buttons[5].hovered) {
-    sayTextPrefix = "Toggle camera view";
-}
-}
-
-void buttonsRefresh() {
-  for (int i=0;i<buttons.length;i++) {
-    buttons[i].clicked = false;
-  }
-}
-
-void modesRefresh() {
-  countdown = new Countdown(8, 2);
-  buttonsRefresh();
-  counter=0;
-  modeRec = false;
-  modeOsc = false;
-  modePlay = false;
-  modeExport = false; 
-  modeStop=false;
-  modePreview=false;
-}
 
 void recDot() {
   fill(200);
@@ -378,10 +245,12 @@ void recDot() {
     if (modeRec) {
       stroke(255, 20, 0);
     }
+    
     else if (modeOsc) {
       stroke(225, 0, 205);
     }
     else if (!modeRec&&!modeOsc) {
+    //else if (!modeRec) {
       stroke(35, 25, 35);
     }
   } 
