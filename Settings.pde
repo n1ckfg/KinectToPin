@@ -26,6 +26,7 @@ class Settings {
         if (settings.data[i].equals("motionBlur")) motionBlur = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("applyEffects")) applyEffects = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("smoothNum")) smoothNum = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("multiThread")) multiThread = setBoolean(settings.data[i+1]);
        }
     } 
     catch(Exception e) {

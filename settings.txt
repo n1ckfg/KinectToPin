@@ -41,7 +41,7 @@ fps
 24
 
 previewLevel
-2
+1
 
 motionBlur
 true
@@ -51,3 +51,6 @@ false
 
 smoothNum
 6
+
+multiThread
+false

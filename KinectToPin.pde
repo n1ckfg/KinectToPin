@@ -29,6 +29,7 @@ int[] previewInt;
 
 SimpleOpenNI  context;
 boolean mirror = false;
+boolean multiThread = false;
 
 int masterFileCounter=0;
 String[] allFiles;

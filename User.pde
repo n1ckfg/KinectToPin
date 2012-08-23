@@ -10,9 +10,13 @@
  */
 
 void setupUser(){
+  if(multiThread){
   context = new SimpleOpenNI(this,SimpleOpenNI.RUN_MODE_MULTI_THREADED);
+  }else{
+  context = new SimpleOpenNI(this);
+  }
   //context = new SimpleOpenNI(this);
-  context.setMirror(mirror);  //mirrors view but not joint names
+  context.setMirror(mirror);  //mirrors view but not joint names; that must be done separately
    
   // enable depthMap generation 
   context.enableDepth();
@@ -41,15 +45,16 @@ void drawUser(){
     }else{
   
   
-  previewInt = context.depthImage().pixels;
-  for(int i=0;i<sW*sH;i+=previewLevel){
-  previewImg.pixels[i] = previewInt[i];
-  previewImg.updatePixels();
-  }
-  image(previewImg, 0,0);
-  
-
-  //image(context.depthImage(),0,0);
+  if(previewLevel>1){
+    previewInt = context.depthImage().pixels;
+    for(int i=0;i<sW*sH;i+=previewLevel){
+      previewImg.pixels[i] = previewInt[i];
+      previewImg.updatePixels();
+    }
+    image(previewImg, 0,0);
+   }else{
+    image(context.depthImage(),0,0);
+   }
     }
   }
   
