@@ -21,6 +21,7 @@ float scaleNum  = 1.0 / (weight + 2);
 boolean tracePath = true;
 //**************************
 
+boolean delaySimpleOpenNI = false;
 boolean firstRun=true;
 boolean modePreview = false;
 int previewLevel = 5;
@@ -198,7 +199,7 @@ void setup() {
   previewInt = new int[sW*sH];
   
   //~~~~~~~ get rid of this to use with OSC device that grabs camera
-  //setupUser(); //this sets up SimpleOpenNi
+  if(!delaySimpleOpenNI) setupUser(); //this sets up SimpleOpenNi
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   background(0);
 }
@@ -223,7 +224,7 @@ void draw() {
   recDot();
   sayText = xmlFileName + (masterFileCounter);
   //println(counter);
-  if(introWarningCounter<introWarningCounterMax){
+  if(introWarningCounter<introWarningCounterMax && delaySimpleOpenNI){
     textAlign(CENTER);
   text("PLEASE NOTE:",width/2,(height/2)-70);
   text("The app will freeze for ~20 sec. the first time you press REC or CAM.",width/2,(height/2)-50);
