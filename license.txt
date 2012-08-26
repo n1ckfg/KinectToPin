@@ -1,11 +1,14 @@
-KinectToPin was developed with support from:
+KinectToPin and the KinectToPin UI panel were developed with support from:
    Eyebeam Art + Technology Center
    Canada Council on the Arts
    Bravo!FACT
    Ontario Arts Council
    Toronto Arts Council
-Copyright (c) 2012 Nick Fox-Gieg Animation
-http://fox-gieg.com
+
+Copyright (c) 2012 Nick Fox-Gieg & Victoria Nece
+http://kinecttopin.fox-gieg.com
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The MIT License <http://www.opensource.org/licenses/mit-license.php>
 

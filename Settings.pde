@@ -7,27 +7,27 @@ class Settings {
       settings = new Data();
       settings.load(_s);
       for (int i=0;i<settings.data.length;i++) {
-        if (settings.data[i].equals("mirror")) mirror = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("ipNumber")) ipNumber = setString(settings.data[i+1]);
-        if (settings.data[i].equals("receivePort")) receivePort = setInt(settings.data[i+1]);
-        if (settings.data[i].equals("saveXml")) saveXml = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("savePins")) savePins = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("savePoints")) savePoints = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Mirror Joints")) mirror = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("OSC IP Number")) ipNumber = setString(settings.data[i+1]);
+        if (settings.data[i].equals("OSC Port")) receivePort = setInt(settings.data[i+1]);
+        //if (settings.data[i].equals("Export XML (.xml)")) saveXml = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Export AE Puppet Pin Data (.txt)")) savePins = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Export AE Point Control Data (.txt)")) savePoints = setBoolean(settings.data[i+1]);
         //if (settings.data[i].equals("saveJson")) saveJson = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("saveJsx")) saveJsx = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("saveMaya")) saveMaya = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("sW")) sW = setInt(settings.data[i+1]);
-        if (settings.data[i].equals("sH")) sH = setInt(settings.data[i+1]);
-        if (settings.data[i].equals("sD")) sD = setFloat(settings.data[i+1]);
-        if (settings.data[i].equals("dW")) dW = setInt(settings.data[i+1]);
-        if (settings.data[i].equals("dH")) dH = setInt(settings.data[i+1]);
-        if (settings.data[i].equals("fps")) fps = setInt(settings.data[i+1]);
-        if (settings.data[i].equals("previewLevel")) previewLevel = setInt(settings.data[i+1]);
-        if (settings.data[i].equals("motionBlur")) motionBlur = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("applyEffects")) applyEffects = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("smoothNum")) smoothNum = setInt(settings.data[i+1]);
-        if (settings.data[i].equals("multiThread")) multiThread = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("delaySimpleOpenNI")) delaySimpleOpenNI = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Export AE Template Script (.jsx)")) saveJsx = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Export Maya Script (.py)")) saveMaya = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Original Capture Image Width")) sW = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("Original Capture Image Height")) sH = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("Original Capture Depth")) sD = setFloat(settings.data[i+1]);
+        if (settings.data[i].equals("Destination AE Comp Width")) dW = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("Destination AE Comp Height")) dH = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("Framerate (max 30)")) fps = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("Camera Display Quality (1 = best)")) previewLevel = setInt(settings.data[i+1]);
+        //if (settings.data[i].equals("motionBlur")) motionBlur = setBoolean(settings.data[i+1]);
+        //if (settings.data[i].equals("applyEffects")) applyEffects = setBoolean(settings.data[i+1]);
+        //if (settings.data[i].equals("smoothNum")) smoothNum = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("Enable Multithreading")) multiThread = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Load SimpleOpenNI at Startup")) loadSimpleOpenNIatStart = setBoolean(settings.data[i+1]);
        }
     } 
     catch(Exception e) {

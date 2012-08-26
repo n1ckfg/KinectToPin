@@ -1,59 +1,47 @@
-mirror
+Mirror Joints
 false
 
-ipNumber
-127.0.0.1
-
-receivePort
-7110
-
-saveXml
+Export AE Puppet Pin Data (.txt)
 true
 
-savePins
+Export AE Point Control Data (.txt)
 true
 
-savePoints
+Export AE Template Script (.jsx)
 false
 
-saveJsx
+Export Maya Script (.py)
 false
 
-saveMaya
-false
-
-sW
+Original Capture Image Width
 640
 
-sH
+Original Capture Image Height
 480
 
-sD
+Original Capture Depth
 200
 
-dW
+Destination AE Comp Width
 1920
 
-dH
+Destination AE Comp Height
 1080
 
-fps
+Framerate (max 30)
 24
 
-previewLevel
+Camera Display Quality (1 = best)
 1
 
-motionBlur
+Enable Multithreading
 true
 
-applyEffects
-false
+Load SimpleOpenNI at Startup
+true
 
-smoothNum
-6
+OSC IP Number
+127.0.0.1
 
-multiThread
-false
-
-delaySimpleOpenNI
-false
+OSC Port
+7110

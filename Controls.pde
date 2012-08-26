@@ -81,7 +81,7 @@ void doButtonRec(){ //toggle
     if(!modeRec){
     if (firstRun) {
       firstRun=false;
-      if(delaySimpleOpenNI) setupUser(); //this sets up SimpleOpenNi
+      if(!loadSimpleOpenNIatStart) setupUser(); //this sets up SimpleOpenNi
     }
     doButtonStop();
     xmlRecorderInit();
@@ -142,7 +142,7 @@ void doButtonCam(){ //toggle
     else if (!modePreview) {
       if (firstRun) {
         firstRun=false;
-        if(delaySimpleOpenNI) setupUser(); //this sets up SimpleOpenNi
+        if(!loadSimpleOpenNIatStart) setupUser(); //this sets up SimpleOpenNi
       }
       doButtonStop();
       modePreview=true;
