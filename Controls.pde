@@ -78,7 +78,8 @@ void modesRefresh() {
   modePreview=false;
 }
 
-void doButtonRec(){ //toggle
+void doButtonRec(){
+     //toggle
     if(!modeRec){
     if (firstRun) {
       firstRun=false;
@@ -121,7 +122,7 @@ void doButtonStop(){ //one-off
 }
 
 void doButtonPlay(){ //one-off
-    doButtonStop();
+     doButtonStop();
     if(dialogueFile!="none") countdown.dialogue.play();
     modePlay = true;
     xmlPlayerInit(masterFileCounter);

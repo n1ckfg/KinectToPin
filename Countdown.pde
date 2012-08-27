@@ -3,7 +3,7 @@ class Countdown {
   //requires Minim
 
   AudioSnippet countdownBeep;
-  AudioSnippet dialogue;
+  AudioPlayer dialogue;
 
   int alphaNum = 150;
   int secStart, secBeep;
@@ -29,7 +29,7 @@ class Countdown {
       //
     }
     try{
-    if (dialogueFile!="none") dialogue = minim.loadSnippet("dialogue/"+dialogueFile);
+    if (dialogueFile!="none") dialogue = minim.loadFile("dialogue/"+dialogueFile);
     }catch(Exception e){
       //
     }
