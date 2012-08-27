@@ -66,6 +66,7 @@ void buttonsRefresh() {
 }
 
 void modesRefresh() {
+  if(dialogueFile!="none") countdown.dialogue.close();
   countdown = new Countdown(8, 2);
   buttonsRefresh();
   counter=0;
@@ -113,7 +114,7 @@ void doButtonOsc(){ //toggle
 void doButtonStop(){ //one-off
     modesRefresh();
     if (needsSaving) {
-      countdown.foo.play();
+      countdown.countdownBeep.play();
       xmlSaveToDisk();
     }
     needsSaving=false;
@@ -121,6 +122,7 @@ void doButtonStop(){ //one-off
 
 void doButtonPlay(){ //one-off
     doButtonStop();
+    if(dialogueFile!="none") countdown.dialogue.play();
     modePlay = true;
     xmlPlayerInit(masterFileCounter);
 }

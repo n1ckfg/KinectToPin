@@ -29,6 +29,7 @@ void xmlPlayerUpdate() {
   } 
   else {
     counter=0;
+    if(dialogueFile!="none") countdown.dialogue.play(0);
   }
 }
 }

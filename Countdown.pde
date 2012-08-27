@@ -2,7 +2,8 @@ class Countdown {
 
   //requires Minim
 
-  AudioSnippet foo;
+  AudioSnippet countdownBeep;
+  AudioSnippet dialogue;
 
   int alphaNum = 150;
   int secStart, secBeep;
@@ -22,7 +23,16 @@ class Countdown {
     secBeep = sb;
     leaderCounterMax = secStart * fps;
     leaderCounterBeep = (secStart-secBeep) * fps;
-    foo = minim.loadSnippet("sounds/24th blip sync pop.wav");
+    try{
+      countdownBeep = minim.loadSnippet("sounds/"+beepFile);
+    }catch(Exception e){
+      //
+    }
+    try{
+    if (dialogueFile!="none") dialogue = minim.loadSnippet("dialogue/"+dialogueFile);
+    }catch(Exception e){
+      //
+    }
     font = createFont("Arial",fontSize);
   }
 
@@ -42,7 +52,7 @@ class Countdown {
       textFont(font,fontSize);
       text(secStart-int(leaderCounter/fps),leaderX,leaderY+(fontSize/2.7));
       if(leaderCounter==leaderCounterBeep) { 
-        foo.play();
+        countdownBeep.play();
         beep=true;
       }
     } 
@@ -52,11 +62,14 @@ class Countdown {
     } 
     else if(leaderCounter==leaderCounterMax) {
       go=true;
+      if(dialogueFile!="none") dialogue.play();
+      //leaderCounter++;
     }
   }
 
   void stop() {
-    foo.close();
+    countdownBeep.close();
+    if(dialogueFile!="none") dialogue.close();
   }
 }
 

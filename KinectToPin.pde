@@ -54,6 +54,8 @@ String sayTextPrefix = "";
 String sayTextSeparator = "  ...  ";
 
 Minim minim;
+String beepFile = "24th blip sync pop.wav";
+String dialogueFile = "none";
 
 OscP5 oscP5;
 boolean found=false;
@@ -96,14 +98,18 @@ boolean saveMaya = false;
 boolean limitReached = false;
 boolean loaded = false;
 
-String[] osceletonNamesNormal = {"head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"};
-String[] osceletonNamesReversed = {"head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot"};
+String[] osceletonNamesNormal = {
+  "head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"
+};
+String[] osceletonNamesReversed = {
+  "head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot"
+};
 String[] osceletonNames = new String[15];
 
 PVector[] simpleOpenNiPos = new PVector[osceletonNames.length];
 PVector[] simpleOpenNiPos_proj = new PVector[osceletonNames.length];
 
-File dataFolder;
+File dataFolder, dialogueFolder;
 Data data;
 int[] pinNums = new int[osceletonNames.length];
 proxml.XMLElement[] oscXmlTags = new proxml.XMLElement[osceletonNames.length];
@@ -138,11 +144,12 @@ int camDelayCounterMax = 10;
 
 //~~~~~~~~~~~~~~~~~~
 
-void initSettings(){
+void initSettings() {
   Settings settings = new Settings("settings.txt");
-  if(mirror){
+  if (mirror) {
     osceletonNames = osceletonNamesNormal;
-  }else{
+  }
+  else {
     osceletonNames = osceletonNamesReversed;
   }
   simpleOpenNiPos = new PVector[osceletonNames.length];
@@ -164,16 +171,32 @@ void setup() {
     simpleOpenNiPos_proj[i] = new PVector(0, 0, 0);
   }
 
-  dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
-  allFiles = dataFolder.list();
-  try{
-  for (int i=0;i<allFiles.length;i++) {
-    if (allFiles[i].toLowerCase().endsWith(xmlFileType)) {
-      masterFileCounter++;
+//~~~~~~~~~~~~~~~~~
+  dialogueFolder = new File(sketchPath, "dialogue");
+  allFiles = dialogueFolder.list();
+  try {
+    int dialogueFileCounter = 0;
+    for (int j=0;j<allFiles.length;j++) {
+      if (allFiles[j].toLowerCase().endsWith("wav")||allFiles[j].toLowerCase().endsWith("aif")||allFiles[j].toLowerCase().endsWith("aiff")||allFiles[j].toLowerCase().endsWith("mp3")) {
+        dialogueFile = allFiles[j];
+      }
     }
   }
-  }catch (Exception e){
-  //
+  catch (Exception e) {
+    //
+  }
+//~~~~~~~~~~~~~~~~~
+dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
+  allFiles = dataFolder.list();
+  try {
+    for (int i=0;i<allFiles.length;i++) {
+      if (allFiles[i].toLowerCase().endsWith(xmlFileType)) {
+        masterFileCounter++;
+      }
+    }
+  }
+  catch (Exception e) {
+    //
   }
   //masterFileCounter = allFiles.length;
   if (masterFileCounter==1) {
@@ -187,19 +210,19 @@ void setup() {
   oscP5 = new OscP5(this, ipNumber, receivePort);
   buttons[buttonRecNum] = new Button(25, sH-20, 30, color(240, 10, 10), 12, "rec");
   buttons[buttonOscNum] = new Button(60, sH-20, 30, color(200, 20, 200), 12, "osc");
-  buttons[buttonSaveNum] = new Button(sW-25, sH-20, 30,  color(50, 50, 220), 12, "save");
+  buttons[buttonSaveNum] = new Button(sW-25, sH-20, 30, color(50, 50, 220), 12, "save");
   buttons[buttonPlayNum] = new Button(sW-60, sH-20, 30, color(20, 200, 20), 12, "play");
   buttons[buttonStopNum] = new Button(95, sH-20, 30, color(100, 100, 100), 12, "stop");
   buttons[buttonCamNum] = new Button(sW/2, sH-20, 30, color(200, 200, 50), 12, "cam");
   xmlPlayerInit(masterFileCounter);
   xmlRecorderInit();
   countdown = new Countdown(8, 2);
-  
-  previewImg = createImage(sW,sH,RGB);
+
+  previewImg = createImage(sW, sH, RGB);
   previewInt = new int[sW*sH];
-  
+
   //~~~~~~~ get rid of this to use with OSC device that grabs camera
-  if(loadSimpleOpenNIatStart) setupUser(); //this sets up SimpleOpenNi
+  if (loadSimpleOpenNIatStart) setupUser(); //this sets up SimpleOpenNi
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   background(0);
 }
@@ -214,9 +237,10 @@ void draw() {
   }
   if (!modePreview) {
     if (modeRec||modeOsc) {
-    //if(modeRec){
+      //if(modeRec){
       xmlRecorderUpdate();
-    }else if (modePlay) {
+    }
+    else if (modePlay) {
       xmlPlayerUpdate();
     }
   }
@@ -224,11 +248,11 @@ void draw() {
   recDot();
   sayText = xmlFileName + (masterFileCounter);
   //println(counter);
-  if(introWarningCounter<introWarningCounterMax && !loadSimpleOpenNIatStart){
+  if (introWarningCounter<introWarningCounterMax && !loadSimpleOpenNIatStart) {
     textAlign(CENTER);
-  text("PLEASE NOTE:",width/2,(height/2)-70);
-  text("The app will freeze for ~20 sec. the first time you press REC or CAM.",width/2,(height/2)-50);
-  introWarningCounter++;
+    text("PLEASE NOTE:", width/2, (height/2)-70);
+    text("The app will freeze for ~20 sec. the first time you press REC or CAM.", width/2, (height/2)-50);
+    introWarningCounter++;
   }
 }
 
@@ -246,12 +270,12 @@ void recDot() {
     if (modeRec) {
       stroke(255, 20, 0);
     }
-    
+
     else if (modeOsc) {
       stroke(225, 0, 205);
     }
     else if (!modeRec&&!modeOsc) {
-    //else if (!modeRec) {
+      //else if (!modeRec) {
       stroke(35, 25, 35);
     }
   } 

@@ -78,7 +78,7 @@ void AEkeysBegin() {
   data = new Data();
   data.beginSave();
   data.add("{  //start script" + "\r");
-  data.add("\t" + "app.beginUndoGroup(\"foo\");" + "\r");
+  data.add("\t" + "app.beginUndoGroup(\"countdownBeep\");" + "\r");
   data.add("\r");
   data.add("\t" + "// create project if necessary" + "\r");
   data.add("\t" + "var proj = app.project;" + "\r");
