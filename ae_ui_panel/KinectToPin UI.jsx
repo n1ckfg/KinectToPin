@@ -14,7 +14,7 @@
 
 // KinectToPin UI Panel Setup
 
-var jointNamesMaster = ["head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"];
+var jointNamesMaster = ["head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot"];
 
 
    function kinectToPin_panel(thisObj) {     
