@@ -14,6 +14,8 @@
 
 // KinectToPin UI Panel Setup
 
+var jointNamesMaster = ["head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"];
+
 
    function kinectToPin_panel(thisObj) {     
 	var myPanel = (thisObj instanceof Panel) ? thisObj : new Window("palette", "KinectToPin", undefined, {resizeable: true});
@@ -93,11 +95,11 @@ function create2DTemplate() { // KinectToPin Template Setup for UI Panels
 	mocap.property("opacity").setValue(0);
 	
 	// array of all points KinectToPin tracks
-	var trackpoint = ["l_foot","l_knee","l_hip","r_foot","r_knee","r_hip","l_hand","l_elbow","l_shoulder","r_hand","r_elbow","r_shoulder","torso","neck","head"];
+	var trackpoint = jointNamesMaster;
 	
 	
 			// create source point control and control null for each
-			for (var i = 0; i <= 14; ++i){        
+			for (var i = 0; i <= 14; i++){        
 
 				// add source point
 				var pointname = trackpoint[i];
@@ -105,8 +107,11 @@ function create2DTemplate() { // KinectToPin Template Setup for UI Panels
 				myEffect.name = pointname;
 				var p = mocap.property("Effects")(pointname)("Point");
 				p.expression = """smooth(.2,5)""";
-	
+			}
+
+			for (var j = 14; j >= 0; j--){ 
 				// add control null
+				var pointname = trackpoint[j];
 				var solid = myComp.layers.addSolid([1.0, 0, 0], pointname, 50, 50, 1);
 				solid.guideLayer = true;
 				solid.property("opacity").setValue(33);
@@ -123,7 +128,7 @@ function create2DTemplate() { // KinectToPin Template Setup for UI Panels
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 				p.expression = expression;
 	
-	}
+			}
 	
 	app.endUndoGroup();
     }  //end script
@@ -166,7 +171,7 @@ function create3DTemplate() { // KinectToPin Template Setup for UI Panels
 	mocap.property("opacity").setValue(0);
 	
 	// array of all points KinectToPin tracks
-	var trackpoint = ["l_foot","l_knee","l_hip","r_foot","r_knee","r_hip","l_hand","l_elbow","l_shoulder","r_hand","r_elbow","r_shoulder","torso","neck","head"];
+	var trackpoint = jointNamesMaster;
 	
 	
 			// create source point control and control null for each
@@ -178,8 +183,11 @@ function create3DTemplate() { // KinectToPin Template Setup for UI Panels
 				myEffect.name = pointname;
 				var p = mocap.property("Effects")(pointname)("3D Point");
 				p.expression = """smooth(.2,5)""";
-	
+			}
+
+			for (var j=14; j >= 0; j--){
 				// add control null
+				var pointname = trackpoint[j];
 				var solid = myComp.layers.addSolid([1.0, 0, 0], pointname, 50, 50, 1);
 				solid.guideLayer = true;
                  solid.threeDLayer = true;
@@ -413,7 +421,7 @@ function importMocap2D(){  //start script
 
 	var mocap = myComp.layer("mocap");
 
-	var trackPoint = ["r_foot","r_knee","r_hip","l_foot","l_knee","l_hip","r_hand","r_elbow","r_shoulder","l_hand","l_elbow","l_shoulder","torso","neck","head"];
+	var trackPoint = jointNamesMaster;
 
 	// add joint information
 	for(var j=0;j<trackPoint.length;j++){
@@ -478,7 +486,7 @@ function importMocap3D(){  //start script
 
 	var mocap = myComp.layer("mocap");
 
-	var trackPoint = ["r_foot","r_knee","r_hip","l_foot","l_knee","l_hip","r_hand","r_elbow","r_shoulder","l_hand","l_elbow","l_shoulder","torso","neck","head"];
+	var trackPoint = jointNamesMaster;
 
 	// add joint information
 	for(var j=0;j<trackPoint.length;j++){

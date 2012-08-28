@@ -13,6 +13,7 @@ class Settings {
         //if (settings.data[i].equals("Export XML (.xml)")) saveXml = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Puppet Pin Data (.txt)")) savePins = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Point Control Data (.txt)")) savePoints = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Export AE Point Control 3D Data (.txt)")) savePoints3D = setBoolean(settings.data[i+1]);
         //if (settings.data[i].equals("saveJson")) saveJson = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Template Script (.jsx)")) saveJsx = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export Maya Script (.py)")) saveMaya = setBoolean(settings.data[i+1]);

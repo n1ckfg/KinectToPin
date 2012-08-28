@@ -80,6 +80,11 @@ String aePointFilePath = "saveae-points";
 String aePointFileType = "txt";
 boolean savePoints = true;
 //~
+String aePoint3DFileName = "AEpoint3Ddata";
+String aePoint3DFilePath = "saveae-points3D";
+String aePoint3DFileType = "txt";
+boolean savePoints3D = true;
+//~
 String jsonFileName = "jsonData";
 String jsonFilePath = "savejson";
 String jsonFileType = "txt";

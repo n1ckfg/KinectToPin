@@ -7,6 +7,9 @@ true
 Export AE Point Control Data (.txt)
 true
 
+Export AE Point Control 3D Data (.txt)
+true
+
 Export AE Template Script (.jsx)
 false
 
