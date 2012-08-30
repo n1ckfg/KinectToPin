@@ -7,7 +7,6 @@ void xmlRecorderInit() {
   MotionCapture.addAttribute("depth", sD);
   MotionCapture.addAttribute("numFrames", counter);
   MotionCapture.addAttribute("dialogueFile", dialogueFile);
-  MotionCapture.addAttribute("mirror", mirror);
 }
 
 //~~~
