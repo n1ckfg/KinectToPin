@@ -3,7 +3,6 @@ KinectToPin and the KinectToPin UI panel were developed with support from:
    Canada Council on the Arts
    Eyebeam Art + Technology Center
    Ontario Arts Council
-   STUDIO for Creative Inquiry
    Toronto Arts Council
 
 Copyright (c) 2012 Nick Fox-Gieg & Victoria Nece
