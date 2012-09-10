@@ -380,12 +380,16 @@ void jsonSaveToDisk(int mfc) {
       data.beginSave();
       data.add("{"+"\r");
       data.add("\t"+"\"MotionCapture\":{"+"\r");
-      data.add("\t\t"+"\"width\":\""+MotionCapture.getAttribute("width")+"\","+"\r");
-      data.add("\t\t"+"\"height\":\""+MotionCapture.getAttribute("height")+"\","+"\r");
-      data.add("\t\t"+"\"depth\":\""+MotionCapture.getAttribute("depth")+"\","+"\r");
-      data.add("\t\t"+"\"fps\":\""+MotionCapture.getAttribute("fps")+"\","+"\r");
-      data.add("\t\t"+"\"numFrames\":\""+MotionCapture.getAttribute("numFrames")+"\","+"\r");
-      data.add("\t\t"+"\"dialogueFile\":\""+MotionCapture.getAttribute("dialogueFile")+"\","+"\r");   
+      try{
+        data.add("\t\t"+"\"width\":\""+MotionCapture.getAttribute("width")+"\","+"\r");
+        data.add("\t\t"+"\"height\":\""+MotionCapture.getAttribute("height")+"\","+"\r");
+        data.add("\t\t"+"\"depth\":\""+MotionCapture.getAttribute("depth")+"\","+"\r");
+        data.add("\t\t"+"\"fps\":\""+MotionCapture.getAttribute("fps")+"\","+"\r");
+        data.add("\t\t"+"\"numFrames\":\""+MotionCapture.getAttribute("numFrames")+"\","+"\r");
+        data.add("\t\t"+"\"dialogueFile\":\""+MotionCapture.getAttribute("dialogueFile")+"\","+"\r");   
+      }catch(Exception e){
+        //
+      }
       data.add("\t\t"+"\"MocapFrame\":{"+"\r");
       data.add("\t\t\t"+"\"Skeleton\":["+"\r");
       data.add("\t\t\t\t"+"{"+"\r");
