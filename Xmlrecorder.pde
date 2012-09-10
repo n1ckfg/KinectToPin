@@ -373,41 +373,57 @@ void jsonSaveToDisk(int mfc) {
     int zz=z+1;
     xmlPlayerInit(zz);
     if (loaded) {
-      /*
       for (int i=0;i<pinNums.length;i++) {
-       pinNums[i] = i+1;
-       }
-       */
+        pinNums[i] = i+1;
+      }
       data = new Data();
       data.beginSave();
-      data.add("Adobe After Effects 8.0 Keyframe Data");
-      data.add("\r");
-      data.add("\t"+"Units Per Second"+"\t"+fps);
-      data.add("\t"+"Source Width"+"\t"+sW);
-      data.add("\t"+"Source Height"+"\t"+sH);
-      data.add("\t"+"Source Pixel Aspect Ratio"+"\t"+"1");
-      data.add("\t"+"Comp Pixel Aspect Ratio"+"\t"+"1");
+      data.add("{"+"\r");
+      data.add("\t"+"\"MotionCapture\":{"+"\r");
+      data.add("\t\t"+"\"width\":\""+MotionCapture.getAttribute("width")+"\","+"\r");
+      data.add("\t\t"+"\"height\":\""+MotionCapture.getAttribute("height")+"\","+"\r");
+      data.add("\t\t"+"\"depth\":\""+MotionCapture.getAttribute("depth")+"\","+"\r");
+      data.add("\t\t"+"\"fps\":\""+MotionCapture.getAttribute("fps")+"\","+"\r");
+      data.add("\t\t"+"\"numFrames\":\""+MotionCapture.getAttribute("numFrames")+"\","+"\r");
+      data.add("\t\t"+"\"dialogueFile\":\""+MotionCapture.getAttribute("dialogueFile")+"\","+"\r");   
+      data.add("\t\t"+"\"MocapFrame\":{"+"\r");
+      data.add("\t\t\t"+"\"Skeleton\":["+"\r");
+      data.add("\t\t\t\t"+"{"+"\r");
+      data.add("\t\t\t\t\t"+"\"Joints\":["+"\r");
       for (int j=0;j<osceletonNames.length;j++) {
         modesRefresh();
-        data.add("\r");
-        data.add("Effects" + "\t" + "Puppet #2" + "\t" + "arap #3" + "\t" + "Mesh" + "\t" + "Mesh #1" + "\t" + "Deform" + "\t" + "Pin #" + pinNums[j] + "\t" + "Position");
-        data.add("\t" + "Frame" + "\t" + "X pixels" + "\t" + "Y pixels");
-        for (int i=0;i<MotionCapture.countChildren();i++) {
-          if (MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")=="NaN"||MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")=="NaN") {
-            data.add("\t" + i  
-              + "\t" + 0.0
-              + "\t" + 0.0); //gets to the child we need //gets to the child we need
-          }
-          else { 
-            data.add("\t" + i  
-              + "\t" + (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))
-              + "\t" + (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))); //gets to the child we need //gets to the child we need
+        data.add("\t\t\t\t\t\t"+"["+"\r");
+        for (int i=0;i<MotionCapture.countChildren();i++) { 
+          if (errorCheck(i, j)) {
+            if(i==MotionCapture.countChildren()-1){
+            data.add("\t\t\t\t\t\t\t" + "{"  
+              + "\"name\":" + "\""+osceletonNames[j]+"\", " 
+              + "\"x\":"+"\""+(sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))+"\", "
+              + "\"y\":"+"\""+(sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))+"\", "
+              + "\"z\":"+"\""+(sD * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))+"\""
+              +"}"+"\r"); //gets to the child we need //gets to the child we need
+            }else{
+            data.add("\t\t\t\t\t\t\t" + "{"  
+              + "\"name\":" + "\""+osceletonNames[j]+"\", " 
+              + "\"x\":"+"\""+(sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))+"\", "
+              + "\"y\":"+"\""+(sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))+"\", "
+              + "\"z\":"+"\""+(sD * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))+"\""
+              +"},"+"\r"); //gets to the child we need //gets to the child we need
+            }
           }
         }
+            if(j==osceletonNames.length-1){
+               data.add("\t\t\t\t\t\t"+"]"+"\r");
+            }else{
+               data.add("\t\t\t\t\t\t"+"],"+"\r");
+            }
       }
-      data.add("\r");
-      data.add("\r");
-      data.add("End of Keyframe Data");
+      data.add("\t\t\t\t\t"+"]"+"\r");
+      data.add("\t\t\t\t"+"}"+"\r");
+      data.add("\t\t\t"+"]"+"\r");
+      data.add("\t\t"+"}"+"\r");
+      data.add("\t"+"}"+"\r");
+      data.add("}"+"\r");
       data.endSave("data/"+ jsonFilePath + "/" + jsonFileName + zz +"."+jsonFileType);
     }
   }

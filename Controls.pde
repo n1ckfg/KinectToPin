@@ -134,7 +134,7 @@ void doButtonSave(){ //one-off
     if(savePins) aePinSaveToDisk(masterFileCounter);    
     if(savePoints) aePointSaveToDisk(masterFileCounter);    
     if(savePoints3D) aePoint3DsaveToDisk(masterFileCounter);    
-    //if(saveJson) aeJsxSaveToDisk(masterFileCounter);    
+    if(saveJson) jsonSaveToDisk(masterFileCounter);    
     if(saveJsx) aeJsxSaveToDisk(masterFileCounter);    
     if(saveMaya) mayaSaveToDisk(masterFileCounter);
 }

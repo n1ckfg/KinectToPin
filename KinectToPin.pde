@@ -87,8 +87,8 @@ boolean savePoints3D = true;
 //~
 String jsonFileName = "jsonData";
 String jsonFilePath = "savejson";
-String jsonFileType = "txt";
-boolean saveJson = false;
+String jsonFileType = "json";
+boolean saveJson = true;
 //~
 String aeJsxFileName = "AEscript";
 String aeJsxFilePath = "saveae-jsx";
