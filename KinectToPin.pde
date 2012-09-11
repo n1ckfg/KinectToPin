@@ -1,3 +1,7 @@
+// KinectToPin v1.1
+// by Nick Fox-Gieg and Victoria Nece
+// kinecttopin.fox-gieg.com
+
 import processing.opengl.*;
 import oscP5.*;
 import netP5.*;

@@ -1,5 +1,5 @@
 ﻿//
-// KinectToPin Motion Capture Tools v. 1.0
+// KinectToPin Motion Capture Tools v. 1.1
 //
 // by Nick Fox-Gieg and Victoria Nece
 // kinecttopin.fox-gieg.com
