@@ -468,20 +468,22 @@ function importMocap2D(){  //start script
 		var trackPoint = jointNamesMaster;
 
 		// add joint information
-		for(var name in myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints){
-			var myEffect = mocap.property("Effects").property(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name);
-			myEffect.name = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name;
-			var p = mocap.property("Effects")(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name)("Point");
+		for(var j=0;j<trackPoint.length;j++){
+			var myEffect = mocap.property("Effects").property(trackPoint[j]);
+			myEffect.name = trackPoint[j];
+			var p = mocap.property("Effects")(trackPoint[j])("Point");
 			
-			for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
+				for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
+			if(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].name==trackPoint[j]){
 				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 					//keyframes go here
 					var pT = i/compRate;
-					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].x;
-					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].y;
+					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].x;
+					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].y;
 					p.setValueAtTime(pT, [pX,pY]);
 					
 				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+				}
 			}
 			
 		}
@@ -571,24 +573,26 @@ function importMocap3D(){  //start script
 			var trackPoint = jointNamesMaster;
 
 			// add joint information
-			for(var name in myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints){
-				var myEffect = mocap.property("Effects").property(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name);
-				myEffect.name = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name;
-				var p = mocap.property("Effects")(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name)("3D Point");
-				
+		for(var j=0;j<trackPoint.length;j++){
+			var myEffect = mocap.property("Effects").property(trackPoint[j]);
+			myEffect.name = trackPoint[j];
+			var p = mocap.property("Effects")(trackPoint[j])("3D Point");
+			
 				for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
-					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-						//keyframes go here
-						var pT = i/compRate;
-						var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].x;
-						var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].y;
-						var pZ = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].z;
-						p.setValueAtTime(pT, [pX,pY,pZ]);
-						
-					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			if(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].name==trackPoint[j]){
+				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					//keyframes go here
+					var pT = i/compRate;
+					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].x;
+					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].y;
+					var pZ = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].z;
+					p.setValueAtTime(pT, [pX,pY,pZ]);
+					
+				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 				}
-				
 			}
+			
+		}
 		//~~~~~~~~~~~~~end JSON version
 	}		
 } else {

@@ -393,22 +393,22 @@ void jsonSaveToDisk(int mfc) {
       data.add("\t\t"+"\"MocapFrame\":{"+"\r");
       data.add("\t\t\t"+"\"Skeleton\":["+"\r");
       data.add("\t\t\t\t"+"{"+"\r");
-      data.add("\t\t\t\t\t"+"\"Joints\":{"+"\r");
+      data.add("\t\t\t\t\t"+"\"Joints\":["+"\r");
       for (int j=0;j<osceletonNames.length;j++) {
         modesRefresh();
-        data.add("\t\t\t\t\t\t"+"\""+osceletonNames[j]+"\":{"+"\r");
-        data.add("\t\t\t\t\t\t\t"+"\"name\":\""+osceletonNames[j]+"\","+"\r");
-        data.add("\t\t\t\t\t\t\t"+"\"pos\":["+"\r");
+        data.add("\t\t\t\t\t\t"+"["+"\r");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
           if (errorCheck(i, j)) {
             if(i==MotionCapture.countChildren()-1){
-            data.add("\t\t\t\t\t\t\t\t" + "{"  
+            data.add("\t\t\t\t\t\t\t" + "{"  
+              + "\"name\":" + "\""+osceletonNames[j]+"\", " 
               + "\"x\":"+(sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))+", "
               + "\"y\":"+(sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))+", "
               + "\"z\":"+(sD * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))
               +"}"+"\r"); //gets to the child we need //gets to the child we need
             }else{
-            data.add("\t\t\t\t\t\t\t\t" + "{"  
+            data.add("\t\t\t\t\t\t\t" + "{"  
+              + "\"name\":" + "\""+osceletonNames[j]+"\", " 
               + "\"x\":"+(sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))+", "
               + "\"y\":"+(sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))+", "
               + "\"z\":"+(sD * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))
@@ -416,14 +416,13 @@ void jsonSaveToDisk(int mfc) {
             }
           }
         }
-            data.add("\t\t\t\t\t\t\t"+"]"+"\r");        
             if(j==osceletonNames.length-1){
-               data.add("\t\t\t\t\t\t"+"}"+"\r");
+               data.add("\t\t\t\t\t\t"+"]"+"\r");
             }else{
-               data.add("\t\t\t\t\t\t"+"},"+"\r");
+               data.add("\t\t\t\t\t\t"+"],"+"\r");
             }
       }
-      data.add("\t\t\t\t\t"+"}"+"\r");
+      data.add("\t\t\t\t\t"+"]"+"\r");
       data.add("\t\t\t\t"+"}"+"\r");
       data.add("\t\t\t"+"]"+"\r");
       data.add("\t\t"+"}"+"\r");
