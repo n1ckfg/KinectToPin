@@ -381,11 +381,11 @@ void jsonSaveToDisk(int mfc) {
       data.add("{"+"\r");
       data.add("\t"+"\"MotionCapture\":{"+"\r");
       try{
-        data.add("\t\t"+"\"width\":\""+MotionCapture.getAttribute("width")+"\","+"\r");
-        data.add("\t\t"+"\"height\":\""+MotionCapture.getAttribute("height")+"\","+"\r");
-        data.add("\t\t"+"\"depth\":\""+MotionCapture.getAttribute("depth")+"\","+"\r");
-        data.add("\t\t"+"\"fps\":\""+MotionCapture.getAttribute("fps")+"\","+"\r");
-        data.add("\t\t"+"\"numFrames\":\""+MotionCapture.getAttribute("numFrames")+"\","+"\r");
+        data.add("\t\t"+"\"width\":"+MotionCapture.getAttribute("width")+","+"\r");
+        data.add("\t\t"+"\"height\":"+MotionCapture.getAttribute("height")+","+"\r");
+        data.add("\t\t"+"\"depth\":"+MotionCapture.getAttribute("depth")+","+"\r");
+        data.add("\t\t"+"\"fps\":"+MotionCapture.getAttribute("fps")+","+"\r");
+        data.add("\t\t"+"\"numFrames\":"+MotionCapture.getAttribute("numFrames")+","+"\r");
         data.add("\t\t"+"\"dialogueFile\":\""+MotionCapture.getAttribute("dialogueFile")+"\","+"\r");   
       }catch(Exception e){
         //
@@ -393,36 +393,37 @@ void jsonSaveToDisk(int mfc) {
       data.add("\t\t"+"\"MocapFrame\":{"+"\r");
       data.add("\t\t\t"+"\"Skeleton\":["+"\r");
       data.add("\t\t\t\t"+"{"+"\r");
-      data.add("\t\t\t\t\t"+"\"Joints\":["+"\r");
+      data.add("\t\t\t\t\t"+"\"Joints\":{"+"\r");
       for (int j=0;j<osceletonNames.length;j++) {
         modesRefresh();
-        data.add("\t\t\t\t\t\t"+"["+"\r");
+        data.add("\t\t\t\t\t\t"+"\""+osceletonNames[j]+"\":{"+"\r");
+        data.add("\t\t\t\t\t\t\t"+"\"name\":\""+osceletonNames[j]+"\","+"\r");
+        data.add("\t\t\t\t\t\t\t"+"\"pos\":["+"\r");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
           if (errorCheck(i, j)) {
             if(i==MotionCapture.countChildren()-1){
-            data.add("\t\t\t\t\t\t\t" + "{"  
-              + "\"name\":" + "\""+osceletonNames[j]+"\", " 
-              + "\"x\":"+"\""+(sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))+"\", "
-              + "\"y\":"+"\""+(sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))+"\", "
-              + "\"z\":"+"\""+(sD * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))+"\""
+            data.add("\t\t\t\t\t\t\t\t" + "{"  
+              + "\"x\":"+(sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))+", "
+              + "\"y\":"+(sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))+", "
+              + "\"z\":"+(sD * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))
               +"}"+"\r"); //gets to the child we need //gets to the child we need
             }else{
-            data.add("\t\t\t\t\t\t\t" + "{"  
-              + "\"name\":" + "\""+osceletonNames[j]+"\", " 
-              + "\"x\":"+"\""+(sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))+"\", "
-              + "\"y\":"+"\""+(sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))+"\", "
-              + "\"z\":"+"\""+(sD * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))+"\""
+            data.add("\t\t\t\t\t\t\t\t" + "{"  
+              + "\"x\":"+(sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))+", "
+              + "\"y\":"+(sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))+", "
+              + "\"z\":"+(sD * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))
               +"},"+"\r"); //gets to the child we need //gets to the child we need
             }
           }
         }
+            data.add("\t\t\t\t\t\t\t"+"]"+"\r");        
             if(j==osceletonNames.length-1){
-               data.add("\t\t\t\t\t\t"+"]"+"\r");
+               data.add("\t\t\t\t\t\t"+"}"+"\r");
             }else{
-               data.add("\t\t\t\t\t\t"+"],"+"\r");
+               data.add("\t\t\t\t\t\t"+"},"+"\r");
             }
       }
-      data.add("\t\t\t\t\t"+"]"+"\r");
+      data.add("\t\t\t\t\t"+"}"+"\r");
       data.add("\t\t\t\t"+"}"+"\r");
       data.add("\t\t\t"+"]"+"\r");
       data.add("\t\t"+"}"+"\r");

@@ -398,54 +398,94 @@ if (curLayer.name == "head_layer"){
 
 
 
-// Import XML file of tracking data for 2D characters
+// Import XML or JSON file of tracking data for 2D characters
 function importMocap2D(){  //start script
-	app.beginUndoGroup("Import Pins From XML");
+	app.beginUndoGroup("Import 2D Points From XML or JSON");
 
     var myComp = app.project.activeItem;
-
-    
-	//load xml file
-	var myXmlFile = File.openDialog();
-	var fileOK = myXmlFile.open("r");
+    var fileType="xml";
+    var myRoot;
+    //load xml or json file
+	var myFile = File.openDialog();
+	var fileOK = myFile.open("r");
 	if (fileOK){
-  		var myXmlString = myXmlFile.read();
-  		var myRoot = new XML(myXmlString);
-  		myXmlFile.close();
+  		var myFileString = myFile.read();
+  		if(myFile.name.split('.').pop()=="xml"){
+  			fileType="xml";
+  			myRoot = new XML(myFileString);
+  		}else if(myFile.name.split('.').pop()=="json"){
+  			fileType="json";
+  			myRoot = eval("(" + myFileString + ")");
+  		}
+  		myFile.close();
 	}
 
-	var compRate = parseFloat(myRoot.@fps); // comp frame rate
+	if(fileType=="xml"){
+	//~~~~~~~~~~~~~~~~~begin XML version
+		var compRate = parseFloat(myRoot.@fps); // comp frame rate
 
-	var sW = parseFloat(myRoot.@width);
-	var sH = parseFloat(myRoot.@height);
+		var sW = parseFloat(myRoot.@width);
+		var sH = parseFloat(myRoot.@height);
 
-	var mocap = myComp.layer("mocap");
+		var mocap = myComp.layer("mocap");
 
-	var trackPoint = jointNamesMaster;
+		var trackPoint = jointNamesMaster;
 
-	// add joint information
-	for(var j=0;j<trackPoint.length;j++){
-		var myEffect = mocap.property("Effects").property(trackPoint[j]);
-		myEffect.name = trackPoint[j];
-		var p = mocap.property("Effects")(trackPoint[j])("Point");
+		// add joint information
+		for(var j=0;j<trackPoint.length;j++){
+			var myEffect = mocap.property("Effects").property(trackPoint[j]);
+			myEffect.name = trackPoint[j];
+			var p = mocap.property("Effects")(trackPoint[j])("Point");
 
-		for(var i=0;i<myRoot.MocapFrame.length();i++){
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-			//keyframes go here
-			//var pTfps = myRoot.@fps;
-			var pT = i/compRate;
-			var pXs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@x;
-			var pYs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@y;
+			for(var i=0;i<myRoot.MocapFrame.length();i++){
+				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+				//keyframes go here
+				//var pTfps = myRoot.@fps;
+				var pT = i/compRate;
+				var pXs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@x;
+				var pYs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@y;
 
-			if(pXs != "NaN" && pYs != "NaN"){
-				var pX = parseFloat(pXs);
-				var pY = parseFloat(pYs);
-				p.setValueAtTime(pT, [pX * sW, pY * sH]);
+				if(pXs != "NaN" && pYs != "NaN"){
+					var pX = parseFloat(pXs);
+					var pY = parseFloat(pYs);
+					p.setValueAtTime(pT, [pX * sW, pY * sH]);
+				}
+				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			}
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 		}
+	//~~~~~~~~~~~~~~~~~end XML version
+	} else if(fileType=="json"){
+	//~~~~~~~~~~~~~begin JSON version
+		var compRate = myRoot.MotionCapture.fps; // comp frame rate
+		var sW = myRoot.MotionCapture.width;
+		var sH = myRoot.MotionCapture.height;
+		var sD = myRoot.MotionCapture.depth;
+		
+		var mocap = myComp.layer("mocap");
 
+		var trackPoint = jointNamesMaster;
 
+		// add joint information
+		for(var name in myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints){
+			var myEffect = mocap.property("Effects").property(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name);
+			myEffect.name = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name;
+			var p = mocap.property("Effects")(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name)("Point");
+			
+			for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
+				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					//keyframes go here
+					var pT = i/compRate;
+					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].x;
+					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].y;
+					p.setValueAtTime(pT, [pX,pY]);
+					
+				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			}
+			
+		}
+	//~~~~~~~~~~~~~end JSON version
 	}
 
 	app.endUndoGroup();
@@ -455,67 +495,103 @@ function importMocap2D(){  //start script
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
-
-// Import XML file of tracking data for 3D characters
+// Import XML or JSON file of tracking data for 3D characters
 function importMocap3D(){  //start script
-	app.beginUndoGroup("Import Pins From XML");
+	app.beginUndoGroup("Import 3D Points From XML or JSON");
 
     if(parseFloat(app.version) >= 10.5){
 
 
     var myComp = app.project.activeItem;
-
-    
-	//load xml file
-	var myXmlFile = File.openDialog();
-	var fileOK = myXmlFile.open("r");
+    var fileType="xml";
+    var myRoot;
+	//load xml or json file
+	var myFile = File.openDialog();
+	var fileOK = myFile.open("r");
 	if (fileOK){
-  		var myXmlString = myXmlFile.read();
-  		var myRoot = new XML(myXmlString);
-  		myXmlFile.close();
+  		var myFileString = myFile.read();
+  		if(myFile.name.split('.').pop()=="xml"){
+  			fileType="xml";
+  			myRoot = new XML(myFileString);
+  		}else if(myFile.name.split('.').pop()=="json"){
+  			fileType="json";
+  			myRoot = eval("(" + myFileString + ")");
+  		}
+  		myFile.close();
 	}
-
-	var compRate = parseFloat(myRoot.@fps); // comp frame rate
-
-	var sW = parseFloat(myRoot.@width);
-	var sH = parseFloat(myRoot.@height);
-	var sD = parseFloat(myRoot.@depth);
-
-	var mocap = myComp.layer("mocap");
-
-	var trackPoint = jointNamesMaster;
-
-	// add joint information
-	for(var j=0;j<trackPoint.length;j++){
-		var myEffect = mocap.property("Effects").property(trackPoint[j]);
-		myEffect.name = trackPoint[j];
-		var p = mocap.property("Effects")(trackPoint[j])("3D Point");
-
-		for(var i=0;i<myRoot.MocapFrame.length();i++){
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-			//keyframes go here
-			//var pTfps = myRoot.@fps;
-			var pT = i/compRate;
-			var pXs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@x;
-			var pYs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@y;
-			var pZs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@z;
-
-			if(pXs != "NaN" && pYs != "NaN" && pZs != "NaN"){
-				var pX = parseFloat(pXs);
-				var pY = parseFloat(pYs);
-				var pZ = parseFloat(pZs);
-				p.setValueAtTime(pT, [pX * sW, pY * sH, pZ * sD]);
-			}
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		}
-
-
-	} 
     
-    } else {
+	if(fileType=="xml"){
+		//~~~~~~~~~~~~~~~~~begin XML version
+		var compRate = parseFloat(myRoot.@fps); // comp frame rate
+
+		var sW = parseFloat(myRoot.@width);
+		var sH = parseFloat(myRoot.@height);
+		var sD = parseFloat(myRoot.@depth);
+
+		var mocap = myComp.layer("mocap");
+
+		var trackPoint = jointNamesMaster;
+
+		// add joint information
+		for(var j=0;j<trackPoint.length;j++){
+			var myEffect = mocap.property("Effects").property(trackPoint[j]);
+			myEffect.name = trackPoint[j];
+			var p = mocap.property("Effects")(trackPoint[j])("3D Point");
+
+			for(var i=0;i<myRoot.MocapFrame.length();i++){
+				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+				//keyframes go here
+				//var pTfps = myRoot.@fps;
+				var pT = i/compRate;
+				var pXs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@x;
+				var pYs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@y;
+				var pZs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@z;
+
+				if(pXs != "NaN" && pYs != "NaN" && pZs != "NaN"){
+					var pX = parseFloat(pXs);
+					var pY = parseFloat(pYs);
+					var pZ = parseFloat(pZs);
+					p.setValueAtTime(pT, [pX * sW, pY * sH, pZ * sD]);
+				}
+				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			}
+
+
+		}
+		//~~~~~~~~~~~~~~~~~end XML version
+	} else if(fileType=="json"){
+		//~~~~~~~~~~~~~begin JSON version
+			var compRate = myRoot.MotionCapture.fps; // comp frame rate
+			var sW = myRoot.MotionCapture.width;
+			var sH = myRoot.MotionCapture.height;
+			var sD = myRoot.MotionCapture.depth;
+			
+			var mocap = myComp.layer("mocap");
+
+			var trackPoint = jointNamesMaster;
+
+			// add joint information
+			for(var name in myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints){
+				var myEffect = mocap.property("Effects").property(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name);
+				myEffect.name = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name;
+				var p = mocap.property("Effects")(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name)("3D Point");
+				
+				for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
+					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+						//keyframes go here
+						var pT = i/compRate;
+						var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].x;
+						var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].y;
+						var pZ = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].z;
+						p.setValueAtTime(pT, [pX,pY,pZ]);
+						
+					//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+				}
+				
+			}
+		//~~~~~~~~~~~~~end JSON version
+	}		
+} else {
              alert("Sorry, this feature only works with CS5.5 and higher.");
      }
  
