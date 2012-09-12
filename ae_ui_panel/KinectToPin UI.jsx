@@ -421,7 +421,7 @@ function importMocap2D(){  //start script
 	}
 
 	if(fileType=="xml"){
-	//~~~~~~~~~~~~~~~~~begin XML version
+	//~~~~~~~~~~~~~~~~~begin 2D XML version
 		var compRate = parseFloat(myRoot.@fps); // comp frame rate
 
 		var sW = parseFloat(myRoot.@width);
@@ -455,9 +455,9 @@ function importMocap2D(){  //start script
 
 
 		}
-	//~~~~~~~~~~~~~~~~~end XML version
+	//~~~~~~~~~~~~~~~~~end 2D XML version
 	} else if(fileType=="json"){
-	//~~~~~~~~~~~~~begin JSON version
+	//~~~~~~~~~~~~~begin 2D JSON version
 		var compRate = myRoot.MotionCapture.fps; // comp frame rate
 		var sW = myRoot.MotionCapture.width;
 		var sH = myRoot.MotionCapture.height;
@@ -468,26 +468,24 @@ function importMocap2D(){  //start script
 		var trackPoint = jointNamesMaster;
 
 		// add joint information
-		for(var j=0;j<trackPoint.length;j++){
-			var myEffect = mocap.property("Effects").property(trackPoint[j]);
-			myEffect.name = trackPoint[j];
-			var p = mocap.property("Effects")(trackPoint[j])("Point");
+		for(var name in myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints){
+			var myEffect = mocap.property("Effects").property(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name);
+			myEffect.name = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name;
+			var p = mocap.property("Effects")(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name)("Point");
 			
-				for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
-			if(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].name==trackPoint[j]){
+			for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
 				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 					//keyframes go here
 					var pT = i/compRate;
-					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].x;
-					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].y;
-					p.setValueAtTime(pT, [pX,pY]);
+					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].x;
+					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].y;
+					if(pX>=0.0 && pY>=0.0) p.setValueAtTime(pT, [pX,pY]);
 					
 				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-				}
 			}
 			
 		}
-	//~~~~~~~~~~~~~end JSON version
+	//~~~~~~~~~~~~~end 2D JSON version
 	}
 
 	app.endUndoGroup();
@@ -523,7 +521,7 @@ function importMocap3D(){  //start script
 	}
     
 	if(fileType=="xml"){
-		//~~~~~~~~~~~~~~~~~begin XML version
+		//~~~~~~~~~~~~~~~~~begin 3D XML version
 		var compRate = parseFloat(myRoot.@fps); // comp frame rate
 
 		var sW = parseFloat(myRoot.@width);
@@ -560,9 +558,9 @@ function importMocap3D(){  //start script
 
 
 		}
-		//~~~~~~~~~~~~~~~~~end XML version
+		//~~~~~~~~~~~~~~~~~end 3D XML version
 	} else if(fileType=="json"){
-		//~~~~~~~~~~~~~begin JSON version
+		//~~~~~~~~~~~~~begin 3D JSON version
 			var compRate = myRoot.MotionCapture.fps; // comp frame rate
 			var sW = myRoot.MotionCapture.width;
 			var sH = myRoot.MotionCapture.height;
@@ -573,27 +571,25 @@ function importMocap3D(){  //start script
 			var trackPoint = jointNamesMaster;
 
 			// add joint information
-		for(var j=0;j<trackPoint.length;j++){
-			var myEffect = mocap.property("Effects").property(trackPoint[j]);
-			myEffect.name = trackPoint[j];
-			var p = mocap.property("Effects")(trackPoint[j])("3D Point");
+		for(var name in myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints){
+			var myEffect = mocap.property("Effects").property(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name);
+			myEffect.name = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name;
+			var p = mocap.property("Effects")(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name)("3D Point");
 			
-				for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
-			if(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].name==trackPoint[j]){
+			for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
 				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 					//keyframes go here
 					var pT = i/compRate;
-					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].x;
-					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].y;
-					var pZ = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[j][i].z;
-					p.setValueAtTime(pT, [pX,pY,pZ]);
+					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].x;
+					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].y;
+					var pZ = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].z;
+					if(pX>=0.0 && pY>=0.0) p.setValueAtTime(pT, [pX,pY,pZ]);
 					
 				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-				}
 			}
 			
 		}
-		//~~~~~~~~~~~~~end JSON version
+		//~~~~~~~~~~~~~end 3D JSON version
 	}		
 } else {
              alert("Sorry, this feature only works with CS5.5 and higher.");
