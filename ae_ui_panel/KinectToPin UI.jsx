@@ -479,7 +479,7 @@ function importMocap2D(){  //start script
 					var pT = i/compRate;
 					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].x;
 					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].y;
-					if(pX>=0.0 && pY>=0.0) p.setValueAtTime(pT, [pX,pY]);
+					p.setValueAtTime(pT, [pX,pY]);
 					
 				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			}
@@ -583,7 +583,7 @@ function importMocap3D(){  //start script
 					var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].x;
 					var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].y;
 					var pZ = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].z;
-					if(pX>=0.0 && pY>=0.0) p.setValueAtTime(pT, [pX,pY,pZ]);
+					p.setValueAtTime(pT, [pX,pY,pZ]);
 					
 				//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			}
