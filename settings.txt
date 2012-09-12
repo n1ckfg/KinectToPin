@@ -11,7 +11,7 @@ Export AE Point Control 3D Data (.txt)
 true
 
 Export JSON Data (.json)
-true
+false
 
 Export AE Template Script (.jsx)
 false
