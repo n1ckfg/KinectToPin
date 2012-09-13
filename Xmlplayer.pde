@@ -1,7 +1,9 @@
 void xmlPlayerInit(int mfc){
+  MotionCapture = new proxml.XMLElement("MotionCapture");
   xmlIO = new XMLInOut(this);
   try {
     xmlIO.loadElement(xmlFilePath + "/" + xmlFileName + (mfc) + "." + xmlFileType); //loads the XML
+    delay(10);
   }
   catch(Exception e) {
     //if loading failed 

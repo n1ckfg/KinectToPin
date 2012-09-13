@@ -140,11 +140,11 @@ void aePinSaveToDisk(int mfc) {
         data.add("Effects" + "\t" + "Puppet #2" + "\t" + "arap #3" + "\t" + "Mesh" + "\t" + "Mesh #1" + "\t" + "Deform" + "\t" + "Pin #" + pinNums[j] + "\t" + "Position");
         data.add("\t" + "Frame" + "\t" + "X pixels" + "\t" + "Y pixels");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
-          if (errorCheck(i, j)) {
+          try{
             data.add("\t" + i  
               + "\t" + (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))
               + "\t" + (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))); //gets to the child we need //gets to the child we need
-          }
+          }catch(Exception e){ }
         }
       }
       data.add("\r");
@@ -179,11 +179,11 @@ void aePointSaveToDisk(int mfc) {
         data.add("Effects" + "\t" + "Point Control #" + pinNums[j] + "\t" + "Point #2");
         data.add("\t" + "Frame" + "\t" + "X pixels" + "\t" + "Y pixels");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
-          if (errorCheck(i, j)) {
+          try{
             data.add("\t" + i  
               + "\t" + (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))
               + "\t" + (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")))); //gets to the child we need //gets to the child we need
-          }
+          }catch(Exception e){ }
         }
       }
       data.add("\r");
@@ -218,12 +218,12 @@ void aePoint3DsaveToDisk(int mfc) {
         data.add("Effects" + "\t" + "3D Point Control #" + pinNums[j] + "\t" + "3D Point #2");
         data.add("\t" + "Frame" + "\t" + "X pixels" + "\t" + "Y pixels" + "\t" + "Z pixels");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
-          if (errorCheck(i, j)) {
+          try{
             data.add("\t" + i  
               + "\t" + (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))
               + "\t" + (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y"))) //gets to the child we need //gets to the child we need
             + "\t" + (100 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))); //gets to the child we need //gets to the child we need
-          }
+          }catch(Exception e){ }
         }
       }
       data.add("\r");
@@ -270,13 +270,13 @@ void aeJsxSaveToDisk(int mfc) {
         //data.add("\t" + "var r = solid.property(\"rotation\");" + "\r");
         //data.add("\r");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
-          if (errorCheck(i, j)) {
+          try{
             PVector temp = new PVector(0, 0, 0);
             temp.x = (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")));
             temp.y = (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")));
             temp.z = (100* float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")));
             data.add("\t\t" + "p.setValueAtTime(" + AEkeyTime(i, MotionCapture.countChildren()) + ", [" + temp.x + ", " + temp.y + ", " + temp.z + "]);" + "\r");
-          }
+          }catch(Exception e){ }
         }
 
         data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 0, 0], \"" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
@@ -325,7 +325,7 @@ void mayaSaveToDisk(int mfc) {
        for (int j=0;j<osceletonNames.length;j++) {
         modesRefresh();
        for (int i=0;i<MotionCapture.countChildren();i++) { 
-          if (errorCheck(i, j)) {
+          try{
             PVector temp = new PVector(0, 0, 0);
             temp.x = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")));
             temp.y = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")));
@@ -334,7 +334,7 @@ void mayaSaveToDisk(int mfc) {
        data.add("currentTime("+i+")"+"\r");
        data.add("move(" + (temp.x) + ", " + (temp.y) + "," + (temp.z) + ")" + "\r");
        data.add("setKeyframe()" + "\r");          
-        }
+        }catch(Exception e){ }
         }
       }
       mayaKeysEnd(zz);
@@ -387,9 +387,7 @@ void jsonSaveToDisk(int mfc) {
         data.add("\t\t"+"\"fps\":"+MotionCapture.getAttribute("fps")+","+"\r");
         data.add("\t\t"+"\"numFrames\":"+MotionCapture.getAttribute("numFrames")+","+"\r");
         data.add("\t\t"+"\"dialogueFile\":\""+MotionCapture.getAttribute("dialogueFile")+"\","+"\r");   
-      }catch(Exception e){
-        //
-      }
+      }catch(Exception e){ }
       data.add("\t\t"+"\"MocapFrame\":{"+"\r");
       data.add("\t\t\t"+"\"Skeleton\":["+"\r");
       data.add("\t\t\t\t"+"{"+"\r");
@@ -400,7 +398,7 @@ void jsonSaveToDisk(int mfc) {
         data.add("\t\t\t\t\t\t\t"+"\"name\":\""+osceletonNames[j]+"\","+"\r");
         data.add("\t\t\t\t\t\t\t"+"\"pos\":["+"\r");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
-          if (errorCheck(i, j)) {
+          try{
             if(i==MotionCapture.countChildren()-1){
             data.add("\t\t\t\t\t\t\t\t" + "{"  
               + "\"x\":"+(sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")))+", "
@@ -414,7 +412,7 @@ void jsonSaveToDisk(int mfc) {
               + "\"z\":"+(sD * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")))
               +"},"+"\r"); //gets to the child we need //gets to the child we need
             }
-          }
+          }catch(Exception e){ }
         }
             data.add("\t\t\t\t\t\t\t"+"]"+"\r");        
             if(j==osceletonNames.length-1){
@@ -434,6 +432,7 @@ void jsonSaveToDisk(int mfc) {
   }
 }
 
+//broken; don't use
 boolean errorCheck(int i, int j) {
   if (
     float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")) >= 0 &&
