@@ -44,7 +44,7 @@ Enable Multithreading
 true
 
 Load SimpleOpenNI at Startup
-false
+true
 
 OSC IP Number
 127.0.0.1
