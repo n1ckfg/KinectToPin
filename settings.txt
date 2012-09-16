@@ -51,3 +51,6 @@ OSC IP Number
 
 OSC Port
 7110
+
+Delay Between Saving Files
+100

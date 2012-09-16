@@ -107,6 +107,8 @@ boolean saveMaya = false;
 boolean limitReached = false;
 boolean loaded = false;
 
+int saveDelayInterval = 100; //ms
+
 String[] osceletonNamesNormal = {
   "head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"
 };

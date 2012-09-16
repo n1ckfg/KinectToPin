@@ -3,7 +3,7 @@ void xmlPlayerInit(int mfc){
   xmlIO = new XMLInOut(this);
   try {
     xmlIO.loadElement(xmlFilePath + "/" + xmlFileName + (mfc) + "." + xmlFileType); //loads the XML
-    delay(10);
+    delay(saveDelayInterval);
   }
   catch(Exception e) {
     //if loading failed 

@@ -29,6 +29,7 @@ class Settings {
         //if (settings.data[i].equals("smoothNum")) smoothNum = setInt(settings.data[i+1]);
         if (settings.data[i].equals("Enable Multithreading")) multiThread = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Load SimpleOpenNI at Startup")) loadSimpleOpenNIatStart = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Delay Between Saving Files")) saveDelayInterval = setInt(settings.data[i+1]);
        }
     } 
     catch(Exception e) {
