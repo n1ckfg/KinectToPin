@@ -111,12 +111,12 @@ void xmlAdd() {
 }
 
 
-//exports xml file with all original data
+//1-7.  XML EXPORT, exports xml file with all original data
 void xmlSaveToDisk() {
   xmlIO.saveElement(MotionCapture, xmlFilePath + "/" + xmlFileName + (masterFileCounter) + "." + xmlFileType);
 }
 
-//exports puppet pins as text with only x and y
+//2-7.  PIN TEXT, exports puppet pins as text with only x and y
 void aePinSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -125,7 +125,7 @@ void aePinSaveToDisk(int mfc) {
       for (int i=0;i<pinNums.length;i++) {
         pinNums[i] = i+1;
       }
-      data = new Data();
+      Data data = new Data();
       data.beginSave();
       data.add("Adobe After Effects 8.0 Keyframe Data");
       data.add("\r");
@@ -155,7 +155,7 @@ void aePinSaveToDisk(int mfc) {
   }
 }
 
-//export 2D points as text with xy
+//3-7.  POINT TEXT, export 2D points as text with xy
 void aePointSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -164,7 +164,7 @@ void aePointSaveToDisk(int mfc) {
       for (int i=0;i<pinNums.length;i++) {
         pinNums[i] = i+1;
       }
-      data = new Data();
+      Data data = new Data();
       data.beginSave();
       data.add("Adobe After Effects 8.0 Keyframe Data");
       data.add("\r");
@@ -194,7 +194,7 @@ void aePointSaveToDisk(int mfc) {
   }
 }
 
-//export 3D points as text with xyz
+//4-7.  3D POINT TEXT, export 3D points as text with xyz
 void aePoint3DsaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -203,7 +203,7 @@ void aePoint3DsaveToDisk(int mfc) {
       for (int i=0;i<pinNums.length;i++) {
         pinNums[i] = i+1;
       }
-      data = new Data();
+      Data data = new Data();
       data.beginSave();
       data.add("Adobe After Effects 8.0 Keyframe Data");
       data.add("\r");
@@ -234,7 +234,7 @@ void aePoint3DsaveToDisk(int mfc) {
   }
 }
 
-//export JavaScript script to automate rigging tasks
+//5-7.  JSX TEXT, export JavaScript script to automate rigging tasks
 void aeJsxSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -243,7 +243,25 @@ void aeJsxSaveToDisk(int mfc) {
       for (int i=0;i<pinNums.length;i++) {
         pinNums[i] = i+1;
       }
-      AEkeysBegin();
+      Data data = new Data();
+        data.beginSave();
+        data.add("{  //start script" + "\r");
+        data.add("\t" + "app.beginUndoGroup(\"countdownBeep\");" + "\r");
+        data.add("\r");
+        data.add("\t" + "// create project if necessary" + "\r");
+        data.add("\t" + "var proj = app.project;" + "\r");
+        data.add("\t" + "if(!proj) proj = app.newProject();" + "\r");
+        data.add("\r");
+        data.add("\t" + "// create new comp named 'my comp'" + "\r");
+        data.add("\t" + "var compW = " + dW + "; // comp width" + "\r");
+        data.add("\t" + "var compH = " + dH + "; // comp height" + "\r");
+        data.add("\t" + "var compL = " + (counterMax/fps) + ";  // comp length (seconds)" + "\r");
+        data.add("\t" + "var compRate = " + fps + "; // comp frame rate" + "\r");
+        data.add("\t" + "var compBG = [0/255,0/255,0/255] // comp background color" + "\r");
+        data.add("\t" + "var myItemCollection = app.project.items;" + "\r");
+        data.add("\t" + "var myComp = myItemCollection.addComp('my comp',compW,compH,1,compL,compRate);" + "\r");
+        data.add("\t" + "myComp.bgColor = compBG;" + "\r");
+        data.add("\r");  
       data.add("\t" + "var mocap = myComp.layers.addSolid([0, 0, 0], \"mocap\", 640, 480, 1);" + "\r");
       data.add("\t" + "mocap.guideLayer = true;" + "\r");
       data.add("\t" + "mocap.locked = true;" + "\r");
@@ -308,11 +326,15 @@ void aeJsxSaveToDisk(int mfc) {
          data.add("\t" + "p.expression = expression;");
          */
       }
-      AEkeysEnd(zz);
+        data.add("\r");
+        data.add("\t" + "app.endUndoGroup();" + "\r");
+        data.add("}  //end script" + "\r");
+        data.endSave("data/" + aeJsxFilePath + "/" + aeJsxFileName + zz + "." + aeJsxFileType);
     }
   }
 }
 
+//6-7.  MAYA PYTHON TEXT
 void mayaSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -321,7 +343,15 @@ void mayaSaveToDisk(int mfc) {
       for (int i=0;i<pinNums.length;i++) {
         pinNums[i] = i+1;
       }
-      mayaKeysBegin();
+      Data data = new Data();
+        data.beginSave();
+        data.add("from maya.cmds import *" + "\r");
+        data.add("from random import uniform as rnd" + "\r");
+        data.add("#select(all=True)" + "\r");
+        data.add("#delete()" + "\r");
+        data.add("playbackOptions(minTime=\"0\", maxTime=\"" + counterMax + "\")" + "\r");
+        data.add("#grav = gravity()" + "\r");  
+        data.add("\r");
        for (int j=0;j<osceletonNames.length;j++) {
         modesRefresh();
        for (int i=0;i<MotionCapture.countChildren();i++) { 
@@ -337,7 +367,10 @@ void mayaSaveToDisk(int mfc) {
         }catch(Exception e){ }
         }
       }
-      mayaKeysEnd(zz);
+        data.add("#floor = polyPlane(w=30,h=30)" + "\r");
+      data.add("#rigidBody(passive=True)" + "\r");
+      data.add("#move(0,0,0)" + "\r");
+      data.endSave("data/" + mayaFilePath + "/" + mayaFileName + zz + "." + mayaFileType);
     }
   }
 }
@@ -368,6 +401,7 @@ void mayaSaveToDisk(int mfc) {
  }
  */
 
+//7-7.  JSON TEXT
 void jsonSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -376,7 +410,7 @@ void jsonSaveToDisk(int mfc) {
       for (int i=0;i<pinNums.length;i++) {
         pinNums[i] = i+1;
       }
-      data = new Data();
+      Data data = new Data();
       data.beginSave();
       data.add("{"+"\r");
       data.add("\t"+"\"MotionCapture\":{"+"\r");
@@ -448,3 +482,10 @@ boolean errorCheck(int i, int j) {
   }
 }
 
+float mayaKeyTime(int currentFrame, int totalFrames){
+  return (float(currentFrame)/float(totalFrames)) * (float(totalFrames)/float(fps));
+}
+
+float AEkeyTime(int currentFrame, int totalFrames){
+  return (float(currentFrame)/float(totalFrames)) * (float(totalFrames)/float(fps));
+}

@@ -121,7 +121,7 @@ PVector[] simpleOpenNiPos = new PVector[osceletonNames.length];
 PVector[] simpleOpenNiPos_proj = new PVector[osceletonNames.length];
 
 File dataFolder, dialogueFolder;
-Data data;
+//Data data;
 int[] pinNums = new int[osceletonNames.length];
 proxml.XMLElement[] oscXmlTags = new proxml.XMLElement[osceletonNames.length];
 float posX, posY, posZ;
