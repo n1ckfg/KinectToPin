@@ -1,4 +1,4 @@
-// KinectToPin v1.1
+// KinectToPin v1.1.3
 // by Nick Fox-Gieg and Victoria Nece
 // kinecttopin.fox-gieg.com
 
