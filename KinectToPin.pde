@@ -1,4 +1,4 @@
-// KinectToPin v1.1.3
+// KinectToPin v1.1
 // by Nick Fox-Gieg and Victoria Nece
 // kinecttopin.fox-gieg.com
 
@@ -35,6 +35,7 @@ int[] previewInt;
 SimpleOpenNI  context;
 boolean mirror = false;
 boolean multiThread = true;
+boolean autoCalibrate = false;
 
 int masterFileCounter=0;
 String[] allFiles;
@@ -65,9 +66,12 @@ OscP5 oscP5;
 boolean found=false;
 String ipNumber = "127.0.0.1";
 int receivePort = 7110;
+int sendPort = 1234;
+NetAddress myRemoteLocation;
+boolean sendOsc = false;
+String oscChannelFormat = "Isadora"; // "Isadora", "OSCeleton"
 
 XMLInOut xmlIO;
-//proxml.XMLElement xmlFile;
 proxml.XMLElement MotionCapture;
 String xmlFileName = "mocapData";
 String xmlFileType = "xml";
@@ -103,6 +107,11 @@ String mayaFileName = "mayaScript";
 String mayaFilePath = "saveMaya";
 String mayaFileType = "py";
 boolean saveMaya = false;
+
+String objFileName = "pointcloud";
+String objFilePath = "saveObj";
+String objFileType = "obj";
+boolean saveObj = false;
 
 boolean limitReached = false;
 boolean loaded = false;
@@ -218,7 +227,7 @@ dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
   }
   ellipseMode(CENTER);
   minim = new Minim(this);
-  oscP5 = new OscP5(this, ipNumber, receivePort);
+  oscSetup();
   buttons[buttonRecNum] = new Button(25, sH-20, 30, color(240, 10, 10), 12, "rec");
   buttons[buttonOscNum] = new Button(60, sH-20, 30, color(200, 20, 200), 12, "osc");
   buttons[buttonSaveNum] = new Button(sW-25, sH-20, 30, color(50, 50, 220), 12, "save");

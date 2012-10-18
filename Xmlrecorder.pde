@@ -45,20 +45,6 @@ void xmlRecorderUpdate() {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-void oscEvent(OscMessage msg) {
-  if (msg.checkAddrPattern("/joint") && msg.checkTypetag("sifff")) {
-    found = true;
-    for (int i=0;i<osceletonNames.length;i++) {
-      if (modeOsc&&msg.get(0).stringValue().equals(osceletonNames[i])) {
-        x[i] = msg.get(2).floatValue();
-        y[i] = msg.get(3).floatValue();
-        z[i] = msg.get(4).floatValue();
-      }
-    }
-  }
-}
-
-
 void simpleOpenNiEvent(int userId) {
   context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_HEAD, simpleOpenNiPos[0]);
   context.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_NECK, simpleOpenNiPos[1]);
@@ -111,12 +97,12 @@ void xmlAdd() {
 }
 
 
-//1-7.  XML EXPORT, exports xml file with all original data
+//1-8.  XML EXPORT, exports xml file with all original data
 void xmlSaveToDisk() {
   xmlIO.saveElement(MotionCapture, xmlFilePath + "/" + xmlFileName + (masterFileCounter) + "." + xmlFileType);
 }
 
-//2-7.  PIN TEXT, exports puppet pins as text with only x and y
+//2-8.  PIN TEXT, exports puppet pins as text with only x and y
 void aePinSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -155,7 +141,7 @@ void aePinSaveToDisk(int mfc) {
   }
 }
 
-//3-7.  POINT TEXT, export 2D points as text with xy
+//3-8.  POINT TEXT, export 2D points as text with xy
 void aePointSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -194,7 +180,7 @@ void aePointSaveToDisk(int mfc) {
   }
 }
 
-//4-7.  3D POINT TEXT, export 3D points as text with xyz
+//4-8.  3D POINT TEXT, export 3D points as text with xyz
 void aePoint3DsaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -234,7 +220,7 @@ void aePoint3DsaveToDisk(int mfc) {
   }
 }
 
-//5-7.  JSX TEXT, export JavaScript script to automate rigging tasks
+//5-8.  JSX TEXT, export JavaScript script to automate rigging tasks
 void aeJsxSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -334,7 +320,7 @@ void aeJsxSaveToDisk(int mfc) {
   }
 }
 
-//6-7.  MAYA PYTHON TEXT
+//6-8.  MAYA PYTHON TEXT
 void mayaSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;
@@ -375,33 +361,48 @@ void mayaSaveToDisk(int mfc) {
   }
 }
 
-/*
-//json parser by Greg Borenstein, gregborenstein.com 
- String toJson() {
- String result = "{\"project\" : \"skelestreamer\",";      
- result += "\"session\" : \"" + uuid + "\",";       
- result += "\"head\" : {\"x\":" + head.x + ", \"y\":" + head.y + ",\"z\":" + head.z + "},";         
- result += "\"neck\" : {\"x\":" + neck.x + ", \"y\":" + neck.y + ",\"z\":" + neck.z + "},";          
- result += "\"rightShoulder\" : {\"x\":" + rightShoulder.x + ", \"y\":" + rightShoulder.y + ",\"z\":" + rightShoulder.z + "},"; 
- result += "\"rightElbow\" : {\"x\":" + rightElbow.x + ", \"y\":" + rightElbow.y + ",\"z\":" + rightElbow.z + "},";    
- result += "\"rightHand\" : {\"x\":" + rightHand.x + ", \"y\":" + rightHand.y + ",\"z\":" + rightHand.z + "},";     
- result += "\"leftShoulder\" : {\"x\":" + leftShoulder.x + ", \"y\":" + leftShoulder.y + ",\"z\":" + leftShoulder.z + "},";  
- result += "\"leftElbow\" : {\"x\":" + leftElbow.x + ", \"y\":" + leftElbow.y + ",\"z\":" + leftElbow.z + "},";     
- result += "\"leftHand\" : {\"x\":" + leftHand.x + ", \"y\":" + leftHand.y + ",\"z\":" + leftHand.z + "},";    
- result += "\"torso\" : {\"x\":" + torso.x + ", \"y\":" + torso.y + ",\"z\":" + torso.z + "},";         
- result += "\"rightHip\" : {\"x\":" + rightHip.x + ", \"y\":" + rightHip.y + ",\"z\":" + rightHip.z + "},";      
- result += "\"rightKnee\" : {\"x\":" + rightKnee.x + ", \"y\":" + rightKnee.y + ",\"z\":" + rightKnee.z + "},";     
- result += "\"rightFoot\" : {\"x\":" + rightFoot.x + ", \"y\":" + rightFoot.y + ",\"z\":" + rightFoot.z + "},";     
- result += "\"leftHip\" : {\"x\":" + leftHip.x + ", \"y\":" + leftHip.y + ",\"z\":" + leftHip.z + "},";       
- result += "\"leftKnee\" : {\"x\":" + leftKnee.x + ", \"y\":" + leftKnee.y + ",\"z\":" + leftKnee.z + "},";     
- result += "\"leftFoot\" : {\"x\":" + leftFoot.x + ", \"y\":" + leftFoot.y + ",\"z\":" + leftFoot.z + "}";     
- 
- result += "}";
- return result;
- }
- */
+//7-8.  POINTCLOUD OBJ FILE
+void objSaveToDisk(int mfc) {
+  for (int z=0;z<mfc;z++) {
+    int zz=z+1;
+    xmlPlayerInit(zz);
+    if (loaded) {
+      for (int i=0;i<pinNums.length;i++) {
+        pinNums[i] = i+1;
+      }
+       for (int i=0;i<MotionCapture.countChildren();i++) { 
+            modesRefresh();
+            Data data = new Data();
+            data.beginSave();
+            data.add("####");
+            data.add("#");
+            data.add("# Vertices: "+ (MotionCapture.countChildren()*osceletonNames.length));
+            data.add("# Faces: 0");
+            data.add("#");
+            data.add("####");
+          for (int j=0;j<osceletonNames.length;j++) {
+          try{
+            PVector temp = new PVector(0, 0, 0);
+            temp.x = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")));
+            temp.y = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")));
+            temp.z = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")));
+            data.add("v " + temp.x + " " + temp.y + " " + temp.z);
+          }catch(Exception e){ }
+        }
+            data.add("####");
+            data.add("#");
+            data.add("# "+ (MotionCapture.countChildren()*osceletonNames.length) +" vertices, 0 vertex normals");
+            data.add("# 0 faces, 0 texture coords");
+            data.add("# End of File");
+            data.add("#");
+            data.add("####");
+            data.endSave("data/" + objFilePath + "/" + objFileName + zz + "/" + objFileName + zz + "_frame" + i + "." + objFileType);
+          }
+    }
+  }
+}
 
-//7-7.  JSON TEXT
+//8-8.  JSON TEXT
 void jsonSaveToDisk(int mfc) {
   for (int z=0;z<mfc;z++) {
     int zz=z+1;

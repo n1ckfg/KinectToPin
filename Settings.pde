@@ -8,15 +8,18 @@ class Settings {
       settings.load(_s);
       for (int i=0;i<settings.data.length;i++) {
         if (settings.data[i].equals("Mirror Joints")) mirror = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("OSC IP Number")) ipNumber = setString(settings.data[i+1]);
-        if (settings.data[i].equals("OSC Port")) receivePort = setInt(settings.data[i+1]);
-        //if (settings.data[i].equals("Export XML (.xml)")) saveXml = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Send OSC Active")) sendOsc = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("OSC Send IP Number")) ipNumber = setString(settings.data[i+1]);
+        if (settings.data[i].equals("OSC Send Port")) sendPort = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("OSC Receive Port")) receivePort = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("OSC Channel Format (Isadora, OSCeleton)")) oscChannelFormat = setString(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Puppet Pin Data (.txt)")) savePins = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Point Control Data (.txt)")) savePoints = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Point Control 3D Data (.txt)")) savePoints3D = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export JSON Data (.json)")) saveJson = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Template Script (.jsx)")) saveJsx = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export Maya Script (.py)")) saveMaya = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("Export Pointcloud (.obj)")) saveObj = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Original Capture Image Width")) sW = setInt(settings.data[i+1]);
         if (settings.data[i].equals("Original Capture Image Height")) sH = setInt(settings.data[i+1]);
         if (settings.data[i].equals("Original Capture Depth")) sD = setFloat(settings.data[i+1]);
@@ -24,11 +27,9 @@ class Settings {
         if (settings.data[i].equals("Destination AE Comp Height")) dH = setInt(settings.data[i+1]);
         if (settings.data[i].equals("Framerate (max 30)")) fps = setInt(settings.data[i+1]);
         if (settings.data[i].equals("Camera Display Quality (1 = best)")) previewLevel = setInt(settings.data[i+1]);
-        //if (settings.data[i].equals("motionBlur")) motionBlur = setBoolean(settings.data[i+1]);
-        //if (settings.data[i].equals("applyEffects")) applyEffects = setBoolean(settings.data[i+1]);
-        //if (settings.data[i].equals("smoothNum")) smoothNum = setInt(settings.data[i+1]);
         if (settings.data[i].equals("Enable Multithreading")) multiThread = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Load SimpleOpenNI at Startup")) loadSimpleOpenNIatStart = setBoolean(settings.data[i+1]);
+        if (settings.data[i].equals("SimpleOpenNI Autocalibration (no \"cactus pose\")")) autoCalibrate = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Delay Between Saving Files")) saveDelayInterval = setInt(settings.data[i+1]);
        }
     } 

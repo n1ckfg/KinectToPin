@@ -57,15 +57,21 @@ void drawUser(){
    }
     }
   }
-  
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // draw the skeleton if it's available
   if(context.isTrackingSkeleton(1)){
     if(modePreview){
     drawSkeleton(1);
+    if(sendOsc){
+      simpleOpenNiEvent(1);
+      oscSend(1);
+    }
     }else if(modeRec){
     simpleOpenNiEvent(1);
+    if(sendOsc) oscSend(1);
     }
   }
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 // draw the skeleton with the selected joints
@@ -108,8 +114,13 @@ void drawSkeleton(int userId){
 void onNewUser(int userId){
   println("onNewUser - userId: " + userId);
   println("  start pose detection");
-  
-  context.startPoseDetection("Psi",userId);
+  //~~~~~~~~~~~~~ added autocalibration ~~~~~~~~~~~~~~~~~
+  if(autoCalibrate){
+    context.requestCalibrationSkeleton(userId,true);
+  } else {    
+    context.startPoseDetection("Psi",userId);
+  }
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
 }
 
 void onLostUser(int userId){

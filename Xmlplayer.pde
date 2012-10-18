@@ -26,6 +26,7 @@ void xmlPlayerUpdate() {
     ellipse(0,0,circleSize,circleSize);
     popMatrix();
   }
+  if(sendOsc) oscSend(1);
   if(counter<counterMax&&!modeStop) {
     counter++;
   } 
@@ -41,7 +42,6 @@ void xmlPlayerUpdate() {
 void xmlEvent(proxml.XMLElement element) {
   //this function is ccalled by default when an XML object is loaded
   MotionCapture = element;
-  //parseXML(); //appelle la fonction qui analyse le fichier XML
   loaded = true;
   xmlFirstRun();
 }
@@ -68,9 +68,9 @@ void parseXML(){
     y[i] = posY;
     z[i] = posZ;
     if(i==0){
-      println("~~~~~~~~~~~~~~~~");
+      //println("~~~~~~~~~~~~~~~~");
     }
-    println(osceletonNames[i] + "  x: " + posX + "  y: " + posY + "  z: " + posZ);
+    //println(osceletonNames[i] + "  x: " + posX + "  y: " + posY + "  z: " + posZ);
   }
   }
 }

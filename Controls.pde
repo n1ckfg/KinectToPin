@@ -137,6 +137,7 @@ void doButtonSave(){ //one-off
     if(saveJson) jsonSaveToDisk(masterFileCounter);    
     if(saveJsx) aeJsxSaveToDisk(masterFileCounter);    
     if(saveMaya) mayaSaveToDisk(masterFileCounter);
+    if(saveObj) objSaveToDisk(masterFileCounter);
 }
 
 void doButtonCam(){ //toggle

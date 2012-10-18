@@ -2,22 +2,25 @@ Mirror Joints
 false
 
 Export AE Puppet Pin Data (.txt)
-true
+false
 
 Export AE Point Control Data (.txt)
-true
+false
 
 Export AE Point Control 3D Data (.txt)
-true
+false
 
 Export JSON Data (.json)
-true
+false
 
 Export AE Template Script (.jsx)
 false
 
 Export Maya Script (.py)
 false
+
+Export Pointcloud (.obj)
+true
 
 Original Capture Image Width
 640
@@ -44,13 +47,25 @@ Enable Multithreading
 true
 
 Load SimpleOpenNI at Startup
+false
+
+SimpleOpenNI Autocalibration (no "cactus pose")
+false
+
+Send OSC Active
 true
 
-OSC IP Number
+OSC Send IP Number
 127.0.0.1
 
-OSC Port
+OSC Send Port
+1234
+
+OSC Receive Port
 7110
+
+OSC Channel Format (Isadora, OSCeleton)
+Isadora
 
 Delay Between Saving Files
 100
