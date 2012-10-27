@@ -13,8 +13,8 @@ void xmlRecorderInit() {
 
 void xmlRecorderUpdate() {
   background(0);
-  //if (modeRec||(modeOsc&&found)) {
-  if (modeRec) {
+  if (modeRec||(modeOsc&&found)) {
+  //if (modeRec) {
     fill(255, 200);
     stroke(0);
     strokeWeight(5);

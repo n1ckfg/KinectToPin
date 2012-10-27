@@ -1,6 +1,6 @@
 void oscSetup() {
-  oscP5 = new OscP5(this, receivePort);
-  myRemoteLocation = new NetAddress(ipNumber, sendPort);
+    oscP5 = new OscP5(this, receivePort);
+    myRemoteLocation = new NetAddress(ipNumber, sendPort);
 }
 
 void oscEvent(OscMessage msg) {
@@ -22,6 +22,7 @@ void oscSend(int skel) {
     int counter = 0;
     
     for (int i=0;i<osceletonNames.length;i++) {
+      try{
       if(oscChannelFormat.equals("Isadora")){     
       counter++;
       myMessage = new OscMessage("/isadora/"+counter); // x
@@ -38,10 +39,17 @@ void oscSend(int skel) {
       myMessage.add(z[i]);
       oscP5.send(myMessage, myRemoteLocation);
 
-      println("Sending OSC to " + myRemoteLocation + " " + osceletonNames[i] + " x: " + x[i] + " y: " + y[i] + " z: " + z[i]);
-      }else if(oscChannelFormat.equals("OSCeleton")){
-        //OSCeleton-style message goes here
+       }else if(oscChannelFormat.equals("OSCeleton")){
+        myMessage = new OscMessage("/joint"); // x
+        myMessage.add(osceletonNames[i]);
+        myMessage.add(skel);
+        myMessage.add(x[i]);
+        myMessage.add(y[i]);
+        myMessage.add(z[i]);
+        oscP5.send(myMessage, myRemoteLocation);
       }
-   }
+      println("Sending OSC, format \""+ oscChannelFormat +"\", to " + myRemoteLocation + " " + osceletonNames[i] + " x: " + x[i] + " y: " + y[i] + " z: " + z[i]);
+   }catch(Exception e){ }
+    }
 }
 

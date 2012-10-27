@@ -56,16 +56,16 @@ Send OSC Active
 true
 
 OSC Send IP Number
-127.0.0.1
+fox-gieg.dyndns.org
 
 OSC Send Port
-1234
+61863
 
 OSC Receive Port
 7110
 
 OSC Channel Format (Isadora, OSCeleton)
-Isadora
+OSCeleton
 
 Delay Between Saving Files
 100
