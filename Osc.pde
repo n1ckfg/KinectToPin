@@ -1,6 +1,7 @@
 void oscSetup() {
     oscP5 = new OscP5(this, receivePort);
     myRemoteLocation = new NetAddress(ipNumber, sendPort);
+    if(oscLocalEcho) myRemoteLocationEcho = new NetAddress("127.0.0.1", sendPort); 
 }
 
 void oscEvent(OscMessage msg) {
@@ -16,6 +17,18 @@ void oscEvent(OscMessage msg) {
   }
 }
 
+void oscSendHandler(OscMessage _myMessage){
+  try{
+    oscP5.send(_myMessage, myRemoteLocation);
+  }catch(Exception e){ }
+  
+  try{
+  if(oscLocalEcho){
+    oscP5.send(_myMessage, myRemoteLocationEcho);
+  }
+  }catch(Exception e){ }
+}
+
 void oscSend(int skel) {
     OscMessage myMessage;
 
@@ -27,17 +40,17 @@ void oscSend(int skel) {
       counter++;
       myMessage = new OscMessage("/isadora/"+counter); // x
       myMessage.add(x[i]);
-      oscP5.send(myMessage, myRemoteLocation); 
+      oscSendHandler(myMessage); 
 
       counter++;
       myMessage = new OscMessage("/isadora/"+counter); // x
       myMessage.add(y[i]);
-      oscP5.send(myMessage, myRemoteLocation); 
+      oscSendHandler(myMessage);
 
       counter++;
       myMessage = new OscMessage("/isadora/"+counter); // x
       myMessage.add(z[i]);
-      oscP5.send(myMessage, myRemoteLocation);
+      oscSendHandler(myMessage);
 
        }else if(oscChannelFormat.equals("OSCeleton")){
         myMessage = new OscMessage("/joint"); // x
@@ -46,7 +59,7 @@ void oscSend(int skel) {
         myMessage.add(x[i]);
         myMessage.add(y[i]);
         myMessage.add(z[i]);
-        oscP5.send(myMessage, myRemoteLocation);
+        oscSendHandler(myMessage);
       }
       println("Sending OSC, format \""+ oscChannelFormat +"\", to " + myRemoteLocation + " " + osceletonNames[i] + " x: " + x[i] + " y: " + y[i] + " z: " + z[i]);
    }catch(Exception e){ }

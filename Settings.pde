@@ -12,6 +12,7 @@ class Settings {
         if (settings.data[i].equals("OSC Send IP Number")) ipNumber = setString(settings.data[i+1]);
         if (settings.data[i].equals("OSC Send Port")) sendPort = setInt(settings.data[i+1]);
         if (settings.data[i].equals("OSC Receive Port")) receivePort = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("OSC Local Echo")) oscLocalEcho = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("OSC Channel Format (Isadora, OSCeleton)")) oscChannelFormat = setString(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Puppet Pin Data (.txt)")) savePins = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Point Control Data (.txt)")) savePoints = setBoolean(settings.data[i+1]);
