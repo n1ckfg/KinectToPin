@@ -50,7 +50,7 @@ Load SimpleOpenNI at Startup
 false
 
 SimpleOpenNI Autocalibration (no "cactus pose")
-false
+true
 
 Send OSC Active
 true

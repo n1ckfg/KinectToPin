@@ -68,8 +68,10 @@ String ipNumber = "127.0.0.1";
 int receivePort = 7110;
 int sendPort = 1234;
 NetAddress myRemoteLocation;
+NetAddress myRemoteLocationEcho;
 boolean sendOsc = false;
 String oscChannelFormat = "Isadora"; // "Isadora", "OSCeleton"
+boolean oscLocalEcho = false;
 
 XMLInOut xmlIO;
 proxml.XMLElement MotionCapture;
