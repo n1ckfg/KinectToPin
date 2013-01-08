@@ -17,10 +17,10 @@ Export AE Template Script (.jsx)
 false
 
 Export Maya Script (.py)
-false
+true
 
 Export Pointcloud (.obj)
-true
+false
 
 Original Capture Image Width
 640
@@ -50,7 +50,7 @@ Load SimpleOpenNI at Startup
 false
 
 SimpleOpenNI Autocalibration (no "cactus pose")
-true
+false
 
 Send OSC Active
 true
@@ -72,3 +72,9 @@ OSCeleton
 
 Delay Between Saving Files
 100
+
+BVH Scale Factor
+6, -6, 6
+
+BVH Offset
+320, 240, 100

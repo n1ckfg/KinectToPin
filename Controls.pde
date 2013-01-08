@@ -29,13 +29,14 @@ void mouseReleased(){
   else if (buttons[buttonCamNum].clicked) {  //CAM
     doButtonCam();
   }
+  else if (buttons[buttonBvhNum].clicked) {  //CAM
+    doButtonBvh();
+  }
 
 if (buttons[buttonRecNum].hovered) {
     sayTextPrefix = "Record skeleton data";
-
 }else if (buttons[buttonOscNum].hovered) {
     sayTextPrefix = "Record OSC data";
-    
 }else if (buttons[buttonSaveNum].hovered) {
     sayTextPrefix = "Save all XML files for After Effects";
 }else if (buttons[buttonPlayNum].hovered) {
@@ -44,6 +45,8 @@ if (buttons[buttonRecNum].hovered) {
     sayTextPrefix = "Stop recording";
 }else if (buttons[buttonCamNum].hovered) {
     sayTextPrefix = "Toggle camera view";
+}else if (buttons[buttonBvhNum].hovered) {
+    sayTextPrefix = "Import BVH file";
 }
 }
 
@@ -74,8 +77,10 @@ void modesRefresh() {
   modeOsc = false;
   modePlay = false;
   modeExport = false; 
+  modeBvh = false;
   modeStop=false;
   modePreview=false;
+  bvhConversionCounter = 0;
 }
 
 void doButtonRec(){
@@ -153,3 +158,37 @@ void doButtonCam(){ //toggle
       modePreview=true;
     }
 }
+
+void doButtonBvh(){
+  doButtonStop();
+  chooseFolderDialog();
+  delay(saveDelayInterval);
+  modeBvh = true;
+  bvhConversionCounterMax = bvhNames.size();
+  bvhBegin();
+}
+
+void chooseFolderDialog(){
+  String folderPath = selectFolder();  // Opens file chooser
+  if (folderPath == null) {
+    // If a folder was not selected
+    println("No folder was selected...");
+  } else {
+    println(folderPath);
+    countFrames(folderPath);
+  }
+}
+
+void countFrames(String usePath) {
+  bvhNames = new ArrayList();
+    try {
+        //loads a sequence of frames from a folder
+        File dataFolder = new File(usePath); 
+        String[] allFiles = dataFolder.list();
+        for (int j=0;j<allFiles.length;j++) {
+          if (allFiles[j].toLowerCase().endsWith("bvh")) {
+            bvhNames.add(usePath+"/"+allFiles[j]);
+          }
+        }
+    }catch(Exception e){ }
+  }

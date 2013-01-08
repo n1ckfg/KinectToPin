@@ -32,6 +32,8 @@ class Settings {
         if (settings.data[i].equals("Load SimpleOpenNI at Startup")) loadSimpleOpenNIatStart = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("SimpleOpenNI Autocalibration (no \"cactus pose\")")) autoCalibrate = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Delay Between Saving Files")) saveDelayInterval = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("BVH Scale Factor")) bvhScaleFactor = setPVector(settings.data[i+1]);
+        if (settings.data[i].equals("BVH Offset")) bvhOffset = setPVector(settings.data[i+1]);
        }
     } 
     catch(Exception e) {
@@ -129,6 +131,46 @@ class Settings {
       endColor = color(r, g, b, a);
     }
       return endColor;
+  }
+  
+  PVector setPVector(String _s){
+    PVector endPVector = new PVector(0,0,0);
+    int commaCounter=0;
+    String sx = "";
+    String sy = "";
+    String sz = "";
+    float x = 0;
+    float y = 0;
+    float z = 0;
+
+    for (int i=0;i<_s.length();i++) {
+        if (_s.charAt(i)!=char(' ') && _s.charAt(i)!=char('(') && _s.charAt(i)!=char(')')) {
+          if (_s.charAt(i)==char(',')){
+            commaCounter++;
+          }else{
+          if (commaCounter==0) sx += _s.charAt(i);
+          if (commaCounter==1) sy += _s.charAt(i);
+          if (commaCounter==2) sz += _s.charAt(i); 
+         }
+       }
+     }
+
+    if (sx!="" && sy=="" && sz=="") {
+      x = float(sx);
+      endPVector = new PVector(x,0);
+    }
+    if (sx!="" && sy!="" && sz=="") {
+      x = float(sx);
+      y = float(sy);
+      endPVector = new PVector(x,y);
+    }
+    if (sx!="" && sy!="" && sz!="") {
+      x = float(sx);
+      y = float(sy);
+      z = float(sz);
+      endPVector = new PVector(x,y,z);
+    }
+      return endPVector;
   }
 }
 

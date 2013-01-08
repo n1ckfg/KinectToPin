@@ -13,7 +13,7 @@ void xmlRecorderInit() {
 
 void xmlRecorderUpdate() {
   background(0);
-  if (modeRec||(modeOsc&&found)) {
+  if (modeRec||(modeOsc&&found)||modeBvh) {
   //if (modeRec) {
     fill(255, 200);
     stroke(0);
@@ -231,47 +231,47 @@ void aeJsxSaveToDisk(int mfc) {
       }
       Data data = new Data();
         data.beginSave();
-        data.add("{  //start script" + "\r");
-        data.add("\t" + "app.beginUndoGroup(\"countdownBeep\");" + "\r");
+        data.add("{  //start script");
+        data.add("\t" + "app.beginUndoGroup(\"countdownBeep\");");
         data.add("\r");
-        data.add("\t" + "// create project if necessary" + "\r");
-        data.add("\t" + "var proj = app.project;" + "\r");
-        data.add("\t" + "if(!proj) proj = app.newProject();" + "\r");
+        data.add("\t" + "// create project if necessary");
+        data.add("\t" + "var proj = app.project;");
+        data.add("\t" + "if(!proj) proj = app.newProject();");
         data.add("\r");
-        data.add("\t" + "// create new comp named 'my comp'" + "\r");
-        data.add("\t" + "var compW = " + dW + "; // comp width" + "\r");
-        data.add("\t" + "var compH = " + dH + "; // comp height" + "\r");
-        data.add("\t" + "var compL = " + (counterMax/fps) + ";  // comp length (seconds)" + "\r");
-        data.add("\t" + "var compRate = " + fps + "; // comp frame rate" + "\r");
-        data.add("\t" + "var compBG = [0/255,0/255,0/255] // comp background color" + "\r");
-        data.add("\t" + "var myItemCollection = app.project.items;" + "\r");
-        data.add("\t" + "var myComp = myItemCollection.addComp('my comp',compW,compH,1,compL,compRate);" + "\r");
-        data.add("\t" + "myComp.bgColor = compBG;" + "\r");
+        data.add("\t" + "// create new comp named 'my comp'");
+        data.add("\t" + "var compW = " + dW + "; // comp width");
+        data.add("\t" + "var compH = " + dH + "; // comp height");
+        data.add("\t" + "var compL = " + (counterMax/fps) + ";  // comp length (seconds)");
+        data.add("\t" + "var compRate = " + fps + "; // comp frame rate");
+        data.add("\t" + "var compBG = [0/255,0/255,0/255] // comp background color");
+        data.add("\t" + "var myItemCollection = app.project.items;");
+        data.add("\t" + "var myComp = myItemCollection.addComp('my comp',compW,compH,1,compL,compRate);");
+        data.add("\t" + "myComp.bgColor = compBG;");
         data.add("\r");  
-      data.add("\t" + "var mocap = myComp.layers.addSolid([0, 0, 0], \"mocap\", 640, 480, 1);" + "\r");
-      data.add("\t" + "mocap.guideLayer = true;" + "\r");
-      data.add("\t" + "mocap.locked = true;" + "\r");
-      data.add("\t" + "mocap.property(\"position\").setValue([320,240]);" + "\r");
-      data.add("\t" + "mocap.property(\"opacity\").setValue(0);" + "\r");
+      data.add("\t" + "var mocap = myComp.layers.addSolid([0, 0, 0], \"mocap\", 640, 480, 1);");
+      data.add("\t" + "mocap.guideLayer = true;");
+      data.add("\t" + "mocap.locked = true;");
+      data.add("\t" + "mocap.property(\"position\").setValue([320,240]);");
+      data.add("\t" + "mocap.property(\"opacity\").setValue(0);");
       for (int j=0;j<osceletonNames.length;j++) {
         modesRefresh();
         data.add("\r");
-        data.add("\t" + "var myEffect = mocap.property(\"Effects\").addProperty(\"3D Point Control\");" + "\r");
-        data.add("\t" + "myEffect.name = \"" + osceletonNames[j] + "\";" + "\r");
+        data.add("\t" + "var myEffect = mocap.property(\"Effects\").addProperty(\"3D Point Control\");");
+        data.add("\t" + "myEffect.name = \"" + osceletonNames[j] + "\";");
         //(\"Blurriness\").setValue(61);");
-        //data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 1.0, 0], \"" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
+        //data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 1.0, 0], \"" + osceletonNames[j] + "\", 50, 50, 1);");
         /*
         if (motionBlur) {
-         data.add("\t" + "solid.motionBlur = true;" + "\r");
+         data.add("\t" + "solid.motionBlur = true;");
          }
          if (applyEffects) {
          AEeffects();
          }
          */
         //data.add("\r");
-        data.add("\t" + "var p = mocap.property(\"Effects\")(\"" + osceletonNames[j] + "\")(\"3D Point\");" + "\r");
+        data.add("\t" + "var p = mocap.property(\"Effects\")(\"" + osceletonNames[j] + "\")(\"3D Point\");");
         data.add("p.expression = \"\"\"smooth(.2,5)\"\"\";");
-        //data.add("\t" + "var r = solid.property(\"rotation\");" + "\r");
+        //data.add("\t" + "var r = solid.property(\"rotation\");");
         //data.add("\r");
         for (int i=0;i<MotionCapture.countChildren();i++) { 
           try{
@@ -279,42 +279,42 @@ void aeJsxSaveToDisk(int mfc) {
             temp.x = (sW * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")));
             temp.y = (sH * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")));
             temp.z = (100* float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")));
-            data.add("\t\t" + "p.setValueAtTime(" + AEkeyTime(i, MotionCapture.countChildren()) + ", [" + temp.x + ", " + temp.y + ", " + temp.z + "]);" + "\r");
+            data.add("\t\t" + "p.setValueAtTime(" + AEkeyTime(i, MotionCapture.countChildren()) + ", [" + temp.x + ", " + temp.y + ", " + temp.z + "]);");
           }catch(Exception e){ }
         }
 
-        data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 0, 0], \"" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
-        data.add("\t" + "solid.guideLayer = true;" + "\r");
-        data.add("\t" + "solid.property(\"opacity\").setValue(33);" + "\r");
-        data.add("\t" + "var p = solid.property(\"position\");" + "\r");
-        data.add("\t" + "var expression = " + "\r");
-        data.add("\t" + "//~~~~~~~~~~~~~expression here~~~~~~~~~~~~~~~" + "\r");
-        data.add("\t\t" + "\"" + "var sW = 640;" + "\"" + " +" + "\r");
-        data.add("\t\t" + "\"" + "var sH = 480;" + "\"" + " +" + "\r");
-        data.add("\t\t" + "\"" + "var dW = thisComp.width;" + "\"" + " +" + "\r");
-        data.add("\t\t" + "\"" + "var dH = thisComp.height;" + "\"" + " +" + "\r");
-        data.add("\t\t" + "\"" + "var x = fromComp(thisComp.layer(" + "\\" + "\"mocap" + "\\" + "\").effect(" + "\\" + "\"" + osceletonNames[j] + "\\" + "\")(" + "\\" + "\"3D Point" + "\\" + "\"))[0];" + "\"" + " +" + "\r");
-        data.add("\t\t" + "\"" + "var y = fromComp(thisComp.layer(" + "\\" + "\"mocap" + "\\" + "\").effect(" + "\\" + "\"" + osceletonNames[j] + "\\" + "\")(" + "\\" + "\"3D Point" + "\\" + "\"))[1];" + "\"" + " +" + "\r");
-        data.add("\t\t" + "\"" + "[(1.5 * dW) + (x*(dW/sW)),dH + (y*(dH/sH))];" + "\"" + ";" + "\r");
-        data.add("\t" + "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + "\r");
+        data.add("\t" + "var solid = myComp.layers.addSolid([1.0, 0, 0], \"" + osceletonNames[j] + "\", 50, 50, 1);");
+        data.add("\t" + "solid.guideLayer = true;");
+        data.add("\t" + "solid.property(\"opacity\").setValue(33);");
+        data.add("\t" + "var p = solid.property(\"position\");");
+        data.add("\t" + "var expression = ");
+        data.add("\t" + "//~~~~~~~~~~~~~expression here~~~~~~~~~~~~~~~");
+        data.add("\t\t" + "\"" + "var sW = 640;" + "\"" + " +");
+        data.add("\t\t" + "\"" + "var sH = 480;" + "\"" + " +");
+        data.add("\t\t" + "\"" + "var dW = thisComp.width;" + "\"" + " +");
+        data.add("\t\t" + "\"" + "var dH = thisComp.height;" + "\"" + " +");
+        data.add("\t\t" + "\"" + "var x = fromComp(thisComp.layer(" + "\\" + "\"mocap" + "\\" + "\").effect(" + "\\" + "\"" + osceletonNames[j] + "\\" + "\")(" + "\\" + "\"3D Point" + "\\" + "\"))[0];" + "\"" + " +");
+        data.add("\t\t" + "\"" + "var y = fromComp(thisComp.layer(" + "\\" + "\"mocap" + "\\" + "\").effect(" + "\\" + "\"" + osceletonNames[j] + "\\" + "\")(" + "\\" + "\"3D Point" + "\\" + "\"))[1];" + "\"" + " +");
+        data.add("\t\t" + "\"" + "[(1.5 * dW) + (x*(dW/sW)),dH + (y*(dH/sH))];" + "\"" + ";");
+        data.add("\t" + "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         data.add("\t" + "p.expression = expression;");
 
         /*
         data.add("\r");
          
-         data.add("\t" + "var solid = myComp.layers.addSolid([0, 1.0, 0], \"dest_" + osceletonNames[j] + "\", 50, 50, 1);" + "\r");
-         data.add("\t" + "var p = solid.property(\"position\");" + "\r");
-         data.add("\t" + "var expression = " + "\r");
-         data.add("\t" + "//~~~~~~~~~~~~~expression here~~~~~~~~~~~~~~~" + "\r");
-         data.add("\t\t" + "\"" + "var nullTarget = " + "\\" + "\"source_" + osceletonNames[j] + "\\" + "\";" + "\"" + " +" + "\r");
-         data.add("\t\t" + "\"" + "fromComp(thisComp.layer(nullTarget).transform.position);" + "\";" + "\r");
-         data.add("\t" + "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + "\r");
+         data.add("\t" + "var solid = myComp.layers.addSolid([0, 1.0, 0], \"dest_" + osceletonNames[j] + "\", 50, 50, 1);");
+         data.add("\t" + "var p = solid.property(\"position\");");
+         data.add("\t" + "var expression = ");
+         data.add("\t" + "//~~~~~~~~~~~~~expression here~~~~~~~~~~~~~~~");
+         data.add("\t\t" + "\"" + "var nullTarget = " + "\\" + "\"source_" + osceletonNames[j] + "\\" + "\";" + "\"" + " +");
+         data.add("\t\t" + "\"" + "fromComp(thisComp.layer(nullTarget).transform.position);" + "\";");
+         data.add("\t" + "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
          data.add("\t" + "p.expression = expression;");
          */
       }
         data.add("\r");
-        data.add("\t" + "app.endUndoGroup();" + "\r");
-        data.add("}  //end script" + "\r");
+        data.add("\t" + "app.endUndoGroup();");
+        data.add("}  //end script");
         data.endSave("data/" + aeJsxFilePath + "/" + aeJsxFileName + zz + "." + aeJsxFileType);
     }
   }
@@ -331,31 +331,31 @@ void mayaSaveToDisk(int mfc) {
       }
       Data data = new Data();
         data.beginSave();
-        data.add("from maya.cmds import *" + "\r");
-        data.add("from random import uniform as rnd" + "\r");
-        data.add("#select(all=True)" + "\r");
-        data.add("#delete()" + "\r");
-        data.add("playbackOptions(minTime=\"0\", maxTime=\"" + counterMax + "\")" + "\r");
-        data.add("#grav = gravity()" + "\r");  
+        data.add("from maya.cmds import *");
+        data.add("from random import uniform as rnd");
+        data.add("#select(all=True)");
+        data.add("#delete()");
+        data.add("playbackOptions(minTime=\"0\", maxTime=\"" + counterMax + "\")");
+        data.add("#grav = gravity()");  
         data.add("\r");
        for (int j=0;j<osceletonNames.length;j++) {
         modesRefresh();
+        data.add("spaceLocator(name=\"" + osceletonNames[j] + "\")");
        for (int i=0;i<MotionCapture.countChildren();i++) { 
           try{
             PVector temp = new PVector(0, 0, 0);
             temp.x = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("x")));
             temp.y = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("y")));
             temp.z = (10 * float(MotionCapture.getChild(i).getChild(0).getChild(0).getChild(j).getAttribute("z")));
-            data.add("polyCube()" + "\r");
        data.add("currentTime("+i+")"+"\r");
-       data.add("move(" + (temp.x) + ", " + (temp.y) + "," + (temp.z) + ")" + "\r");
-       data.add("setKeyframe()" + "\r");          
+       data.add("move(" + (temp.x) + ", " + ((-1 * temp.y)+10) + "," + (temp.z) + ")");
+       data.add("setKeyframe()");          
         }catch(Exception e){ }
         }
       }
-        data.add("#floor = polyPlane(w=30,h=30)" + "\r");
-      data.add("#rigidBody(passive=True)" + "\r");
-      data.add("#move(0,0,0)" + "\r");
+        data.add("#floor = polyPlane(w=30,h=30)");
+      data.add("#rigidBody(passive=True)");
+      data.add("#move(0,0,0)");
       data.endSave("data/" + mayaFilePath + "/" + mayaFileName + zz + "." + mayaFileType);
     }
   }

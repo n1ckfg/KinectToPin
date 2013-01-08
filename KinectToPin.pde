@@ -8,6 +8,7 @@ import netP5.*;
 import proxml.*;
 import ddf.minim.*;
 import SimpleOpenNI.*;
+import com.rhizomatiks.bvh.*;
 
 //~~~~~~~~~~~~~~~~~~
 
@@ -120,6 +121,14 @@ boolean loaded = false;
 
 int saveDelayInterval = 100; //ms
 
+PVector bvhScaleFactor = new PVector(1,1,1);
+PVector bvhOffset = new PVector(0,0,0);
+ArrayList bvhNames;
+int bvhConversionCounter = 0;
+int bvhConversionCounterMax = 0;
+BvhParser parserA;
+PBvh bvh1;
+
 String[] osceletonNamesNormal = {
   "head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"
 };
@@ -146,6 +155,7 @@ boolean modeRec = false;
 boolean modeOsc = false;
 boolean modePlay = false;
 boolean modeExport = false;
+boolean modeBvh = false;
 boolean modeStop = true;
 boolean needsSaving = false;
 
@@ -155,7 +165,8 @@ int buttonStopNum = 2;
 int buttonPlayNum = 3;
 int buttonSaveNum = 4;
 int buttonCamNum = 5;
-int totalButtons = 6;
+int buttonBvhNum = 6;
+int totalButtons = 7;
 Button[] buttons = new Button[totalButtons];
 
 int introWarningCounter = 0;
@@ -232,10 +243,11 @@ dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
   oscSetup();
   buttons[buttonRecNum] = new Button(25, sH-20, 30, color(240, 10, 10), 12, "rec");
   buttons[buttonOscNum] = new Button(60, sH-20, 30, color(200, 20, 200), 12, "osc");
-  buttons[buttonSaveNum] = new Button(sW-25, sH-20, 30, color(50, 50, 220), 12, "save");
-  buttons[buttonPlayNum] = new Button(sW-60, sH-20, 30, color(20, 200, 20), 12, "play");
+  buttons[buttonSaveNum] = new Button(sW-25, sH-20, 30, color(50, 100, 220), 12, "save");
+  buttons[buttonPlayNum] = new Button(sW-95, sH-20, 30, color(20, 200, 20), 12, "play");
   buttons[buttonStopNum] = new Button(95, sH-20, 30, color(100, 100, 100), 12, "stop");
   buttons[buttonCamNum] = new Button(sW/2, sH-20, 30, color(200, 200, 50), 12, "cam");
+  buttons[buttonBvhNum] = new Button(sW-60, sH-20, 30, color(250, 130, 50), 12, "bvh");
   xmlPlayerInit(masterFileCounter);
   xmlRecorderInit();
   countdown = new Countdown(8, 2);
@@ -261,6 +273,9 @@ void draw() {
     if (modeRec||modeOsc) {
       //if(modeRec){
       xmlRecorderUpdate();
+    }
+    else if (modeBvh){
+      bvhConvert();
     }
     else if (modePlay) {
       xmlPlayerUpdate();
