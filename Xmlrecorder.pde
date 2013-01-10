@@ -13,7 +13,7 @@ void xmlRecorderInit() {
 
 void xmlRecorderUpdate() {
   background(0);
-  if (modeRec||(modeOsc&&found)||modeBvh) {
+  if (modeRec||modeOsc&&found||modeBvh) {
   //if (modeRec) {
     fill(255, 200);
     stroke(0);
@@ -32,14 +32,20 @@ void xmlRecorderUpdate() {
       
       //~~~~~~~~~~
       ellipse(0, 0, circleSize, circleSize);
+      
       popMatrix();
     }
   } 
-  if (countdown.go&&!modeStop) {
-    xmlAdd();
-    counter++;
-  }
-  countdown.update();
+  if (modeRec||modeOsc&&found){
+    if (countdown.go&&!modeStop) {
+      xmlAdd();
+      counter++;
+    }
+    countdown.update();
+  }else if (modeBvh){
+      xmlAdd();
+      counter++;
+    }
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

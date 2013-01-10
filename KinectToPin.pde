@@ -8,7 +8,7 @@ import netP5.*;
 import proxml.*;
 import ddf.minim.*;
 import SimpleOpenNI.*;
-import com.rhizomatiks.bvh.*;
+//import com.rhizomatiks.bvh.*;
 
 //~~~~~~~~~~~~~~~~~~
 
@@ -129,13 +129,26 @@ int bvhConversionCounterMax = 0;
 BvhParser parserA;
 PBvh bvh1;
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//1. OSCELETON / OPENNI / MS SDK
 String[] osceletonNamesNormal = {
   "head", "neck", "torso", "r_shoulder", "r_elbow", "r_hand", "l_shoulder", "l_elbow", "l_hand", "r_hip", "r_knee", "r_foot", "l_hip", "l_knee", "l_foot"
 };
-String[] osceletonNamesReversed = {
+String[] osceletonNamesReversed = { //standard non-mirrored
   "head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot"
 };
 String[] osceletonNames = new String[15];
+
+//2. CMU BVH
+String[] cmuBvhNames = {
+  "Head", "Neck1", "Spine", "LeftArm", "LeftForeArm", "LeftFingerBase", "RightArm", "RightForeArm", "RightFingerBase", "LeftUpLeg", "LeftLeg", "LeftToeBase", "RightUpLeg", "RightLeg", "RightToeBase" 
+};
+
+//3. BREKEL
+String[] brekelNames = {
+  "Head", "Neck", "Spine", "LeftArm", "LeftForeArm", "LeftHand", "RightArm", "RightForeArm", "RightHand", "LeftUpLeg", "LeftLeft", "LeftFoot", "RightUpLeg", "RightLeg", "RightFoot"
+};
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 PVector[] simpleOpenNiPos = new PVector[osceletonNames.length];
 PVector[] simpleOpenNiPos_proj = new PVector[osceletonNames.length];

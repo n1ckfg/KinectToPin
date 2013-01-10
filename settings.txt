@@ -77,4 +77,4 @@ BVH Scale Factor
 6, -6, 6
 
 BVH Offset
-320, 240, 100
+320, 320, 0

@@ -1,19 +1,14 @@
+int startTime = 0;
+
 void bvhConvert(){
+    println(bvh1.parser.frame + " " + bvh1.frameMax);
+    if(bvh1.parser.frame<bvh1.frameMax){
     bvh1.update(millis());
-    println("fooooo");
-    for (int j=0;j<osceletonNames.length;j++) {
-      
-      PVector p = (PVector) bvh1.bonePoints.get(j);
-      x[j] = p.x/sW;
-      y[j] = p.y/sH;
-      z[j] = p.z/(sD*10); //approximate 'cause don't know real SimpleOpenNI depth max/min in pixels; will fix
-      
-    }
-  
     xmlRecorderUpdate();
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if(random(1)>0.99){
+    }else{
     xmlSaveToDisk();
+    delay(saveDelayInterval);
     bvhConversionCounter++;
     if(bvhConversionCounter<bvhConversionCounterMax){
       bvhBegin(); 
@@ -25,9 +20,11 @@ void bvhConvert(){
 
 void bvhBegin(){
   masterFileCounter++;
+  bvh1 = new PBvh(loadStrings((String) bvhNames.get(bvhConversionCounter)),bvhScaleFactor,bvhOffset);
   xmlRecorderInit();
-  
-  parserA = new BvhParser();
-  bvh1 = new PBvh(loadStrings((String) bvhNames.get(bvhConversionCounter)),new PVector(6,-6, 6),new PVector(sW/2,sH/1.5,0));
+  startTime = millis();
+  //countdown.go = true;
+  //countdown.beep = true;
+  //parserA = new BvhParser();
 }
 

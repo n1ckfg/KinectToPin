@@ -161,34 +161,36 @@ void doButtonCam(){ //toggle
 
 void doButtonBvh(){
   doButtonStop();
-  chooseFolderDialog();
-  delay(saveDelayInterval);
-  modeBvh = true;
-  bvhConversionCounterMax = bvhNames.size();
-  bvhBegin();
+  try{
+    chooseFolderDialog();
+    delay(saveDelayInterval);
+    modeBvh = true;
+    bvhConversionCounterMax = bvhNames.size();
+    bvhBegin();
+  }catch(Exception e){
+    doButtonStop();
+  }
 }
 
 void chooseFolderDialog(){
-  String folderPath = selectFolder();  // Opens file chooser
-  if (folderPath == null) {
-    // If a folder was not selected
-    println("No folder was selected...");
-  } else {
-    println(folderPath);
-    countFrames(folderPath);
-  }
+    String folderPath = selectFolder();  // Opens file chooser
+    if (folderPath == null) {
+      // If a folder was not selected
+      println("No folder was selected...");
+    } else {
+      println(folderPath);
+      countFrames(folderPath);
+    }
 }
 
 void countFrames(String usePath) {
-  bvhNames = new ArrayList();
-    try {
-        //loads a sequence of frames from a folder
-        File dataFolder = new File(usePath); 
-        String[] allFiles = dataFolder.list();
-        for (int j=0;j<allFiles.length;j++) {
-          if (allFiles[j].toLowerCase().endsWith("bvh")) {
-            bvhNames.add(usePath+"/"+allFiles[j]);
-          }
-        }
-    }catch(Exception e){ }
-  }
+    bvhNames = new ArrayList();
+    //loads a sequence of frames from a folder
+    File dataFolder = new File(usePath); 
+    String[] allFiles = dataFolder.list();
+    for (int j=0;j<allFiles.length;j++) {
+      if (allFiles[j].toLowerCase().endsWith("bvh")) {
+        bvhNames.add(usePath+"/"+allFiles[j]);
+      }
+    }
+}
