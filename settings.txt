@@ -74,7 +74,7 @@ Delay Between Saving Files
 100
 
 BVH Scale Factor
-6, -6, 6
+10, -10, -10
 
 BVH Offset
-320, 320, 0
+320, 400, 200

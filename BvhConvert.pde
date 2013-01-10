@@ -20,6 +20,7 @@ void bvhConvert(){
 
 void bvhBegin(){
   masterFileCounter++;
+  counter=0; //see if this causes any problems
   bvh1 = new PBvh(loadStrings((String) bvhNames.get(bvhConversionCounter)),bvhScaleFactor,bvhOffset);
   xmlRecorderInit();
   startTime = millis();

@@ -162,7 +162,7 @@ float posX, posY, posZ;
 float[] x = new float[osceletonNames.length];
 float[] y = new float[osceletonNames.length];
 float[] z = new float[osceletonNames.length];
-int circleSize = 50;
+int circleSize = 30;//50;
 
 boolean modeRec = false;
 boolean modeOsc = false;
