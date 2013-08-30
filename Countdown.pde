@@ -52,7 +52,9 @@ class Countdown {
       textFont(font,fontSize);
       text(secStart-int(leaderCounter/fps),leaderX,leaderY+(fontSize/2.7));
       if(leaderCounter==leaderCounterBeep) { 
-        countdownBeep.play();
+        try{
+          countdownBeep.play();
+        }catch(Exception e){ }
         beep=true;
       }
     } 

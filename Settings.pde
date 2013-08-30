@@ -13,7 +13,7 @@ class Settings {
         if (settings.data[i].equals("OSC Send Port")) sendPort = setInt(settings.data[i+1]);
         if (settings.data[i].equals("OSC Receive Port")) receivePort = setInt(settings.data[i+1]);
         if (settings.data[i].equals("OSC Local Echo")) oscLocalEcho = setBoolean(settings.data[i+1]);
-        if (settings.data[i].equals("OSC Channel Format (Isadora, OSCeleton)")) oscChannelFormat = setString(settings.data[i+1]);
+        if (settings.data[i].equals("OSC Channel Format (Isadora, OSCeleton, Animata)")) oscChannelFormat = setString(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Puppet Pin Data (.txt)")) savePins = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Point Control Data (.txt)")) savePoints = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Export AE Point Control 3D Data (.txt)")) savePoints3D = setBoolean(settings.data[i+1]);
@@ -32,6 +32,7 @@ class Settings {
         if (settings.data[i].equals("Load SimpleOpenNI at Startup")) loadSimpleOpenNIatStart = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("SimpleOpenNI Autocalibration (no \"cactus pose\")")) autoCalibrate = setBoolean(settings.data[i+1]);
         if (settings.data[i].equals("Delay Between Saving Files")) saveDelayInterval = setInt(settings.data[i+1]);
+        if (settings.data[i].equals("BVH Names List")) bvhJointNames = setStringArray(settings.data[i+1]);
         if (settings.data[i].equals("BVH Scale Factor")) bvhScaleFactor = setPVector(settings.data[i+1]);
         if (settings.data[i].equals("BVH Offset")) bvhOffset = setPVector(settings.data[i+1]);
        }

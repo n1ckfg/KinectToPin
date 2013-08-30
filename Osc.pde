@@ -52,6 +52,8 @@ void oscSend(int skel) {
       myMessage.add(z[i]);
       oscSendHandler(myMessage);
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
        }else if(oscChannelFormat.equals("OSCeleton")){
         myMessage = new OscMessage("/joint"); // x
         myMessage.add(osceletonNames[i]);
@@ -60,6 +62,22 @@ void oscSend(int skel) {
         myMessage.add(y[i]);
         myMessage.add(z[i]);
         oscSendHandler(myMessage);
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       
+      }else if(oscChannelFormat.equals("Animata")){
+        myMessage = new OscMessage("/joint");
+        myMessage.add(osceletonNames[i]);
+        myMessage.add((x[i]*640)+0);
+        myMessage.add((y[i]*480)+0);
+        oscSendHandler(myMessage);
+        //~~
+        /*
+        myMessage = new OscMessage("/anibone");
+        myMessage.add(osceletonNames[i]);
+        myMessage.add(1);
+        oscSendHandler(myMessage);
+        */        
       }
       println("Sending OSC, format \""+ oscChannelFormat +"\", to " + myRemoteLocation + " " + osceletonNames[i] + " x: " + x[i] + " y: " + y[i] + " z: " + z[i]);
    }catch(Exception e){ }

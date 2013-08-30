@@ -59,19 +59,22 @@ OSC Send IP Number
 127.0.0.1
 
 OSC Send Port
-61863
+7110
 
 OSC Receive Port
-7110
+7111
 
 OSC Local Echo
 false
 
-OSC Channel Format (Isadora, OSCeleton)
+OSC Channel Format (Isadora, OSCeleton, Animata)
 OSCeleton
 
 Delay Between Saving Files
-100
+10
+
+BVH Names List
+Head, Neck, Spine, LeftArm, LeftForeArm, LeftHand, RightArm, RightForeArm, RightHand, LeftUpLeg, LeftLeg, LeftFoot, RightUpLeg, RightLeg, RightFoot
 
 BVH Scale Factor
 10, -10, -10

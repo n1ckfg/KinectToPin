@@ -1,4 +1,4 @@
-// KinectToPin v1.1
+// KinectToPin v1.3.5
 // by Nick Fox-Gieg and Victoria Nece
 // kinecttopin.fox-gieg.com
 
@@ -71,7 +71,7 @@ int sendPort = 1234;
 NetAddress myRemoteLocation;
 NetAddress myRemoteLocationEcho;
 boolean sendOsc = false;
-String oscChannelFormat = "Isadora"; // "Isadora", "OSCeleton"
+String oscChannelFormat = "Animata"; // "Isadora", "OSCeleton, Animata"
 boolean oscLocalEcho = false;
 
 XMLInOut xmlIO;
@@ -123,7 +123,7 @@ int saveDelayInterval = 100; //ms
 
 PVector bvhScaleFactor = new PVector(1,1,1);
 PVector bvhOffset = new PVector(0,0,0);
-ArrayList bvhNames;
+ArrayList bvhNames; //file names, not joint names
 int bvhConversionCounter = 0;
 int bvhConversionCounterMax = 0;
 BvhParser parserA;
@@ -139,14 +139,14 @@ String[] osceletonNamesReversed = { //standard non-mirrored
 };
 String[] osceletonNames = new String[15];
 
-//2. CMU BVH
-String[] cmuBvhNames = {
+//2. CMU BVH default
+/*
+String[] bvhJointNames = {
   "Head", "Neck1", "Spine", "LeftArm", "LeftForeArm", "LeftFingerBase", "RightArm", "RightForeArm", "RightFingerBase", "LeftUpLeg", "LeftLeg", "LeftToeBase", "RightUpLeg", "RightLeg", "RightToeBase" 
 };
-
-//3. BREKEL
-String[] brekelNames = {
-  "Head", "Neck", "Spine", "LeftArm", "LeftForeArm", "LeftHand", "RightArm", "RightForeArm", "RightHand", "LeftUpLeg", "LeftLeft", "LeftFoot", "RightUpLeg", "RightLeg", "RightFoot"
+*/
+String[] bvhJointNames = {
+  "Head", "Neck1", "Spine", "LeftArm", "LeftForeArm", "LeftFingerBase", "RightArm", "RightForeArm", "RightFingerBase", "LeftUpLeg", "LeftLeg", "LeftToeBase", "RightUpLeg", "RightLeg", "RightToeBase" 
 };
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

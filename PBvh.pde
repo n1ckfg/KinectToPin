@@ -35,10 +35,9 @@ class PBvh{
        boolean writeCoords = false;
        for (int i=0;i<osceletonNames.length;i++) {
          String name1 = "" + b.getName();
-         String name2 = "" + osceletonNames[i];
-         String name3 = "" + cmuBvhNames[i];
-         String name4 = "" + brekelNames[i];
-         if(name1.equals(name2) || name1.equals(name3) || name1.equals(name4)){
+         String name2 = "" + bvhJointNames[i];
+
+         if(name1.equals(name2)){
            writeCoords = true;
            counter=i;
          }
