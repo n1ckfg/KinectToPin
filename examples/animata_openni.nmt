@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<animata version="0.004">
+    <layer name="layer_0001" x="31.564251" y="-34.699139" z="0.000000" alpha="1.000000" scale="0.820000" vis="1">
+        <texture location="test.png" x="0.000000" y="0.000000" scale="1.000000" />
+        <skeleton>
+            <joints>
+                <joint name="head" x="369.575775" y="92.737198" fixed="0" selected="0" osc="1" />
+                <joint name="neck" x="367.122223" y="168.352310" fixed="0" selected="0" osc="1" />
+                <joint name="r_shoulder" x="292.194275" y="200.640762" fixed="0" selected="0" osc="1" />
+                <joint name="r_elbow" x="195.196915" y="174.066895" fixed="0" selected="0" osc="1" />
+                <joint name="r_hand" x="125.682022" y="160.634811" fixed="0" selected="0" osc="1" />
+                <joint name="l_shoulder" x="458.006439" y="198.256851" fixed="0" selected="0" osc="1" />
+                <joint name="l_elbow" x="548.959045" y="168.514725" fixed="0" selected="0" osc="1" />
+                <joint name="l_hand" x="628.361877" y="134.892532" fixed="0" selected="0" osc="1" />
+                <joint name="torso" x="374.699707" y="315.928741" fixed="0" selected="0" osc="1" />
+                <joint name="r_hip" x="329.830414" y="426.321991" fixed="0" selected="0" osc="1" />
+                <joint name="r_knee" x="252.866150" y="424.162933" fixed="0" selected="0" osc="1" />
+                <joint name="r_foot" x="207.500214" y="551.699524" fixed="0" selected="0" osc="1" />
+                <joint name="l_hip" x="451.333191" y="414.937408" fixed="0" selected="0" osc="1" />
+                <joint name="l_knee" x="545.276123" y="431.651672" fixed="0" selected="0" osc="1" />
+                <joint name="l_foot" x="569.434814" y="551.068726" fixed="0" selected="0" osc="1" />
+            </joints>
+            <bones>
+                <bone name="r_knee-r_foot" j0="11" j1="10" stiffness="0.000689" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="135.365906" selected="0" radius="1.730000" />
+                <bone name="r_hip-r_knee" j0="10" j1="9" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="76.983986" selected="0" radius="1.510000" />
+                <bone name="l_hip-l_knee" j0="12" j1="13" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="95.441887" selected="0" radius="1.110000" />
+                <bone name="l_knee-l_foot" j0="13" j1="14" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="121.859734" selected="0" radius="1.700000" />
+                <bone name="torso-r_hip" j0="8" j1="9" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="119.138298" selected="0" radius="1.460000" />
+                <bone name="torso-l_hip" j0="12" j1="8" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="125.182831" selected="0" radius="1.510000" />
+                <bone name="r_shldr-r_elbow" j0="2" j1="3" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="100.563553" selected="0" radius="1.000000" />
+                <bone name="r_elbow-r_hand" j0="3" j1="4" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="70.794785" selected="0" radius="2.300000" />
+                <bone name="l_shldr-l_elbow" j0="5" j1="6" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="95.667564" selected="0" radius="1.000000" />
+                <bone name="l_elbow-l_hand" j0="6" j1="7" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="86.198090" selected="0" radius="1.700000" />
+                <bone name="neck-head" j0="1" j1="0" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="75.649086" selected="0" radius="1.980000" />
+                <bone name="torso-r_shldr" j0="2" j1="8" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="141.782104" selected="0" radius="1.000000" />
+                <bone name="torso-l_shldr" j0="8" j1="5" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="144.161636" selected="0" radius="1.000000" />
+                <bone name="neck-torso" j0="8" j1="1" stiffness="0.000655" lm="1.000000" lmmin="0.010000" lmmax="1.000000" tempo="0.000000" time="1.570796" size="147.765930" selected="0" radius="1.000000" />
+            </bones>
+        </skeleton>
+    </layer>
+</animata>
