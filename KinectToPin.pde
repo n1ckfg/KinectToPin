@@ -1,4 +1,4 @@
-// KinectToPin v1.3.5
+// KinectToPin v1.3.6
 // by Nick Fox-Gieg and Victoria Nece
 // kinecttopin.fox-gieg.com
 
@@ -182,6 +182,7 @@ int buttonCamNum = 5;
 int buttonBvhNum = 6;
 int totalButtons = 7;
 Button[] buttons = new Button[totalButtons];
+boolean buttonFreeze = false;
 
 int introWarningCounter = 0;
 int introWarningCounterMax = 6*fps;
@@ -261,7 +262,7 @@ dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
   buttons[buttonPlayNum] = new Button(sW-95, sH-20, 30, color(20, 200, 20), 12, "play");
   buttons[buttonStopNum] = new Button(95, sH-20, 30, color(100, 100, 100), 12, "stop");
   buttons[buttonCamNum] = new Button(sW/2, sH-20, 30, color(200, 200, 50), 12, "cam");
-  buttons[buttonBvhNum] = new Button(sW-60, sH-20, 30, color(250, 130, 50), 12, "bvh");
+  buttons[buttonBvhNum] = new Button(sW-60, sH-20, 30, color(250, 130, 50), 12, "data");
   xmlPlayerInit(masterFileCounter);
   xmlRecorderInit();
   countdown = new Countdown(8, 2);

@@ -31,8 +31,12 @@ void mouseReleased(){
   else if (buttons[buttonCamNum].clicked) {  //CAM
     doButtonCam();
   }
-  else if (buttons[buttonBvhNum].clicked) {  //CAM
-    doButtonBvh();
+  else if (buttons[buttonBvhNum].clicked) {  //formerly BVH, now OPEN FOLDER
+    //doButtonBvh();
+    buttonFreeze = true;
+    buttons[buttonBvhNum].clicked = false;
+    buttons[buttonBvhNum].hovered = false;
+    openAppFolderHandler();
   }
 
 if (buttons[buttonRecNum].hovered) {
@@ -48,11 +52,14 @@ if (buttons[buttonRecNum].hovered) {
 }else if (buttons[buttonCamNum].hovered) {
     sayTextPrefix = "Toggle camera view";
 }else if (buttons[buttonBvhNum].hovered) {
-    sayTextPrefix = "Import BVH file";
+    //sayTextPrefix = "Import BVH file";
+    sayTextPrefix = "Open app folder";
 }
 }
 
 void buttonHandler() {
+  //resets button freeze used when the open app folder button opens a new window
+  if(mouseX != pmouseX || mouseY != pmouseY) buttonFreeze = false;
   for (int i=0;i<buttons.length;i++) {
   if(modePreview){
     buttons[buttonCamNum].checkButton();
@@ -174,14 +181,18 @@ void doButtonBvh(){
   }
 }
 
+//~~~~~~~~~~~ broken ~~~~~~~~~~~~~~~~~~~~~~
 void chooseFolderDialog(){
-    String folderPath = selectFolder();  // Opens file chooser
+  selectFolder("Select a folder to process:", "folderSelected");
+}
+
+void folderSelection(File folderPath){
     if (folderPath == null) {
       // If a folder was not selected
       println("No folder was selected...");
     } else {
       println(folderPath);
-      countFrames(folderPath);
+      countFrames(""+folderPath);
     }
 }
 
@@ -197,6 +208,8 @@ void countFrames(String usePath) {
     }
 }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 void openAppFolderHandler(){
   if(System.getProperty("os.name").equals("Mac OS X")){
     try{
@@ -204,8 +217,8 @@ void openAppFolderHandler(){
       //open(sketchPath(""));
       //String[] params = {  };
       open(sketchPath("data"));
-      open(sketchPath("ManosOsc.app/Contents/Resources/Java/data"));
-      open(sketchPath("ManosOsc_LM.app/Contents/Resources/Java/data"));
+      open(sketchPath("KinectToPin.app/Contents/Resources/Java/data"));
+      open(sketchPath("kinect_to_pin36.app/Contents/Resources/Java/data"));
     }catch(Exception e){ }
   }else{
     try{

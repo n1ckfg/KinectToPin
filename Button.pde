@@ -33,7 +33,7 @@ class Button {
         hovered=true;
         clicked=false;
       } 
-      else if (mousePressed) {
+      else if (mousePressed && !buttonFreeze) {
         hovered=true;
         clicked=true;
       }
