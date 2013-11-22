@@ -6,6 +6,8 @@ void keyPressed() {
   if(key=='c'||key=='C'||keyCode==34){  //CAM works with C key or pgup from clicker
     doButtonCam();
   }
+  
+  if (key=='f' || key=='F') openAppFolderHandler();
 }
 
 void mouseReleased(){
@@ -194,3 +196,22 @@ void countFrames(String usePath) {
       }
     }
 }
+
+void openAppFolderHandler(){
+  if(System.getProperty("os.name").equals("Mac OS X")){
+    try{
+      print("Trying OS X Finder method.");
+      //open(sketchPath(""));
+      //String[] params = {  };
+      open(sketchPath("data"));
+      open(sketchPath("ManosOsc.app/Contents/Resources/Java/data"));
+      open(sketchPath("ManosOsc_LM.app/Contents/Resources/Java/data"));
+    }catch(Exception e){ }
+  }else{
+    try{
+      print("Trying Windows Explorer method.");
+      Desktop.getDesktop().open(new File(sketchPath("") + "/data"));
+    }catch(Exception e){ }
+  }
+}
+
