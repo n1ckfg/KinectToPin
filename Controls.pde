@@ -217,8 +217,8 @@ void openAppFolderHandler(){
       //open(sketchPath(""));
       //String[] params = {  };
       open(sketchPath("data"));
-      open(sketchPath("KinectToPin.app/Contents/Resources/Java/data"));
-      open(sketchPath("kinect_to_pin36.app/Contents/Resources/Java/data"));
+      //open(sketchPath("KinectToPin.app/Contents/Resources/Java/data"));
+      //open(sketchPath("kinect_to_pin36.app/Contents/Resources/Java/data"));
     }catch(Exception e){ }
   }else{
     try{
