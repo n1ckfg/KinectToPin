@@ -17,7 +17,7 @@ Export AE Template Script (.jsx)
 false
 
 Export Maya Script (.py)
-true
+false
 
 Export Pointcloud (.obj)
 false
@@ -47,10 +47,10 @@ Enable Multithreading
 true
 
 Load SimpleOpenNI at Startup
-false
+true
 
 SimpleOpenNI Autocalibration (no "cactus pose")
-false
+true
 
 Send OSC Active
 true
