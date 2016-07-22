@@ -1,44 +1,66 @@
 /* --------------------------------------------------------------------------
  * SimpleOpenNI User Test
  * --------------------------------------------------------------------------
- * Processing Wrapper for the OpenNI/Kinect library
+ * Processing Wrapper for the OpenNI/Kinect 2 library
  * http://code.google.com/p/simple-openni
  * --------------------------------------------------------------------------
- * prog:  Max Rheiner / Interaction Design / zhdk / http://iad.zhdk.ch/
- * date:  02/16/2011 (m/d/y)
+ * prog:  Max Rheiner / Interaction Design / Zhdk / http://iad.zhdk.ch/
+ * date:  12/12/2012 (m/d/y)
  * ----------------------------------------------------------------------------
  */
 
-void setupUser(){
-  if(multiThread){
-  context = new SimpleOpenNI(this,SimpleOpenNI.RUN_MODE_MULTI_THREADED);
-  }else{
-  context = new SimpleOpenNI(this);
+color[]       userClr = new color[] { 
+  color(255, 0, 0), 
+  color(0, 255, 0), 
+  color(0, 0, 255), 
+  color(255, 255, 0), 
+  color(255, 0, 255), 
+  color(0, 255, 255)
+};
+PVector com = new PVector();                                   
+PVector com2d = new PVector();                                   
+
+void setupUser()
+{  
+  if (multiThread) {
+    context = new SimpleOpenNI(this, SimpleOpenNI.RUN_MODE_MULTI_THREADED);
+  }
+  else {
+    context = new SimpleOpenNI(this);
   }
   //context = new SimpleOpenNI(this);
-  context.setMirror(mirror);  //mirrors view but not joint names; that must be done separately
-   
+  context.setMirror(mirror); //mirrors view but not joint names; that must be done separately
+  
+  if (context.isInit() == false)
+  {
+    println("Can't init SimpleOpenNI, maybe the camera is not connected!"); 
+    exit();
+    return;
+  }
+
   // enable depthMap generation 
   context.enableDepth();
-  
-  // enable skeleton generation for all joints
-  context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
- 
-  background(200,0,0);
 
-  stroke(0,0,255);
+  // enable skeleton generation for all joints
+  context.enableUser();
+
+  background(200, 0, 0);
+
+  stroke(0, 0, 255);
   strokeWeight(3);
   //smooth();
-  
-  //size(context.depthWidth(), context.depthHeight()); 
 }
 
-void drawUser(){
+void drawUser()
+{
   // update the cam
   context.update();
-  
+
   // draw depthImageMap
+  //image(context.depthImage(),0,0);
+  image(context.userImage(), 0, 0);
   
+  ///*---------- instead of context.userImage() ????
   if(modePreview){
     if(camDelayCounter<camDelayCounterMax){
       camDelayCounter++;
@@ -57,34 +79,57 @@ void drawUser(){
    }
     }
   }
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //-----------*/
+
   // draw the skeleton if it's available
-  if(context.isTrackingSkeleton(1)){
-    if(modePreview){
-    drawSkeleton(1);
-    if(sendOsc){
-      simpleOpenNiEvent(1);
-      oscSend(1);
-    }
-    }else if(modeRec){
-    simpleOpenNiEvent(1);
-    if(sendOsc) oscSend(1);
+  int[] userList = context.getUsers();
+  for (int i=0;i<userList.length;i++)
+  {
+    if (context.isTrackingSkeleton(userList[i]))
+    {
+      stroke(userClr[ (userList[i] - 1) % userClr.length ] );
+      if(modePreview){
+      drawSkeleton(userList[i]);
+      if(sendOsc){
+        simpleOpenNiEvent(userList[i]);
+        oscSend(userList[i]);
+      }
+      }else if(modeRec){
+        simpleOpenNiEvent(userList[i]);
+        if(sendOsc) oscSend(userList[i]);
+      }
+    }      
+
+    // draw the center of mass
+    if (context.getCoM(userList[i], com))
+    {
+      context.convertRealWorldToProjective(com, com2d);
+      stroke(100, 255, 0);
+      strokeWeight(1);
+      beginShape(LINES);
+      vertex(com2d.x, com2d.y - 5);
+      vertex(com2d.x, com2d.y + 5);
+
+      vertex(com2d.x - 5, com2d.y);
+      vertex(com2d.x + 5, com2d.y);
+      endShape();
+
+      fill(0, 255, 100);
+      text(Integer.toString(userList[i]), com2d.x, com2d.y);
     }
   }
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 // draw the skeleton with the selected joints
-void drawSkeleton(int userId){
+void drawSkeleton(int userId)
+{
   // to get the 3d joint data
   /*
   PVector jointPos = new PVector();
-  context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_NECK,jointPos);
-  println(jointPos);
-  */
-  
-  stroke(0,0,255);
-  strokeWeight(3);
+   context.getJointPositionSkeleton(userId,SimpleOpenNI.SKEL_NECK,jointPos);
+   println(jointPos);
+   */
+
   context.drawLimb(userId, SimpleOpenNI.SKEL_HEAD, SimpleOpenNI.SKEL_NECK);
 
   context.drawLimb(userId, SimpleOpenNI.SKEL_NECK, SimpleOpenNI.SKEL_LEFT_SHOULDER);
@@ -104,56 +149,27 @@ void drawSkeleton(int userId){
 
   context.drawLimb(userId, SimpleOpenNI.SKEL_TORSO, SimpleOpenNI.SKEL_RIGHT_HIP);
   context.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_HIP, SimpleOpenNI.SKEL_RIGHT_KNEE);
-  context.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);  
- 
+  context.drawLimb(userId, SimpleOpenNI.SKEL_RIGHT_KNEE, SimpleOpenNI.SKEL_RIGHT_FOOT);
 }
 
 // -----------------------------------------------------------------
 // SimpleOpenNI events
 
-void onNewUser(int userId){
+void onNewUser(SimpleOpenNI curContext, int userId)
+{
   println("onNewUser - userId: " + userId);
-  println("  start pose detection");
-  //~~~~~~~~~~~~~ added autocalibration ~~~~~~~~~~~~~~~~~
-  if(autoCalibrate){
-    context.requestCalibrationSkeleton(userId,true);
-  } else {    
-    context.startPoseDetection("Psi",userId);
-  }
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+  println("\tstart tracking skeleton");
+
+  curContext.startTrackingSkeleton(userId);
 }
 
-void onLostUser(int userId){
+void onLostUser(SimpleOpenNI curContext, int userId)
+{
   println("onLostUser - userId: " + userId);
 }
 
-void onStartCalibration(int userId){
-  println("onStartCalibration - userId: " + userId);
-}
-
-void onEndCalibration(int userId, boolean successful){
-  println("onEndCalibration - userId: " + userId + ", successful: " + successful);
-  
-  if (successful){ 
-    println("  User calibrated !!!");
-    context.startTrackingSkeleton(userId); 
-  } else { 
-    println("  Failed to calibrate user !!!");
-    println("  Start pose detection");
-    context.startPoseDetection("Psi",userId);
-  }
-}
-
-void onStartPose(String pose,int userId){
-  println("onStartPose - userId: " + userId + ", pose: " + pose);
-  println(" stop pose detection");
-  
-  context.stopPoseDetection(userId); 
-  context.requestCalibrationSkeleton(userId, true);
- 
-}
-
-void onEndPose(String pose,int userId){
-  println("onEndPose - userId: " + userId + ", pose: " + pose);
+void onVisibleUser(SimpleOpenNI curContext, int userId)
+{
+  //println("onVisibleUser - userId: " + userId);
 }
 
