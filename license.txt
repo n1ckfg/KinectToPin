@@ -7,7 +7,7 @@ KinectToPin and the KinectToPin UI panel were developed with support from:
    STUDIO for Creative Inquiry
    Toronto Arts Council
 
-Copyright (c) 2013 Nick Fox-Gieg & Victoria Nece
+Copyright (c) 2017 Nick Fox-Gieg & Victoria Nece
 http://kinecttopin.fox-gieg.com
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

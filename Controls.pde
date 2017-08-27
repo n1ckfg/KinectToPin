@@ -214,11 +214,8 @@ void openAppFolderHandler(){
   if(System.getProperty("os.name").equals("Mac OS X")){
     try{
       print("Trying OS X Finder method.");
-      //open(sketchPath(""));
-      //String[] params = {  };
-      open(sketchPath("data"));
-      //open(sketchPath("KinectToPin.app/Contents/Resources/Java/data"));
-      //open(sketchPath("kinect_to_pin36.app/Contents/Resources/Java/data"));
+      //open(sketchPath("data"));
+      Desktop.getDesktop().open(new File(sketchPath("") + "/data"));
     }catch(Exception e){ }
   }else{
     try{
@@ -227,4 +224,3 @@ void openAppFolderHandler(){
     }catch(Exception e){ }
   }
 }
-

@@ -7,6 +7,7 @@ class Button {
   boolean hovered=false;
   boolean clicked=false;
   float degLocal;
+  boolean isSquare = false;
 
   Button(float x, float y, float s, color oc, int fs, String d) {
     posX = x;
@@ -56,6 +57,7 @@ class Button {
 
   void drawButton() {
     ellipseMode(CENTER);
+    rectMode(CENTER);
     noStroke();
     if (hovered&&!clicked) {
       nowColor = hoverColor;
@@ -67,9 +69,17 @@ class Button {
       nowColor = offColor;
     }
     fill(0, 10);
-    ellipse(posX+2, posY+2, sizeXY, sizeXY);
+    if(!isSquare){
+      ellipse(posX+2, posY+2, sizeXY, sizeXY);
+    }else{
+      rect(posX+2, posY+2, sizeXY, sizeXY);
+    }
     fill(nowColor);
-    ellipse(posX, posY, sizeXY, sizeXY);
+    if(!isSquare){    
+      ellipse(posX, posY, sizeXY, sizeXY);
+    }else{
+      rect(posX, posY, sizeXY, sizeXY);
+    }
     fill(0);
     textFont(font, fontSize);
     textAlign(CENTER, CENTER);
@@ -89,4 +99,3 @@ class Button {
     }
   }
 }
-

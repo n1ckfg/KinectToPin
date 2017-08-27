@@ -1,11 +1,10 @@
-// KinectToPin v1.3.7
+// KinectToPin v1.3.8
 // by Nick Fox-Gieg and Victoria Nece
 // kinecttopin.fox-gieg.com
 
-import processing.opengl.*;
 import oscP5.*;
 import netP5.*;
-import proxml.*;
+//import proxml.*;
 import ddf.minim.*;
 import SimpleOpenNI.*;
 import java.awt.Desktop;
@@ -76,7 +75,7 @@ String oscChannelFormat = "Animata"; // "Isadora", "OSCeleton, Animata"
 boolean oscLocalEcho = false;
 
 XMLInOut xmlIO;
-proxml.XMLElement MotionCapture;
+XMLElement MotionCapture;
 String xmlFileName = "mocapData";
 String xmlFileType = "xml";
 String xmlFilePath = "savexml";
@@ -157,7 +156,7 @@ PVector[] simpleOpenNiPos_proj = new PVector[osceletonNames.length];
 File dataFolder, dialogueFolder;
 //Data data;
 int[] pinNums = new int[osceletonNames.length];
-proxml.XMLElement[] oscXmlTags = new proxml.XMLElement[osceletonNames.length];
+XMLElement[] oscXmlTags = new XMLElement[osceletonNames.length];
 float posX, posY, posZ;
 
 float[] x = new float[osceletonNames.length];
@@ -203,15 +202,16 @@ void initSettings() {
   simpleOpenNiPos = new PVector[osceletonNames.length];
   simpleOpenNiPos_proj = new PVector[osceletonNames.length];
   pinNums = new int[osceletonNames.length];
-  oscXmlTags = new proxml.XMLElement[osceletonNames.length];
+  oscXmlTags = new XMLElement[osceletonNames.length];
   x = new float[osceletonNames.length];
   y = new float[osceletonNames.length];
   z = new float[osceletonNames.length];
 }
 
 void setup() {
+  size(50, 50, P3D);
+  surface.setSize(sW, sH);
   initSettings();
-  size(sW, sH, OPENGL);
   frameRate(fps);
 
   for (int i=0;i<osceletonNames.length;i++) {
@@ -220,7 +220,7 @@ void setup() {
   }
 
 //~~~~~~~~~~~~~~~~~
-  dialogueFolder = new File(sketchPath, "dialogue");
+  dialogueFolder = new File(sketchPath(""), "dialogue");
   allFiles = dialogueFolder.list();
   try {
     int dialogueFileCounter = 0;
@@ -234,7 +234,7 @@ void setup() {
     //
   }
 //~~~~~~~~~~~~~~~~~
-dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
+dataFolder = new File(sketchPath(""), "data" + "/" + xmlFilePath + "/");
   allFiles = dataFolder.list();
   try {
     for (int i=0;i<allFiles.length;i++) {
@@ -263,6 +263,12 @@ dataFolder = new File(sketchPath, "data" + "/" + xmlFilePath + "/");
   buttons[buttonStopNum] = new Button(95, sH-20, 30, color(100, 100, 100), 12, "stop");
   buttons[buttonCamNum] = new Button(sW/2, sH-20, 30, color(200, 200, 50), 12, "cam");
   buttons[buttonBvhNum] = new Button(sW-60, sH-20, 30, color(250, 130, 50), 12, "data");
+  //~~
+  buttons[buttonBvhNum].isSquare = true;
+  buttons[buttonSaveNum].isSquare = true;
+  buttons[buttonStopNum].isSquare = true;
+  buttons[buttonPlayNum].isSquare = true;
+  //~~
   xmlPlayerInit(masterFileCounter);
   xmlRecorderInit();
   countdown = new Countdown(8, 2);
@@ -350,4 +356,3 @@ void stop() {
   super.stop();
   exit();
 }
-

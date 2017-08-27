@@ -22,7 +22,8 @@ void setupUser(){
   context.enableDepth();
   
   // enable skeleton generation for all joints
-  context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
+  //context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
+  context.enableUser();
  
   background(200,0,0);
 
@@ -111,49 +112,17 @@ void drawSkeleton(int userId){
 // -----------------------------------------------------------------
 // SimpleOpenNI events
 
-void onNewUser(int userId){
+void onNewUser(SimpleOpenNI curContext,int userId){
   println("onNewUser - userId: " + userId);
-  println("  start pose detection");
-  //~~~~~~~~~~~~~ added autocalibration ~~~~~~~~~~~~~~~~~
-  if(autoCalibrate){
-    context.requestCalibrationSkeleton(userId,true);
-  } else {    
-    context.startPoseDetection("Psi",userId);
-  }
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+  println("\tstart tracking skeleton");
+  
+  context.startTrackingSkeleton(userId);
 }
 
-void onLostUser(int userId){
+void onLostUser(SimpleOpenNI curContext,int userId){
   println("onLostUser - userId: " + userId);
 }
 
-void onStartCalibration(int userId){
-  println("onStartCalibration - userId: " + userId);
+void onVisibleUser(SimpleOpenNI curContext,int userId){
+  //println("onVisibleUser - userId: " + userId);
 }
-
-void onEndCalibration(int userId, boolean successful){
-  println("onEndCalibration - userId: " + userId + ", successful: " + successful);
-  
-  if (successful){ 
-    println("  User calibrated !!!");
-    context.startTrackingSkeleton(userId); 
-  } else { 
-    println("  Failed to calibrate user !!!");
-    println("  Start pose detection");
-    context.startPoseDetection("Psi",userId);
-  }
-}
-
-void onStartPose(String pose,int userId){
-  println("onStartPose - userId: " + userId + ", pose: " + pose);
-  println(" stop pose detection");
-  
-  context.stopPoseDetection(userId); 
-  context.requestCalibrationSkeleton(userId, true);
- 
-}
-
-void onEndPose(String pose,int userId){
-  println("onEndPose - userId: " + userId + ", pose: " + pose);
-}
-

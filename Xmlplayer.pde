@@ -1,5 +1,5 @@
 void xmlPlayerInit(int mfc){
-  MotionCapture = new proxml.XMLElement("MotionCapture");
+  MotionCapture = new XMLElement("MotionCapture");
   xmlIO = new XMLInOut(this);
   try {
     xmlIO.loadElement(xmlFilePath + "/" + xmlFileName + (mfc) + "." + xmlFileType); //loads the XML
@@ -39,7 +39,7 @@ void xmlPlayerUpdate() {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void xmlEvent(proxml.XMLElement element) {
+void xmlEvent(XMLElement element) {
   //this function is ccalled by default when an XML object is loaded
   MotionCapture = element;
   loaded = true;

@@ -174,4 +174,3 @@ class Settings {
       return endPVector;
   }
 }
-

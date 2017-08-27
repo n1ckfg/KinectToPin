@@ -28,4 +28,3 @@ void bvhBegin(){
   //countdown.beep = true;
   //parserA = new BvhParser();
 }
-

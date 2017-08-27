@@ -74,4 +74,3 @@ class Countdown {
     if(dialogueFile!="none") dialogue.close();
   }
 }
-

@@ -1,6 +1,6 @@
 void xmlRecorderInit() {
   xmlIO = new XMLInOut(this);
-  MotionCapture = new proxml.XMLElement("MotionCapture");
+  MotionCapture = new XMLElement("MotionCapture");
   MotionCapture.addAttribute("fps", fps);
   MotionCapture.addAttribute("width", sW);
   MotionCapture.addAttribute("height", sH);
@@ -78,16 +78,16 @@ void simpleOpenNiEvent(int userId) {
 
 void xmlAdd() {
   MotionCapture.addAttribute("numFrames", counter);
-  proxml.XMLElement MocapFrame = new proxml.XMLElement("MocapFrame");
+  XMLElement MocapFrame = new XMLElement("MocapFrame");
   MotionCapture.addChild(MocapFrame);
   MocapFrame.addAttribute("index", counter);
-  proxml.XMLElement Skeleton = new proxml.XMLElement("Skeleton");
+  XMLElement Skeleton = new XMLElement("Skeleton");
   MocapFrame.addChild(Skeleton);
   Skeleton.addAttribute("id", 0);
-  proxml.XMLElement Joints = new proxml.XMLElement("Joints");
+  XMLElement Joints = new XMLElement("Joints");
   Skeleton.addChild(Joints);
   for (int i=0;i<osceletonNames.length;i++) {
-    oscXmlTags[i] = new proxml.XMLElement(osceletonNames[i]);
+    oscXmlTags[i] = new XMLElement(osceletonNames[i]);
     Joints.addChild(oscXmlTags[i]);
     if (""+x[i]=="NaN"||""+y[i]=="NaN"||""+z[i]=="NaN") {
       oscXmlTags[i].addAttribute("x", 0.0);
