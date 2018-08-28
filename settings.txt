@@ -17,7 +17,7 @@ Export AE Template Script (.jsx)
 false
 
 Export Maya Script (.py)
-true
+false
 
 Export Pointcloud (.obj)
 false
@@ -44,13 +44,13 @@ Camera Display Quality (1 = best)
 1
 
 Enable Multithreading
-true
+false
 
 Load SimpleOpenNI at Startup
 false
 
 SimpleOpenNI Autocalibration (no "cactus pose")
-false
+true
 
 Send OSC Active
 true
