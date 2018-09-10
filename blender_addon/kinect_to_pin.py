@@ -9,23 +9,35 @@ import bpy
 from bpy.types import Operator, AddonPreferences
 from bpy.props import (BoolProperty, FloatProperty, StringProperty, IntProperty, PointerProperty, EnumProperty)
 from bpy_extras.io_utils import (ImportHelper, ExportHelper)
+import xml.dom.minidom as xd
 import xml.etree.ElementTree as etree
 
-jointNames = [ "head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot" ]
-
 def readKinectToPin(filepath=None, resizeTimeline=True):
-    tree = etree.parse(filepath)
-    root = tree.getroot()
-    #~
-    MotionCapture = root.find("MotionCapture")
-    fps = float(MotionCapture.find("fps").text)
-    setSceneFps(fps)
-    #~
-    MocapFrames = MotionCapture.findall("MocapFrame")
-    for i, MocapFrame in enumerate(MocapFrames):
-        Skeletons = MocapFrame.findall("Skeleton")
-        for Skeleton in Skeletons:
-            Joints = Skeleton.find("Joints")
+    joints = [ "head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot" ]
+    
+    globalScale = (1, 1, 1)
+
+    xmlFile = xd.parse(filepath)
+
+    '''
+    for joint in joints:    
+        deselect()
+        frames = xmlFile.getElementsByTagName(joint)
+        loc = addLocator()
+        mc.rename(loc, joint)
+
+        for i, frame in enumerate(frames):
+            x = float(frame.getAttribute("x")) * globalScale[0]
+            y = float(frame.getAttribute("y")) * globalScale[1]
+            z = float(frame.getAttribute("z")) * globalScale[2]
+            
+            gotoFrame(i)
+            mc.move(x, y, z)
+            k()
+
+    s(joints)
+    buildFromLocators()
+    '''
 
 def getJoint(element, name):
     joint = element.find(name)
