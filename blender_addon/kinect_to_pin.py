@@ -11,13 +11,28 @@ from bpy.props import (BoolProperty, FloatProperty, StringProperty, IntProperty,
 from bpy_extras.io_utils import (ImportHelper, ExportHelper)
 import xml.etree.ElementTree as etree
 
+jointNames = [ "head", "neck", "torso", "l_shoulder", "l_elbow", "l_hand", "r_shoulder", "r_elbow", "r_hand", "l_hip", "l_knee", "l_foot", "r_hip", "r_knee", "r_foot" ]
+
 def readKinectToPin(filepath=None, resizeTimeline=True):
     tree = etree.parse(filepath)
     root = tree.getroot()
-    fps = getSceneFps()
-    start, end = getStartEnd()
     #~
     MotionCapture = root.find("MotionCapture")
+    fps = float(MotionCapture.find("fps").text)
+    setSceneFps(fps)
+    #~
+    MocapFrames = MotionCapture.findall("MocapFrame")
+    for i, MocapFrame in enumerate(MocapFrames):
+        Skeletons = MocapFrame.findall("Skeleton")
+        for Skeleton in Skeletons:
+            Joints = Skeleton.find("Joints")
+
+def getJoint(element, name):
+    joint = element.find(name)
+    x = float(joint.find("x").text)
+    y = float(joint.find("y").text)
+    z = float(joint.find("z").text)
+    return (x, y, z)
 
 def writeKinectToPin(filepath=None, bake=False):
     pass
