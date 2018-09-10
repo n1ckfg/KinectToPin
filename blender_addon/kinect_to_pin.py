@@ -9,10 +9,15 @@ import bpy
 from bpy.types import Operator, AddonPreferences
 from bpy.props import (BoolProperty, FloatProperty, StringProperty, IntProperty, PointerProperty, EnumProperty)
 from bpy_extras.io_utils import (ImportHelper, ExportHelper)
-# TODO imports
+import xml.etree.ElementTree as etree
 
 def readKinectToPin(filepath=None, resizeTimeline=True):
-    pass
+    tree = etree.parse(filepath)
+    root = tree.getroot()
+    fps = getSceneFps()
+    start, end = getStartEnd()
+    #~
+    MotionCapture = root.find("MotionCapture")
 
 def writeKinectToPin(filepath=None, bake=False):
     pass
@@ -78,13 +83,13 @@ def register():
     bpy.utils.register_module(__name__)
 
     bpy.types.INFO_MT_file_import.append(menu_func_import)
-    bpy.types.INFO_MT_file_export.append(menu_func_export)
+    #bpy.types.INFO_MT_file_export.append(menu_func_export)
 
 def unregister():
     bpy.utils.unregister_module(__name__)
 
     bpy.types.INFO_MT_file_import.remove(menu_func_import)
-    bpy.types.INFO_MT_file_export.remove(menu_func_export)
+    #bpy.types.INFO_MT_file_export.remove(menu_func_export)
 
 if __name__ == "__main__":
     register()
