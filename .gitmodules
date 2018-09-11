@@ -7,3 +7,6 @@
 [submodule "plugins/blender_k2p_addon"]
 	path = plugins/blender_k2p_addon
 	url = https://github.com/n1ckfg/blender_k2p_addon
+[submodule "plugins/C4DToolbox"]
+	path = plugins/C4DToolbox
+	url = https://github.com/n1ckfg/C4DToolbox
