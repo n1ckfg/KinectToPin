@@ -4,3 +4,6 @@
 [submodule "plugins/MayaToolbox"]
 	path = plugins/MayaToolbox
 	url = https://github.com/n1ckfg/MayaToolbox
+[submodule "plugins/blender_k2p_addon"]
+	path = plugins/blender_k2p_addon
+	url = https://github.com/n1ckfg/blender_k2p_addon
