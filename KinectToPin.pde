@@ -4,7 +4,7 @@
 
 import oscP5.*;
 import netP5.*;
-//import proxml.*;
+import proxml.*;
 import ddf.minim.*;
 import SimpleOpenNI.*;
 import java.awt.Desktop;
