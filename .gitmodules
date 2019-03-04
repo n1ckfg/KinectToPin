@@ -7,3 +7,6 @@
 [submodule "plugins/C4DToolbox"]
 	path = plugins/C4DToolbox
 	url = https://github.com/n1ckfg/C4DToolbox
+[submodule "plugins/ae_k2p_panel"]
+	path = plugins/ae_k2p_panel
+	url = https://github.com/n1ckfg/ae_k2p_panel
