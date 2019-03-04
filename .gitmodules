@@ -1,6 +1,3 @@
-[submodule "plugins/ae_k2p_panel"]
-	path = plugins/ae_k2p_panel
-	url = https://github.com/n1ckfg/ae_k2p_panel
 [submodule "plugins/MayaToolbox"]
 	path = plugins/MayaToolbox
 	url = https://github.com/n1ckfg/MayaToolbox
